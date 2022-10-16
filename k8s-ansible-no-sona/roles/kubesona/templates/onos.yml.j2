@@ -1,0 +1,812 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: sona-config
+  namespace: kube-system
+data:
+  cni_network_config: |-
+    {
+      "cniVersion": "0.3.1",
+      "name": "sona-net",
+      "type": "sona"
+    }
+  sona_network_config: |-
+    # Configuration options for ONOS CNI plugin endpoint
+    [network]
+    # Overlay network type (VXLAN, GRE, GENEVE).
+    type = {{ overlay_type | default('VXLAN') }}
+    # Segment identifier of the network.
+    segment_id = {{ seg_id | default(100) }}
+    # External uplink interface name.
+    external_interface = {{ ext_intf | default('eth1') }}
+    # External gateway IP address.
+    external_gateway_ip = {{ ext_gw_ip | default('192.168.1.1') }}
+    # Service network CIDR.
+    service_cidr = {{ srv_cidr | default('10.96.0.0/12') }}
+    # Network Maximum Transmission Unit (MTU).
+    mtu = {{ mtu | default(1400) }}
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: sona-node
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: sona-node
+subjects:
+- kind: ServiceAccount
+  name: sona-node
+  namespace: kube-system
+
+---
+# Include a clusterrole for the sona-node DaemonSet,
+# and bind it to the sona-node serviceaccount.
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: sona-node
+rules:
+  # The CNI plugin needs to get and list pods, nodes, and namespaces.
+  - apiGroups: [""]
+    resources:
+      - pods
+      - nodes
+      - namespaces
+    verbs:
+      - get
+      - list
+
+  # The CNI plugin needs to patch nodes
+  - apiGroups: [""]
+    resources:
+      - nodes
+    verbs:
+      # Installation script needs to add annotation to each node
+      - patch
+
+---
+# This manifest installs the sona-node container, as well
+# as the CNI plugins and network config on
+# each master and worker node in a Kubernetes cluster.
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: sona-node
+  namespace: kube-system
+  labels:
+    k8s-app: sona-node
+spec:
+  selector:
+    matchLabels:
+      k8s-app: sona-node
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        k8s-app: sona-node
+      annotations:
+        # This, along with the CriticalAddonsOnly toleration below,
+        # marks the pod as a critical add-on, ensuring it gets
+        # priority scheduling and that its resources are reserved
+        # if it ever gets evicted.
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      hostNetwork: true
+      tolerations:
+        # Make sure sona-node gets scheduled on all nodes.
+        - effect: NoSchedule
+          operator: Exists
+        # Mark the pod as a critical add-on for rescheduling.
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - effect: NoExecute
+          operator: Exists
+      serviceAccountName: sona-node
+      # Minimize downtime during a rolling upgrade or deletion; tell Kubernetes to do a "force
+      # deletion": https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods.
+      terminationGracePeriodSeconds: 0
+      priorityClassName: system-node-critical
+      initContainers:
+        # This container installs the CNI network config file on each node.
+        - name: install-sona-config
+          image: opensona/sona-cni:latest
+          command: ["/install-sona-config.sh"]
+          env:
+            # Name of the SONA config file to create.
+            - name: SONA_CONF_NAME
+              value: "sona-cni.conf"
+            # The SONA network config to install on each node.
+            - name: SONA_NETWORK_CONFIG
+              valueFrom:
+                configMapKeyRef:
+                  name: sona-config
+                  key: sona_network_config
+          volumeMounts:
+            - mountPath: /host/etc/sona
+              name: sona-conf-dir
+        # This container adds gateway related annotation to the kubernets nodes.
+        - name: config-external
+          image: opensona/sona-cni:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - cat /host/etc/sona/sona-cni.conf;
+              /config-external;
+          env:
+            - name: SONA_CONFIG_FILE_PATH
+              value: "/host/etc/sona/sona-cni.conf"
+          volumeMounts:
+            - mountPath: /host/etc/sona
+              name: sona-conf-dir
+            - mountPath: /root/.kube/config
+              name: kube-config-file
+        # This container checks the control plane (SONA) status. The container
+        # exits without error only if the control plane state is in ON_BOARD.
+        - name: check-control-plane
+          image: opensona/sona-cni:latest
+          command: ["/bin/bash","-c"]
+          args:
+            - /check-control-plane.sh;
+          env:
+            # Set the hostname based on the k8s node name.
+            - name: KUBERNETES_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - mountPath: /root/.kube/config
+              name: kube-config-file
+      containers:
+        # This container installs the CNI network config file on each node.
+        - name: install-cni-config
+          image: opensona/sona-cni:latest
+          command: ["/bin/sh","-c"]
+          args:
+            - /install-cni-config.sh;
+              while true ; do sleep 10 ; done
+          env:
+            # Name of the CNI config file to create.
+            - name: CNI_CONF_NAME
+              value: "1-sona-net.conf"
+            # The CNI network config to install on each node.
+            - name: CNI_NETWORK_CONFIG
+              valueFrom:
+                configMapKeyRef:
+                  name: sona-config
+                  key: cni_network_config
+          volumeMounts:
+            - mountPath: /host/etc/cni/net.d
+              name: cni-net-dir
+        # This container installs the CNI binaries on each node.
+        - name: install-cni
+          image: opensona/sona-cni:latest
+          command: ["/bin/sh", "-c"]
+          args:
+            - /install-cni.sh;
+              while true ; do sleep 10 ; done
+          volumeMounts:
+            - mountPath: /host/opt/cni/bin
+              name: cni-bin-dir
+      volumes:
+        # Used to install CNI.
+        - name: cni-bin-dir
+          hostPath:
+            path: /opt/cni/bin
+        - name: cni-net-dir
+          hostPath:
+            path: /etc/cni/net.d
+        - name: sona-conf-dir
+          hostPath:
+            path: /etc/sona
+        - name: kube-config-file
+          hostPath:
+            path: /root/.kube/config
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sona-node
+  namespace: kube-system
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: onos-config
+  namespace: kube-system
+data:
+  cluster.json: |-
+    {
+      "node": {
+          "ip": "127.0.0.1",
+          "id": "127.0.0.1",
+          "port": 9876
+      },
+      "storage": [
+          {
+              "ip": "127.0.0.1",
+              "id": "atomix-1",
+              "port": 5679
+          }
+      ],
+      "name": "onos"
+    }
+  component-cfg.json: |-
+    {
+      "org.onosproject.k8snode.impl.DefaultK8sNodeHandler": {
+        "ovsdbPortNum": 6650
+      }
+    }
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: atomix-probe-scripts
+  namespace: kube-system
+data:
+  check-atomix-status: |
+    #!/bin/bash
+    set -e
+    
+    while true
+    do
+      check_str='curl -sL -w "%{http_code}\\n" "http://localhost:5678/v1/status" -o /dev/null'
+      if [ $(eval $check_str) == "200" ];
+      then
+        break
+      else
+        sleep 5s
+      fi
+    done 
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: onos-probe-scripts
+  namespace: kube-system
+data:
+  check-onos-status: |
+    #!/bin/bash
+    set -e
+    config=$(curl -s http://localhost:8181/onos/v1/cluster --user onos:rocks)
+    echo $config
+    printf '%q' $config | grep -q "READY"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sona-probe-scripts
+  namespace: kube-system
+data:
+  check-sona-status: |
+    #!/bin/bash
+    set -e
+    
+    while true
+    do
+      check_str='curl -sL --user onos:rocks -w "%{http_code}\\n" "http://localhost:8181/onos/k8snetworking/network/exist/1" -o /dev/null'
+      if [ $(eval $check_str) == "200" ];
+      then
+        break
+      else
+        sleep 5s
+      fi
+    done
+
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cni-scripts
+  namespace: kube-system
+data:
+  check-node-state.sh: |
+    #!/bin/bash
+    set -e
+
+    while true
+    do
+      check_status_str='curl -sL --user onos:rocks -w "%{http_code}\\n" "http://localhost:8181/onos/k8snode/configure/get/postonboard/all" -o /dev/null'
+      if [ $(eval $check_status_str) = "200" ];
+      then
+        response_str='curl -sL --user onos:rocks http://localhost:8181/onos/k8snode/configure/get/postonboard/all'
+        number=$(echo $(eval $response_str) | grep "true" | wc -l)
+        if [ $number = 0 ];
+        then
+          echo "Date plane is not ready!"
+          sleep 5s
+        else
+          echo "Data plane is ready now!"
+          break
+        fi
+      else
+        echo "Failed to connect to control plane!"
+        sleep 5s
+      fi
+    done
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-config-scripts
+  namespace: kube-system
+data:
+  convert-kube-config.py: |-
+    #!/usr/bin/env python
+    
+    import json, yaml, sys, getopt
+
+    def main(argv):
+       inputfile = ''
+       outputfile = ''
+       try:
+          opts, args = getopt.getopt(argv,"ht:i:o:",["ifile=","ofile="])
+       except getopt.GetoptError:
+          print ('convert-kube-config.py -i <inputfile> -o <outputfile>')
+          sys.exit(2)
+
+       for opt, arg in opts:
+          if opt == '-h':
+             print ('convert-kube-config.py -i <inputfile> -o <outputfile>')
+             sys.exit()
+          elif opt in ("-i", "--ifile"):
+             inputfile = arg
+          elif opt in ("-o", "--ofile"):
+             outputfile = arg
+
+       with open(inputfile, 'r') as stream:
+          try:
+             raw = yaml.safe_load(stream)
+             clusters = raw["clusters"]
+             cluster = clusters[0]["cluster"]
+             ca_cert_data = cluster["certificate-authority-data"]
+             server = cluster["server"]
+             scheme = server.split(":")[0].upper()
+             ip_address = server.split(":")[1].replace('//', '')
+             port = server.split(":")[2]
+
+             users = raw["users"]
+             user = users[0]["user"]
+             client_cert_data = user["client-certificate-data"]
+             client_key_data = user["client-key-data"]
+
+             api_configs = {
+                "scheme": scheme,
+                "ipAddress": ip_address,
+                "port": int(port),
+                "caCertData": ca_cert_data,
+                "clientCertData": client_cert_data,
+                "clientKeyData": client_key_data
+             }
+             data = {
+                "apiConfigs": [
+                   api_configs
+                ]
+             }
+          except yaml.YAMLError as exc:
+             print(exc)
+
+       with open(outputfile, "w") as jsonfile:
+          json.dump(data, jsonfile)
+
+    if __name__ == "__main__":
+       main(sys.argv[1:])
+
+---
+# This ConfigMap is used to configure a self-hosted atomix installation.
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: atomix-config
+  namespace: kube-system
+data:
+  atomix.json: |-
+    {
+      "cluster": {
+        "node": {
+            "id": "atomix-1",
+            "address": "127.0.0.1:5679"
+        },
+        "clusterId": "onos",
+        "discovery": {
+            "nodes": [
+                {
+                    "id": "atomix-1",
+                    "address": "127.0.0.1:5679"
+                }
+            ],
+            "type": "bootstrap"
+        }
+      },
+      "partitionGroups": {
+        "raft": {
+            "partitionSize": 3,
+            "type": "raft",
+            "members": [
+                "atomix-1"
+            ],
+            "partitions": 1
+        }
+      },
+      "managementGroup": {
+        "partitionSize": 1,
+        "type": "raft",
+        "members": [
+            "atomix-1"
+        ],
+        "partitions": 1
+      }
+    }
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sona-atomix
+  namespace: kube-system
+  labels:
+    k8s-app: atomix
+spec:
+  serviceName: sona-atomix
+  selector:
+    matchLabels:
+      k8s-app: atomix
+  replicas: 1
+  podManagementPolicy: Parallel
+  template:
+    metadata:
+      name: sona-atomix
+      namespace: kube-system
+      labels:
+        k8s-app: atomix
+    spec:
+      hostNetwork: true
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+
+      # These containers are run during pod initialization
+      initContainers:
+      - name: atomix-init
+        image: busybox
+        command: ["/bin/sh", "-c", "echo $ATOMIX_JSON > /tmp/atomix.json; cat /tmp/atomix.json"]
+        env:
+          - name: ATOMIX_JSON
+            valueFrom:
+              configMapKeyRef:
+                name: atomix-config
+                key: atomix.json
+        volumeMounts:
+          - name: config
+            mountPath: /tmp
+            readOnly: false
+      containers:
+      - name: atomix
+        image: opensona/atomix-docker:k8s
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: JAVA_OPTS
+          value: -Xmx2G
+        ports:
+        - name: client
+          containerPort: 5678
+        - name: server
+          containerPort: 5679
+        readinessProbe:
+          httpGet:
+            path: /v1/status
+            port: 5678
+          initialDelaySeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 6
+        livenessProbe:
+          httpGet:
+            path: /v1/status
+            port: 5678
+          initialDelaySeconds: 60
+          timeoutSeconds: 10
+        volumeMounts:
+          - name: config
+            mountPath: /root/atomix/config
+            readOnly: true
+      volumes:
+      - name: config
+        hostPath:
+          path: /tmp/atomix-config
+          type: DirectoryOrCreate
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sona-onos
+  namespace: kube-system
+  labels:
+    k8s-app: onos
+spec:
+  serviceName: sona-onos
+  selector:
+    matchLabels:
+      k8s-app: onos
+  replicas: 1
+  template:
+    metadata:
+      name: sona-onos
+      namespace: kube-system
+      labels:
+        k8s-app: onos
+    spec:
+      hostNetwork: true
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+
+      # These containers are run during pod initialization
+      initContainers:
+      - name: onos-init
+        image: opensona/sona-cni:latest
+        command: ["/bin/sh", "-c"] 
+        args:
+          - echo $CLUSTER_JSON > /tmp/cluster.json.tmp;
+            /replace-master-ip -i /tmp/cluster.json.tmp -o /tmp/cluster.json;
+            cat /tmp/cluster.json;
+            echo $COMPONENT_CONFIG_JSON > /tmp/component-cfg.json;
+            cat /tmp/component-cfg.json;
+        env:
+          - name: CLUSTER_JSON
+            valueFrom:
+              configMapKeyRef:
+                name: onos-config
+                key: cluster.json
+          - name: COMPONENT_CONFIG_JSON
+            valueFrom:
+              configMapKeyRef:
+                name: onos-config
+                key: component-cfg.json
+        volumeMounts:
+          - name: config
+            mountPath: /tmp
+            readOnly: false
+          - mountPath: /root/.kube/config
+            name: kube-config-file
+      - name: atomix-readiness-probe
+        image: opensona/python-docker
+        command: ["/bin/sh", "-c"]
+        args:
+          - /tmp/check-atomix-status ;
+            sleep 10
+        volumeMounts:
+          - name: atomix-probe-scripts
+            mountPath: /tmp/check-atomix-status
+            subPath: check-atomix-status
+      containers:
+      - name: onos
+        image: opensona/onos-sona-nightly-docker:k8s
+        imagePullPolicy: Always
+        env:
+        - name: JAVA_OPTS
+          value: -Xmx2G
+        ports:
+        - name: openflow
+          containerPort: 6653
+        - name: ovsdb
+          containerPort: 6640
+        - name: east-west
+          containerPort: 9876
+        - name: cli
+          containerPort: 8101
+        - name: ui
+          containerPort: 8181
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - /root/onos/bin/check-onos-status
+          initialDelaySeconds: 30
+          periodSeconds: 15
+          failureThreshold: 10
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - /root/onos/bin/check-onos-status
+          initialDelaySeconds: 300
+          periodSeconds: 15
+          timeoutSeconds: 5
+        volumeMounts:
+          - name: onos-probe-scripts
+            mountPath: /root/onos/bin/check-onos-status
+            subPath: check-onos-status
+          - name: config
+            mountPath: /root/onos/config
+            readOnly: true
+      volumes:
+      - name: onos-probe-scripts
+        configMap:
+          name: onos-probe-scripts
+          defaultMode: 0744
+      - name: atomix-probe-scripts
+        configMap:
+          name: atomix-probe-scripts
+          defaultMode: 0744
+      - name: config
+        hostPath:
+          path: /tmp/onos-config
+          type: DirectoryOrCreate
+      - name: kube-config-file
+        hostPath:
+          path: /root/.kube/config
+      - name: config-scripts
+        configMap:
+          name: kube-config-scripts
+          defaultMode: 0744
+
+---
+# This manifest installs the sona-dummy container in
+# a Kubernetes cluster including master and worker.
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: sona-dummy
+  namespace: kube-system
+  labels:
+    k8s-app: sona-dummy
+spec:
+  selector:
+    matchLabels:
+      k8s-app: sona-dummy
+  template:
+    metadata:
+      labels:
+        k8s-app: sona-dummy
+      annotations:
+        # This, along with the CriticalAddonsOnly toleration below,
+        # marks the pod as a critical add-on, ensuring it gets
+        # priority scheduling and that its resources are reserved
+        # if it ever gets evicted.
+        scheduler.alpha.kubernetes.io/critical-pod: ''
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/os: linux
+      hostNetwork: false
+      tolerations:
+        # Make sure sona-dummy gets scheduled on all nodes.
+        - effect: NoSchedule
+          operator: Exists
+        # Mark the pod as a critical add-on for rescheduling.
+        - key: CriticalAddonsOnly
+          operator: Exists
+        - effect: NoExecute
+          operator: Exists
+      # Minimize downtime during a rolling upgrade or deletion; tell Kubernetes to do a "force
+      # deletion": https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods.
+      terminationGracePeriodSeconds: 0
+      priorityClassName: system-node-critical
+      containers:
+        - name: sona-dummy
+          image: busybox
+          command: ["/bin/sh","-c"]
+          args:
+            - while true ; do sleep 10 ; done
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sona-onos-config
+  namespace: kube-system
+  labels:
+    k8s-app: onos-config
+spec:
+  serviceName: sona-onos-config
+  selector:
+    matchLabels:
+      k8s-app: onos-config
+  replicas: 1
+  template:
+    metadata:
+      name: sona-onos-config
+      namespace: kube-system
+      labels:
+        k8s-app: onos-config
+    spec:
+      hostNetwork: true
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          operator: Exists
+          effect: NoSchedule
+        - key: node.kubernetes.io/not-ready
+          operator: Exists
+          effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+
+      initContainers:
+      - name: sona-readiness-probe
+        image: opensona/python-docker
+        command: ["/bin/sh", "-c"]
+        args:
+          - /tmp/check-sona-status ;
+            sleep 30
+        volumeMounts:
+          - name: sona-probe-scripts
+            mountPath: /tmp/check-sona-status
+            subPath: check-sona-status
+      containers:
+      - name: onos-config
+        image: opensona/python-docker
+        imagePullPolicy: Always
+        command: ["/bin/sh", "-c"]
+        args:
+          - /root/onos/bin/convert-kube-config.py -i /root/onos/kube_admin.conf -o /tmp/onos_config.json ;
+            curl --user onos:rocks -X POST -H "Content-Type:application/json" http://127.0.0.1:8181/onos/k8snode/configure/api -d @/tmp/onos_config.json ;
+            /check-node-state.sh ;
+            curl --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snetworking/management/sync/states ;
+            curl --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snode/configure/init/all ;
+            sleep 30 ;
+            curl --user onos:rocks -X GET http://127.0.0.1:8181/onos/k8snetworking/management/sync/rules ;
+            while true ; do sleep 10 ; done
+        volumeMounts:
+          - name: config-scripts
+            mountPath: /root/onos/bin/convert-kube-config.py
+            subPath: convert-kube-config.py
+          - name: kube-home
+            mountPath: /root/onos/kube_admin.conf
+            subPath: admin.conf
+          - name: config
+            mountPath: /tmp
+            readOnly: false
+          - name: cni-scripts
+            mountPath: /check-node-state.sh
+            subPath: check-node-state.sh
+          - mountPath: /host/opt/cni/bin
+            name: cni-bin-dir
+      volumes:
+        - name: config-scripts
+          configMap:
+            name: kube-config-scripts
+            defaultMode: 0744
+        - name: sona-probe-scripts
+          configMap:
+            name: sona-probe-scripts
+            defaultMode: 0744
+        - name: cni-scripts
+          configMap:
+            name: cni-scripts
+            defaultMode: 0744
+        - name: config
+          hostPath:
+            path: /tmp/onos-config
+        - name: kube-home
+          hostPath:
+            path: /etc/kubernetes/
+        - name: cni-bin-dir
+          hostPath:
+            path: /opt/cni/bin

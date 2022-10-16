@@ -1,0 +1,54 @@
+---
+
+- name: "Reset Kubernetes component"
+  shell: "kubeadm reset --force"
+  ignore_errors: True
+
+- name: "Remove Kubernetes config directory"
+  file:
+    state: absent
+    path: ".kube/config"
+
+- name: "Remove CNI binaries, configs, directories"
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - /opt/cni/bin/sona
+    - /etc/sona
+    - /etc/cni
+
+- include_tasks: el_reset_k8s.yml
+  when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
+
+- include_tasks: deb_reset_k8s.yml
+  when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"
+
+- name: "Reset external bridge IP"
+  shell: "ip addr add $(ip -4 addr show kbr-ex | grep -oP '(?<=inet\\s)\\d+(\\.\\d+){3}')/24 dev {{ ext_intf }}"
+  ignore_errors: True
+
+- name: "Remove ONOS directories"
+  file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - /tmp/atomix-config
+    - /tmp/onos-config
+
+- name: "Reset OpenvSwitch"
+  shell: |
+    ovs-vsctl del-br kbr-int
+    ovs-vsctl del-br kbr-ex
+    ovs-vsctl del-br kbr-local
+    ovs-dpctl del-dp system@ovs-system
+    rmmod vport_vxlan
+    rmmod vport_geneve
+    rmmod openvswitch
+  ignore_errors: True
+
+- include_tasks: el_reset_ovs.yml
+  when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
+
+- include_tasks: deb_reset_ovs.yml
+  when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"

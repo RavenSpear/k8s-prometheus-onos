@@ -1,0 +1,12 @@
+---
+  - block:
+    - name: Install Docker dependencies
+      yum:
+        name: "{{ docker_dep_pkgs }}"
+        state: installed
+      become: true
+
+    - name: Add Docker yum repository
+      shell: yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

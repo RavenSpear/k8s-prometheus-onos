@@ -1,0 +1,40 @@
+---
+- include_tasks: el_prep.yml
+  when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
+
+- include_tasks: el_install.yml
+  when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"
+
+- include_tasks: deb_prep.yml
+  when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"
+
+- include_tasks: deb_install.yml
+  when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"
+
+- name: Disable system swap
+  shell: "swapoff -a"
+
+- name: Remove current swaps from fstab
+  lineinfile:
+    dest: /etc/fstab
+    regexp: '(?i)^([^#][\S]+\s+(none|swap)\s+swap.*)'
+    line: '# \1'
+    backrefs: yes
+    state: present
+
+- name: Disable swappiness and pass bridged IPv4/IPv6 traffic to iptable's chains
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  with_items:
+    - { name: 'vm.swappiness', value: '0' }
+    - { name: 'net.bridge.bridge-nf-call-iptables', value: '1' }
+    - { name: 'net.ipv4.ip_forward', value: '1' }
+    - { name: 'net.bridge.bridge-nf-call-ip6tables', value: '1' }
+
+- name: Reload kubelet daemon
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    enabled: yes

@@ -1,0 +1,44 @@
+---
+
+- name: Check if kubeadm has already run
+  stat:
+    path: "/etc/kubernetes/pki/ca.key"
+  register: kubeadm_ca
+
+- name: Init cluster if needed
+  include_tasks: init.yml
+  when: not kubeadm_ca.stat.exists
+  run_once: yes
+
+- name: Apply KUBELET_EXTRA_ARGS
+  template: src=kubelet.j2 dest={{ kubelet_env_dir }}
+
+- name: Enable and check kubelet service
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: started
+    enabled: yes
+  register: started_kubelet
+
+- name: Restart kubelet service
+  service:
+    name: kubelet
+    state: restarted
+  become: true 
+
+- name: Adjust the admin.conf access permission
+  file:
+    path: "{{ kubeadmin_config }}"
+    mode: u=rwX,g=rX,o=rX
+  become: true
+
+- name: "Copy config file"
+  fetch:
+    src: "{{ kubeadmin_config }}"
+    dest: "{{ lookup('env', 'HOME') }}/.kube/config"
+    flat: yes
+    owner: "{{ ansible_user | default(ansible_user_id) }}"
+    group: "{{ ansible_user | default(ansible_user_id) }}"
+  run_once: yes
+  become: true

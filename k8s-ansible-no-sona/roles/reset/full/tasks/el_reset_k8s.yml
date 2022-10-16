@@ -1,0 +1,17 @@
+---
+  - block:
+    - name: "Remove kubelet"
+      yum:
+        name: kubelet
+        state: absent
+    - name: "Remove kubeadm"
+      yum:
+        name: kubeadm
+        state: absent
+
+    - name: "Remove kubectl"
+      yum:
+        name: kubectl
+        state: absent
+
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

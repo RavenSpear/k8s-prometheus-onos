@@ -1,0 +1,19 @@
+---
+  - block:
+    - name: Install apt-transport-https
+      apt:
+        name: "apt-transport-https"
+        state: present
+        update_cache: yes
+
+    - name: Add Docker APT GPG key
+      apt_key:
+        url: https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/gpg
+
+    - name: Add Docker APT repository
+      apt_repository:
+        repo: deb http://mirrors.aliyun.com/docker-ce/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
+        filename: 'docker'
+
+    when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"

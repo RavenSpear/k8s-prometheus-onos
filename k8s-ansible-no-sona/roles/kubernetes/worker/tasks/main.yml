@@ -1,0 +1,27 @@
+---
+
+- name: Check if kubelet.conf exists
+  stat:
+    path: "/etc/kubernetes/kubelet.conf"
+  register: kubelet_conf
+
+- name: Join to cluster if needed
+  include_tasks: join.yml
+  when: not kubelet_conf.stat.exists
+
+- name: Apply KUBELET_EXTRA_ARGS
+  template: src=kubelet.j2 dest={{ kubelet_env_dir }}
+
+- name: Enable and check kubelet service
+  systemd:
+    name: kubelet
+    daemon_reload: yes
+    state: started
+    enabled: yes
+  become: true
+
+- name: Restart kubelet service
+  service:
+    name: kubelet
+    state: restarted
+  become: true

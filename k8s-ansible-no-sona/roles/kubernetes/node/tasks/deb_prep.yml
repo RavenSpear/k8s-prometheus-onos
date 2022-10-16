@@ -1,0 +1,18 @@
+---
+  - block:
+    - name: Add Kubernetes APT GPG key
+      apt_key:
+        url: https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg
+        state: present
+
+    - name: Add Kubernetes APT repository
+      apt_repository:
+        repo: deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
+        state: present
+        filename: 'kubernetes'
+
+    - name: Wipe-out etcd store
+      file:
+        state: absent
+        path: "{{ etcd_dir }}/"
+    when: ansible_os_family == "Debian" or ansible_os_family == "Ubuntu"

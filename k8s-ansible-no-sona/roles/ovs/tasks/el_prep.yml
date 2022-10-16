@@ -1,0 +1,19 @@
+---
+  - block:
+    - name: "Yum update"
+      yum:
+        name: '*'
+        state: latest
+        update_cache: no
+        exclude: kernel*, kube*
+      become: true
+
+    - name: "Add OpenvSwitch yum repository"
+      shell: "curl -s https://packagecloud.io/install/repositories/gunine/openvswitch-{{ ovs_el_version }}/script.rpm.sh | sudo bash"
+
+    - name: "Put SELinux in permissive mode"
+      selinux:
+        policy: targeted
+        state: permissive
+
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

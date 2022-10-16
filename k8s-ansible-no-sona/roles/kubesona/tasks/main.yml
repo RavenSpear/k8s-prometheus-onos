@@ -1,0 +1,19 @@
+---
+- name: "Create tmp directory"
+  file:
+    path: "{{ tmp_dir }}"
+    state: directory
+    mode: 0755
+
+- name: "Copy ONOS yaml"
+  template: src="onos.yml.j2" dest="{{ tmp_dir }}/onos.yml"
+
+- name: "Install ONOS POD on kube-system namespace"
+  shell: "kubectl apply -f {{ tmp_dir }}/onos.yml"
+
+#- name: "Clean-up ONOS temporary directory"
+#  file:
+#    path: "{{ tmp_dir }}"
+#    state: absent
+#  ignore_errors: yes
+

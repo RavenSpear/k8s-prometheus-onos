@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+  roles:
+    - { role: ovs }
+    - { role: docker }
+    - { role: kubernetes/master }
+    - { role: kubernetes/clean/master }
+    - { role: kubernetes/clean/node }
+    - { role: kubesona }

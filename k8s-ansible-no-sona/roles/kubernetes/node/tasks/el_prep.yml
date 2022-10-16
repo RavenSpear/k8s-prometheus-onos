@@ -1,0 +1,19 @@
+---
+  - block:
+    - name: Add Kubernetes yum repository
+      yum_repository:
+        name: Kubernetes
+        description: Kubernetes Repository
+        file: kubernetes
+        baseurl: http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64
+        enabled: yes
+        gpgcheck: no
+    - name: Deactivate and remove firewalld
+      yum:
+        name: firewalld
+        state: absent
+    - name: Wipe-out etcd store
+      file:
+        state: absent
+        path: "{{ etcd_dir }}/"
+    when: ansible_os_family == "CentOS" or ansible_os_family == "RedHat"

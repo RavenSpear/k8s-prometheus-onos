@@ -1,0 +1,25 @@
+---
+ovs_deb_version: "2.10"
+ovs_el_version: 2-10
+
+ovs_rpm_package: "openvswitch"
+ovs_devel_rpm_package: "openvswitch-devel"
+ovs_selinux_rpm_package: "openvswitch-selinux-policy"
+ovs_kmod_rpm_package: "openvswitch-kmod"
+el_ovs_packages:
+    - "{{ovs_rpm_package}}"
+    - "{{ovs_devel_rpm_package}}"
+    - "{{ovs_selinux_rpm_package}}"
+    - "{{ovs_kmod_rpm_package}}"
+
+ovs_deb_package: "openvswitch-switch"
+ovs_common_deb_package: "openvswitch-common"
+ovs_dp_dkms_deb_package: "openvswitch-datapath-dkms"
+ovs_python_deb_package: "python-openvswitch"
+ovs_lib_deb_package: "libopenvswitch"
+deb_ovs_packages:
+    - "{{ovs_deb_package}}"
+    - "{{ovs_common_deb_package}}"
+    - "{{ovs_dp_dkms_deb_package}}"
+    - "{{ovs_python_deb_package}}"
+    - "{{ovs_lib_deb_package}}"
