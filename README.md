@@ -61,7 +61,7 @@ worker
 7. 主节点进入```k8s-ansible-no-sona```目录，运行ansible脚本
 ```
 # cd k8s-ansible-no-sona/
-# ansible-playbook inventory/default/sitewithoutona.yml
+# ansible-playbook inventory/default/sitewithoutsona.yml
 ```
 
 ### 重置集群
