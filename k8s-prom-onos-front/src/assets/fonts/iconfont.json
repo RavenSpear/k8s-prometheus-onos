@@ -1,0 +1,93 @@
+{
+  "id": "3159781",
+  "name": "virtual",
+  "font_family": "iconfont",
+  "css_prefix_text": "el-icon-ali-",
+  "description": "SDN网络虚拟化项目所用图标",
+  "glyphs": [
+    {
+      "icon_id": "3267391",
+      "name": "地球",
+      "font_class": "diqiu",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "1727379",
+      "name": "33资源-线性",
+      "font_class": "ziyuan-xianxing",
+      "unicode": "e8a4",
+      "unicode_decimal": 59556
+    },
+    {
+      "icon_id": "228875",
+      "name": "detail",
+      "font_class": "detail",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "6151209",
+      "name": "eye",
+      "font_class": "eye",
+      "unicode": "e7ed",
+      "unicode_decimal": 59373
+    },
+    {
+      "icon_id": "8106214",
+      "name": "addto",
+      "font_class": "addto",
+      "unicode": "e698",
+      "unicode_decimal": 59032
+    },
+    {
+      "icon_id": "122722",
+      "name": "add",
+      "font_class": "add1",
+      "unicode": "e6b9",
+      "unicode_decimal": 59065
+    },
+    {
+      "icon_id": "7008886",
+      "name": "add",
+      "font_class": "add2",
+      "unicode": "e6df",
+      "unicode_decimal": 59103
+    },
+    {
+      "icon_id": "252290",
+      "name": "add",
+      "font_class": "add",
+      "unicode": "e767",
+      "unicode_decimal": 59239
+    },
+    {
+      "icon_id": "1220054",
+      "name": "虚拟化",
+      "font_class": "xunihua",
+      "unicode": "e68a",
+      "unicode_decimal": 59018
+    },
+    {
+      "icon_id": "8123082",
+      "name": "物理网络",
+      "font_class": "wuliwangluo",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "8123115",
+      "name": "虚拟网络",
+      "font_class": "xuniwangluo",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "25847857",
+      "name": "Topology",
+      "font_class": "Topology",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    }
+  ]
+}

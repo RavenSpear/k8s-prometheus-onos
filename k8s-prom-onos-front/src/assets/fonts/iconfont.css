@@ -1,0 +1,63 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3159781 */
+  src: url('iconfont.woff2?t=1651808327019') format('woff2'),
+       url('iconfont.woff?t=1651808327019') format('woff'),
+       url('iconfont.ttf?t=1651808327019') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.el-icon-ali-diqiu:before {
+  content: "\e612";
+}
+
+.el-icon-ali-ziyuan-xianxing:before {
+  content: "\e8a4";
+}
+
+.el-icon-ali-detail:before {
+  content: "\e66c";
+}
+
+.el-icon-ali-eye:before {
+  content: "\e7ed";
+}
+
+.el-icon-ali-addto:before {
+  content: "\e698";
+}
+
+.el-icon-ali-add1:before {
+  content: "\e6b9";
+}
+
+.el-icon-ali-add2:before {
+  content: "\e6df";
+}
+
+.el-icon-ali-add:before {
+  content: "\e767";
+}
+
+.el-icon-ali-xunihua:before {
+  content: "\e68a";
+}
+
+.el-icon-ali-wuliwangluo:before {
+  content: "\e67f";
+}
+
+.el-icon-ali-xuniwangluo:before {
+  content: "\e680";
+}
+
+.el-icon-ali-Topology:before {
+  content: "\e611";
+}
+
