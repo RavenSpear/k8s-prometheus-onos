@@ -53,12 +53,16 @@ export default {
           title: "传存算资源监视器",
           subs: [
             {
+              index: "resourceDashboard",
+              title: "资源感知首页",
+            },
+            {
               index: "resourceList",
               title: "资源感知列表",
             },
             {
               index: "deviceList",
-              title: "设备感知列表列表",
+              title: "设备感知列表",
             }
           ],
         },
@@ -67,6 +71,10 @@ export default {
           index: "task",
           title: "边云协同任务调度",
           subs: [
+            {
+              index: "taskDashboard",
+              title: "任务首页",
+            },
             {
               index: "taskList",
               title: "任务列表",
@@ -82,6 +90,10 @@ export default {
           index: "virtualNetwork",
           title: "传输资源虚拟化控制",
           subs: [
+            {
+              index: "virtualNetworkDashboard",
+              title: "虚拟网络首页",
+            },
             {
               index: "virtualNetworkList",
               title: "虚拟网络列表",

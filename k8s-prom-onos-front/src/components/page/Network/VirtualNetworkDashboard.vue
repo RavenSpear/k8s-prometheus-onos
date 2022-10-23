@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <el-row :gutter="20" class="mgb20">
       <el-col :span="12">
@@ -70,9 +70,9 @@
       </el-col>
     </el-row> -->
   </div>
-</template>
+</template> -->
 
-<script>
+<!-- <script>
 // import Schart from "vue-schart";
 import { getDevices, getLinks, getPorts, getHosts,fetchTenantData,fetchVirtualNetworkData } from "../../../api/index";
 
@@ -169,7 +169,7 @@ export default {
 
   },
 };
-</script>
+</script> -->
 
 
 <style scoped>

@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 
 import Home from '../components/common/Home.vue'
 import Dashboard from '../components/page/Dashboard.vue'
+
+import VirtualNetworkDashboard from '../components/page/Network/VirtualNetworkDashboard.vue'
 import AddTenant from '../components/page/Network/AddTenant.vue'
 import TenantList from '../components/page/Network/TenantList.vue'
 import Piplines from '../components/page/Network/Pipelines.vue'
@@ -14,9 +16,11 @@ import VirtualNetworkList from '../components/page/Network/VirtualNetworkList.vu
 import VirtualNetworkTopo from '../components/page/Network/VirtualNetworkTopo.vue'
 import CollectorConfig from '../components/page/Network/CollectorConfig.vue'
 
+import ResourceDashboard from '../components/page/Resource/ResourceDashboard.vue'
 import ResourceList from '../components/page/Resource/ResourceList.vue'
 import DeviceList from '../components/page/Resource/DeviceList.vue'
 
+import TaskDashboard from '../components/page/Task/TaskDashboard.vue'
 import TaskList from '../components/page/Task/TaskList.vue'
 import TaskCreate from '../components/page/Task/TaskCreate.vue'
 
@@ -40,6 +44,11 @@ const routes = [
 
       //传存算资源监视器资源
       {
+        path: "/resourceDashboard",
+        component: ResourceDashboard,
+        meta: { title: '资源感知首页' }
+      },
+      {
         path: "/deviceList",
         component: DeviceList,
         meta: { title: '设备感知列表' }
@@ -52,6 +61,11 @@ const routes = [
 
       //边云协同任务调度资源
       {
+        path: "/taskDashboard",
+        component: TaskDashboard,
+        meta: { title: '任务首页' }
+      },
+      {
         path: "/taskList",
         component: TaskList,
         meta: { title: '任务列表' }
@@ -63,6 +77,11 @@ const routes = [
       },
 
       //传输资源虚拟化控制资源
+      {
+        path: "/virtualNetworkDashboard",
+        component: VirtualNetworkDashboard,
+        meta: { title: '传输资源控制首页' }
+      },
       {
         path: "/addTenant",
         component: AddTenant,
