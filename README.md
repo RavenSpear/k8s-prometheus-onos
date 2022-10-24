@@ -199,7 +199,7 @@ node-exporter-daemonset.yaml:74:        image: quay.io/brancz/kube-rbac-proxy:v0
 ```
 
 ## III. ONOS服务部署
-待完善
+待进一步完善
 
 ## IV. 测试服务部署
 待完善
