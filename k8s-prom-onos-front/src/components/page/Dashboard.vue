@@ -1,136 +1,210 @@
 <template>
-        <div>
-                <div id="mountNode"></div>
+        <div class="box">
+                <div id="mynetwork" class="myChart"></div>
         </div>
 </template>
-
+      
 <script>
-import G6 from '@antv/g6';
+
+require("vis-network/dist/dist/vis-network.min.css");
+const vis = require("vis-network/dist/vis-network.min");
 export default {
-        name: "dashboard",
         data() {
                 return {
-                };
-        },
-        methods: {
-                initG6() {
-                        const data = {
-                                // 点集
-                                nodes: [
-                                        {
-                                                id: 'master',
-                                                label: 'master',
-                                                size: '50',
-                                                x: 60,
-                                                y: 20,
-                                        },
-                                        {
-                                                id: 'worker1',
-                                                label: 'worker1',
-                                                size: '50',
-                                                x: 600,
-                                                y: 200,
-                                        },
-                                        {
-                                                id: 'worker2',
-                                                label: 'worker2',
-                                                size: '50',
-                                                x: 1000,
-                                                y: 600,
-                                        },
-                                        {
-                                                id: 'sw1',
-                                                label: 'sw1',
-                                                size: '50',
-                                                x: 800,
-                                                y: 700,
-                                        },
-                                        {
-                                                id: 'sw2',
-                                                label: 'sw3',
-                                                size: '50',
-                                                x: 555,
-                                                y: 900,
-                                        },
-                                        {
-                                                id: 'sw3',
-                                                label: 'sw3',
-                                                size: '50',
-                                                x: 30,
-                                                y: 100,
-                                        }
-                                ],
-                                // 边集
-                                edges: [
-                                        // 表示一条从 node1 节点连接到 node2 节点的边
-                                        {
-                                                source: 'master',
-                                                target: 'sw3',
-                                        },
-                                        {
-                                                source: 'worker1',
-                                                target: 'sw1',
-                                        },
-                                        {
-                                                source: 'worker2',
-                                                target: 'sw2',
-                                        },
-                                        {
-                                                source: 'sw1',
-                                                target: 'sw2',
-                                        },
-                                        {
-                                                source: 'sw1',
-                                                target: 'sw3',
-                                        },
-                                        {
-                                                source: 'sw2',
-                                                target: 'sw3',
-                                        }
-                                ],
-                        };
+                        nodes: [
+                                {
+                                        id: 0,
+                                        label: "Cloud-1",
+                                        title: "Cloud",
+                                        shape: "box",
+                                        group: 0,
+                                        isCloud: true,
+                                        margin: 40,
+                                        mass:5
+                                },
+                                
+                                { id: 1, label: "Edge-1", group: 0, isEdge: true, shape: "box", margin: 40,mass:10},
+                                { id: 2, label: "Edge-2", group: 0, isEdge: true, shape: "box", margin: 40,mass:10},
+                                { id: 3, label: "Sw-1", group: 1, shape: "circle", physics: false},
+                                { id: 4, label: "Sw-2", group: 1, shape: "circle", physics: false},
+                                { id: 5, label: "Sw-3", group: 1, shape: "circle", physics: false},
 
-                        // 创建 G6 图实例
-                        const graph = new G6.Graph({
-                                container: 'mountNode', // 指定图画布的容器 id，与第 9 行的容器对应
-                                // 画布宽高
-                                width: 2150,
-                                height: 1080,
-                                renderer:'svg',
-                                modes: {
-                                        default: [
-                                                'drag-canvas',
-                                                'zoom-canvas',
-                                                'drag-node',
-                                                {
-                                                        type: 'tooltip', // 提示框
-                                                        formatText(model) {
-                                                                // 提示框文本内容
-                                                                const text = 'label: ' + model.label + '<br/> class: ' + model.class;
-                                                                return text;
-                                                        },
-                                                },
-                                        ], // 允许拖拽画布、放缩画布、拖拽节点
+                                { id: 6, label: "Task-1", group: 2, shape: "box", parent: 0, hidden: true, margin: 20,
+                                        mass:10},
+                                { id: 7, label: "Task-2", group: 2, shape: "box", parent: 0, hidden: true,margin: 20,
+                                        mass:10},
+                                { id: 8, label: "IoT-1", group: 3, shape: "box", parent: 1, hidden: true,margin: 20 ,
+                                        mass:10},
+                                { id: 9, label: "IoT-2", group: 3, shape: "box", parent: 1, hidden: true,margin: 20 ,
+                                        mass:10},
+
+                                {
+                                        id: 10,
+                                        label: "Cloud-2",
+                                        shape: "box",
+                                        group: 0,
+                                        isCloud: true,
+                                        margin: 40,
+                                        mass:5
                                 },
-                                layout: {
-                                        // Object，可选，布局的方法及其配置项，默认为 random 布局。
-                                        type: 'force', // 指定为力导向布局
-                                        linkDistance: 100,
-                                        fitCenter: true,
-                                        preventOverlap: true, // 防止节点重叠
-                                        // nodeSize: 30        // 节点大小，用于算法中防止节点重叠时的碰撞检测。由于已经在上一节的元素配置中设置了每个节点的 size 属性，则不需要在此设置 nodeSize。
-                                },
-                                //fitView: true,//设置是否将图适配到画布中；
-                                //fitViewPadding: [20, 40, 50, 20]//画布上四周的留白宽度。
-                        });
-                        // 读取 data 中的数据源到图上
-                        graph.data(data);
-                        // 渲染图
-                        graph.render();
+
+                                { id: 11, label: "Sw-4", group: 1, isCloud: true, shape: "circle", physics: false},
+                                { id: 12, label: "Sw-5", group: 1, isCloud: true, shape: "circle", physics: false},
+                                { id: 13, label: "Sw-6", group: 1, isCloud: true, shape: "circle", physics: false},
+
+                                { id: 14, label: "Sw-7", group: 1, shape: "circle", physics: false},
+                                { id: 15, label: "Edge-3", group: 0, isEdge: true, shape: "box", margin: 40,mass:10},
+                        ],
+                        edges: [
+                                { from: 1, to: 4 },
+                                { from: 2, to: 5 },
+
+                                { from: 3, to: 4 },
+                                { from: 4, to: 5 },
+                                { from: 3, to: 5 },
+
+                                { from: 6, to: 0 },
+                                { from: 7, to: 0 },
+                                { from: 8, to: 1 },
+                                { from: 9, to: 1 },
+
+                                
+                                { from: 11, to: 12 },
+                                { from: 11, to: 13 },
+                                { from: 12, to: 13 },
+                                { from: 12, to: 3 },
+                                { from: 0, to: 11 },
+                                { from: 10, to: 13 },
+
+                                { from: 14, to: 3},
+                                { from: 14, to: 4},
+                                { from: 14, to: 5},
+
+                                { from: 15, to: 14},
+
+                        ]
                 }
         },
         mounted() {
-                this.initG6()
+                this.makeVis();
+        },
+        methods: {
+                makeVis() {
+
+
+                        var data = {
+                                nodes: this.nodes,
+                                edges: this.edges,
+                        };
+                        var container = document.getElementById("mynetwork");
+                        var options = {
+                                nodes: {
+                                        size: 40,
+                                        font: {
+                                                size: 32,
+                                        },
+                                        borderWidth: 3,
+                                        shadow: true,
+                                },
+                                edges: {
+                                        width: 3,
+                                        length: 250,
+                                        //shadow: true,
+                                }
+                        };
+                        this.network = new vis.Network(container, data, options);
+                        this.network.on("beforeDrawing", (ctx) => {
+                                //console.log(this.network.getScale()) // 放大缩小倍数
+                                //this.isDrowGaphical(ctx, this.isDrowPosition('isEdge'), this.getPositionWidth('isEdge'))
+                                this.isDrowGaphical(ctx, this.isDrowPosition('isCloud'), this.getPositionWidth('isCloud'))
+                        });
+                        this.network.on("doubleClick", (params) => {
+                                var id = params.nodes[0];
+                                if (id >= 0 && this.nodes[id].group == 0) {
+                                        this.changeSubNodeVisibility(id);
+                                }else if(id >= 0 && (this.nodes[id].group == 2 || this.nodes[id].group == 3)){
+                                        console.log(this.nodes[id].hidden)
+                                }
+                                //params.restore();
+                                //this.network.redraw()
+                        });
+
+                },
+                isDrowPosition(opt) {
+                        let PositionArr = []
+                        this.nodes.forEach(element => {
+                                if (element[opt]) {
+                                        PositionArr.push(element.id)
+                                }
+                        });
+                        let isPosiObj = this.network.getPositions(PositionArr) // 获取位置信息
+                        let NewObj = { maxX: null, minX: null, maxY: null, minY: null }
+                        for (var item in isPosiObj) {
+                                if (isPosiObj[item].x > NewObj.maxX || NewObj.maxX == null) NewObj.maxX = isPosiObj[item].x
+                                if (isPosiObj[item].x < NewObj.minX || NewObj.minX == null) NewObj.minX = isPosiObj[item].x
+                                if (isPosiObj[item].y > NewObj.maxY || NewObj.maxY == null) NewObj.maxY = isPosiObj[item].y
+                                if (isPosiObj[item].y < NewObj.minY || NewObj.minY == null) NewObj.minY = isPosiObj[item].y
+                        }
+                        return NewObj
+                },
+                // 获取符合条件的最大宽度与高度
+                getPositionWidth(opt) {
+                        let removeX = 0
+                        let removeY = 0
+                        this.nodes.forEach(ele => {
+                                if (ele[opt]) {
+                                        let obj = this.network.getBoundingBox(ele.id)
+                                        if (removeX < (obj.right - obj.left) / 2 + 10) {
+                                                removeX = (obj.right - obj.left) / 2 + 10
+                                        }
+                                        if (removeY < (obj.bottom - obj.top) / 2 + 10) {
+                                                removeY = (obj.bottom - obj.top) / 2 + 10
+                                        }
+                                }
+                        })
+                        return {
+                                removeX,
+                                removeY
+                        }
+                },
+                // 画出虚线框
+                isDrowGaphical(ctx, obj, SafeArea) {
+                        // 最小x 最小y => 最大x 最小y  => 最大x 最大y => 最小x 最大y
+                        ctx.save(); // 这里的坑 影响了之前的所有线都成为了虚线
+                        ctx.beginPath();
+                        ctx.strokeStyle = '#aaa'
+                        ctx.setLineDash([10, 10]);
+                        ctx.moveTo(obj.minX - SafeArea.removeX, obj.minY - SafeArea.removeY);
+                        ctx.lineTo(obj.maxX + SafeArea.removeX, obj.minY - SafeArea.removeY);
+                        ctx.lineTo(obj.maxX + SafeArea.removeX, obj.maxY + SafeArea.removeY);
+                        ctx.lineTo(obj.minX - SafeArea.removeX, obj.maxY + SafeArea.removeY);
+                        ctx.closePath();
+                        ctx.stroke();
+                        ctx.restore();
+                },
+                changeSubNodeVisibility(id) {
+                        for (var i = 0; i < this.nodes.length; i++) {
+                                if (this.nodes[i].parent == id) {
+                                        console.log(i)
+                                        let val = !this.nodes[i].hidden;
+                                        this.nodes[i].hidden = !this.nodes[i].hidden;
+                                        this.network.clustering.updateClusteredNode(i,{hidden : val});
+                                }
+                        }
+                }
         }
-};
+}
 </script>
+      
+<style>
+.box {
+        width: 100%;
+        height: 100%;
+}
+
+.myChart {
+        width: 100%;
+        height: 100%;
+}
+</style>
+      
