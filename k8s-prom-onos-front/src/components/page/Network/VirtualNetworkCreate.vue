@@ -10,38 +10,26 @@
     <div class="container">
       <div class="form-box">
         <el-form :model="form" label-width="80px">
-          <el-form-item label="选择租户">
-            <el-select v-model="form.tenantId" placeholder="请选择">
-              <el-option
-                v-for="item in tenants"
-                :key="item.id"
-                :label="item.id"
-                :value="item.id"
-              >
-              </el-option>
-            </el-select>
+
+          <el-form-item label="带宽需求(MB)" label-width="150px">
+            <el-col :span="11"><el-input v-model="form.minBandwidth" placeholder="最小带宽"></el-input></el-col>
+            <el-col class="line" :span="2">-</el-col>
+            <el-col :span="11"><el-input v-model="form.maxBandwidth" placeholder="最大带宽"></el-input></el-col>
           </el-form-item>
 
-          <el-form-item label="虚拟拓扑">
-            <input ref="vTopo" @change="parseTopoFile()" type="file" />
-            <!-- <el-button><i class="el-icon-plus">导入配置文件</i></el-button> -->
+          <el-form-item label="时延需求(MS)" label-width="150px">
+            <el-col :span="11"><el-input v-model="form.minDelay" placeholder="最低时延"></el-input></el-col>
+            <el-col class="line" :span="2">-</el-col>
+            <el-col :span="11"><el-input v-model="form.maxDelay" placeholder="最高时延"></el-input></el-col>
           </el-form-item>
 
-          <!-- <el-form-item label="时延需求">
-            <el-input v-model="form.transmissionDelay"></el-input>
-          </el-form-item> -->
-          <!-- 
-          <el-form-item label="主机1-IP">
-            <el-input v-model="form.h1IP"></el-input>
+          <el-form-item label="业务流量特征" label-width="150px">
+            <el-input v-model="form.traffic" placeholder="以五元组的形式描述业务流量"></el-input>
           </el-form-item>
 
-          <el-form-item label="主机2-IP">
-            <el-input v-model="form.h2IP"></el-input>
-          </el-form-item> -->
-
-          <el-form-item>
+          <el-form-item label-width="150px">
             <el-button type="primary" @click="submit">创建</el-button>
-            <!-- <el-button @click="cancel">取消</el-button> -->
+            <el-button @click="cancel">取消</el-button>
           </el-form-item>
         </el-form>
       </div>
