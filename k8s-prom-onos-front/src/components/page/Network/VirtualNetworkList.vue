@@ -2,35 +2,42 @@
   <div>
     <div class="crumbs">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item>租户管理</el-breadcrumb-item>
-        <el-breadcrumb-item>租户列表</el-breadcrumb-item>
+        <el-breadcrumb-item>传输资源虚拟化控制</el-breadcrumb-item>
+        <el-breadcrumb-item>虚拟网络列表</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
     <div class="container">
+      <div class="handle-box">
+        <el-button type="primary" class="mr10" @click="toAddTenantPage"
+          >创建虚拟网络</el-button
+        >
+      </div>
+
       <el-table :data="tableData" class="table">
         <!-- <el-table-column type="index" width="100"></el-table-column> -->
         <el-table-column
           prop="virtualNetworkId"
           label="虚拟网络Id"
         ></el-table-column>
-        <el-table-column prop="tenantId" label="所属租户"></el-table-column>
-        <el-table-column prop="status" label="状态"></el-table-column>
-        <!-- <el-table-column prop="transmissionDelay" label="传输延迟(ms)"></el-table-column> -->
+        <el-table-column prop="bandwidth" label="带宽需求"></el-table-column>
+        <el-table-column prop="delay" label="时延需求"></el-table-column>
+        <el-table-column prop="traffic" label="业务流量"></el-table-column>
+        <el-table-column prop="status" label="网络状态"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
               type="text"
               icon="el-icon-ali-eye iconfont"
               @click="topoShow(scope.row)"
-              >查看拓扑</el-button
+              >查看</el-button
             >
             <el-button
               type="text"
-              icon="el-icon-plus"
+              icon="el-icon-delete"
               class="red"
-              @click="embed(scope.row)"
-              >嵌入</el-button
+              @click="topoShow(scope.row)"
+              >删除</el-button
             >
           </template>
         </el-table-column>
@@ -45,7 +52,32 @@ export default {
   data() {
     return {
       query: {},
-      tableData: [],
+      tableData: [{
+        virtualNetworkId: "1546137",
+        bandwidth: "10M",
+        delay: "1ms",
+        traffic: "10.0.0.1->10.0.0.2",
+        status: "正在运行"
+
+      },
+      {
+        virtualNetworkId: "1546137",
+        bandwidth: "10M",
+        delay: "1ms",
+        traffic: "10.0.0.1->10.0.0.2",
+        status: "正在运行"
+
+      },
+      {
+        virtualNetworkId: "1546137",
+        bandwidth: "10M",
+        delay: "1ms",
+        traffic: "10.0.0.1->10.0.0.2",
+        status: "正在运行"
+
+      }
+    
+    ],
     };
   },
   created() {
