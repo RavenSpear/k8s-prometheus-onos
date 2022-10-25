@@ -13,7 +13,7 @@
 
 ### 安装内容
   - Kubernetes 1.23.12
-  - OpenvSwitch 2.10.0
+  - OpenvSwitch
   - Docker
 
 ### 安装（以下命令的执行需要root权限）
@@ -85,10 +85,9 @@ worker
 
 ### 安装（以下命令的执行需要root权限）
 
-1. 进入calico目录，部署calico网络插件以启用k8s虚拟网络
+1. 部署calico网络插件以启用k8s虚拟网络
 
 ```
-# cd calico/
 # kubectl apply -f calico/
 ```
 查看集群状态，当所有节点状态STATUS为Ready表示网络建立成功
@@ -99,7 +98,7 @@ master   Ready    control-plane,master   45h   v1.23.12
 ```
 2. 进入k8s-prometheus目录，建立namespace以及CustomResourceDefinition，启动prometheus-operater
 ```
-# cd k8s-prometheus/
+# cd kube-prometheus
 # kubectl apply --server-side -f manifests/setup
 ```
 检查部署情况
