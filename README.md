@@ -82,6 +82,7 @@ worker
   - prometheus-adapter-0.9.1
   - prometheus-operator-0.57.0
   - prometheus-2.36.1
+  - grafana
 
 ### 安装（以下命令的执行需要root权限）
 
@@ -156,6 +157,10 @@ replicaset.apps/prometheus-operator-f59c8b954   1         1         1       11m
 
 NAME                              READY   AGE
 statefulset.apps/prometheus-k8s   2/2     2m54s
+```
+4. 部署grafana
+```
+kubectl apply -f grafana
 ```
 以下命令应返回集群节点CPU及内存使用率
 ```
