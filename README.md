@@ -13,7 +13,7 @@
 
 ### 安装内容
   - Kubernetes 1.23.12
-  - OpenvSwitch 2.10.0
+  - OpenvSwitch
   - Docker
 
 ### 安装（以下命令的执行需要root权限）
@@ -82,13 +82,13 @@ worker
   - prometheus-adapter-0.9.1
   - prometheus-operator-0.57.0
   - prometheus-2.36.1
+  - grafana
 
 ### 安装（以下命令的执行需要root权限）
 
-1. 进入calico目录，部署calico网络插件以启用k8s虚拟网络
+1. 部署calico网络插件以启用k8s虚拟网络
 
 ```
-# cd calico/
 # kubectl apply -f calico/
 ```
 查看集群状态，当所有节点状态STATUS为Ready表示网络建立成功
@@ -99,7 +99,7 @@ master   Ready    control-plane,master   45h   v1.23.12
 ```
 2. 进入k8s-prometheus目录，建立namespace以及CustomResourceDefinition，启动prometheus-operater
 ```
-# cd k8s-prometheus/
+# cd kube-prometheus
 # kubectl apply --server-side -f manifests/setup
 ```
 检查部署情况
@@ -157,6 +157,10 @@ replicaset.apps/prometheus-operator-f59c8b954   1         1         1       11m
 
 NAME                              READY   AGE
 statefulset.apps/prometheus-k8s   2/2     2m54s
+```
+4. 部署grafana
+```
+kubectl apply -f grafana
 ```
 以下命令应返回集群节点CPU及内存使用率
 ```
