@@ -31,7 +31,7 @@ mtu: 1400
 # For example, on DigitalOcean, you would use eth1 as that is the default private network interface.
 network_interface: ""
 
-enable_dashboard: yes
+#enable_dashboard: no
 
 # A list of insecure registries you might need to define
 # insecure_registries: []

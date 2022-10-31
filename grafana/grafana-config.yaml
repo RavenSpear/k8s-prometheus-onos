@@ -11,5 +11,9 @@ metadata:
 stringData:
   grafana.ini: |
     [date_formats]
-    default_timezone = UTC
+    default_timezone = CST
+    [security]
+    allow_embedding = true
+    [auth.anonymous]
+    enabled = true
 type: Opaque
