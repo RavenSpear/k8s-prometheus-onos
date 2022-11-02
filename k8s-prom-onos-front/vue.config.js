@@ -36,6 +36,14 @@ module.exports = {
             '/hosts': {
                 target: 'http://127.0.0.1:8181/onos/v1',
                 changeOrigin: true,
+            },
+
+            '/cluster': {
+                target: 'http://192.168.1.104:8009/api/v1',
+                changeOrigin: true,
+                pathRewrite: {
+   				 '^/cluster': '',   //重写请求路径
+ 			    },
             }
         }
     }

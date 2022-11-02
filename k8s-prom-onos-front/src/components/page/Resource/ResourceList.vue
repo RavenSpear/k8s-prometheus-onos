@@ -97,6 +97,7 @@
 </template>
 
 <script>
+import { getNodes } from "../../../api/index";
 export default {
     data() {
         return {
@@ -207,7 +208,11 @@ export default {
     },
     methods: {
         getData() {
-
+            getNodes();
+        },
+        getNodes(){
+            let nodes = getNodes();
+            console.log(nodes);
         },
         topoShow() {
 

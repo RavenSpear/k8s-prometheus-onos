@@ -1,5 +1,5 @@
 import request from '../utils/request'
-
+require('events').EventEmitter.defaultMaxListeners = 20;
 //================ Tenant API =================
 export const fetchTenantData = query => {
     return request({
@@ -89,6 +89,16 @@ export const getVirtualNetworkTopo = query => {
 export const embedVirtualNetworkTopo = query => {
     return request({
         url: '/vnets/embed/'+query.id,
+        method: 'get'
+    })
+}
+
+
+/* API for dashboard*/
+
+export const getNodes = () => {
+    return request({
+        url: 'cluster/nodes',
         method: 'get'
     })
 }
