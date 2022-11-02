@@ -1,6 +1,8 @@
 require('events').EventEmitter.defaultMaxListeners = 20;
 module.exports = {
     devServer: {
+        host:"223.3.94.112",
+        port:"80",
         proxy: {
             '/tenants': {
                 target: 'http://127.0.0.1:8181/onos/p4virtex',
