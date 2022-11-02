@@ -1,3 +1,4 @@
+require('events').EventEmitter.defaultMaxListeners = 20;
 module.exports = {
     devServer: {
         proxy: {
@@ -38,11 +39,39 @@ module.exports = {
                 changeOrigin: true,
             },
 
+            /* Apis for k8s api/v1 */
             '/cluster': {
                 target: 'http://192.168.1.104:8009/api/v1',
                 changeOrigin: true,
                 pathRewrite: {
-   				 '^/cluster': '',   //重写请求路径
+   				 '^/cluster': '',  
+ 			    },
+            },
+
+            /* Apis for k8s apis/custom.metrics.k8s.io/v1beta1 */
+            '/costum-metrics': {
+                target: 'http://192.168.1.104:8009/apis/custom.metrics.k8s.io/v1beta1',
+                changeOrigin: true,
+                pathRewrite: {
+   				 '^/costum-metrics': '',   
+ 			    },
+            },
+
+            /* Apis for k8s apis/metrics.k8s.io/v1beta1 */
+            '/metrics': {
+                target: 'http://192.168.1.104:8009/apis/metrics.k8s.io/v1beta1',
+                changeOrigin: true,
+                pathRewrite: {
+   				 '^/metrics': '',   
+ 			    },
+            },
+
+            /* Apis for onos api/v1 */
+            '/network': {
+                target: 'http://192.168.1.104:8181/onos/v1',
+                changeOrigin: true,
+                pathRewrite: {
+   				 '^/network': '',   
  			    },
             }
         }
