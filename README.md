@@ -186,6 +186,11 @@ master   1153m        9%     9565Mi          60%
 # kubectl get --raw /apis/custom.metrics.k8s.io/v1beta1 | jq . 
 ```
 
+5. 暴露服务
+```
+kubectl proxy --address='0.0.0.0'  --accpet=hosts='^*$' --port=8009
+``` 
+
 ### 可能遇到的问题
 
 1. 镜像拉取失败。手动拉取镜像，如仍失败，尝试使用系统代理，配置方法：[https://docs.docker.com/config/daemon/systemd/](https://docs.docker.com/config/daemon/systemd/)
