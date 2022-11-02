@@ -6,13 +6,69 @@
 * mininet
   
 虚拟机软件：virtualbox
-## mininet部署
-待完善
-## 集群部署
-### 前言（可能遇到的问题）
-在运行ansible安装主机运行环境的速度取决于网络环境，每一步都会有明确的运行结果输出。
+## Mininet部署
+Mininet主机操作系统为Ubuntu 18.04 (LTS)，一张网卡（NAT模式）用于连接互联网，三张网卡分属三个不同的内部网络并开启了混杂模式。
+### 0x01 配置主机连入互联网
+1. 在virtual box上新建一个NAT网络，假设名为NatNetwork
+2. Mininet主机在创建时，网卡1的连接方式选择NAT网络，界面名称选择NatNetwork。
+### 0x02 配置主机连入内部网络
+Mininet主机网卡2、网卡3、网卡4分别接入内部网络internet、internet1、internet2，并且网卡的混杂模式设置为允许虚拟电脑
+### 0x03 安装mininent容器并启动（需要先安装docker）
+```
+# 安装mininent容器
+docker pull daimaguicai/mn-stratum:v2.0
 
-在部署k8s集群时，可能会遇到容器镜像拖取失败一直重复的问题，可以通过为docker设置代理的方式解决。docker 配置代理方式的两条命令如下：
+# 将项目中的mininet文件放置到mininet宿主机上
+
+# 设置环境变量
+alias mn-stratum="docker run --net=host --privileged -it -e DISPLAY=${DISPLAY} -v ~/projects/p4virtex/mininet:/test -v /tmp/.X11-unix:/tmp/.X11-unix --name mn-stratum --hostname mn-stratum daimaguicai/mn-stratum:v2.0"
+
+"~/projects/p4virtex/mininet"替换成项目中mininet的安装位置
+
+# 打开topo.py文件, 关键代码为如下
+Intf("eth1",node=net.nameToNode[ "s1" ]) 
+Intf("eth2",node=net.nameToNode[ "s8" ])
+
+假设额外安装的网口为eth1和eth2，利用上面的语句就可以实现mininet的端口扩展，直接绑定主机的网口。
+
+# 启动mininet容器
+mn-stratum
+cd /test
+python topo.py
+
+# 至此mininet容器已经启动，并成功绑定主机的两个网口
+- 安装运行ONOS
+
+# 安装docker容器
+docker pull onosproject/onos:2.5.7
+
+# 设置环境变量
+alias onos="docker run --net=host --privileged -it --env JAVA_DEBUG_PORT='0.0.0.0:5005' --name onos onosproject/onos:2.5.7 clean debug"
+
+# 启动onos
+onos
+
+# onos需要开启的服务
+org.onosproject.netconf
+org.onosproject.drivers.bmv2
+org.onosproject.lldpprovider
+org.onosproject.proxyarp
+org.onosproject.hostprovider
+org.onosproject.fwd
+
+
+- onos 连接 mininet
+
+在mininet文件夹下，主机端运行
+`make install_netcfg`
+```
+## k8s集群部署
+k8s集群有三台主机（1 master + 2 worker），操作系统均为Ubuntu 18.04 (LTS)，主机间通过mininet互联。
+### 可能遇到的问题
+
+1. 在运行ansible安装主机运行环境的速度取决于网络环境，每一步都会有明确的运行结果输出。
+
+2. 在部署k8s集群时，可能会遇到容器镜像拖取失败一直重复的问题，可以通过为docker设置代理的方式解决。具体该为集群中哪台主机配置docker代理，可以通过kubectl describe命令查看镜像拉取失败的pod具体运行在哪台主机上面。docker 配置代理方式的两条命令如下：
 ```
 # mkdir /etc/systemd/system/docker.service.d
 
@@ -22,19 +78,19 @@ Environment="HTTP_PROXY=http://ip:port"
 Environment="HTTPS_PROXY=http://ip:port"
 EOF
 ```
-具体该为集群中哪台主机配置docker代理，可以通过kubectl describe命令查看镜像拉取失败的pod具体运行在哪台主机上面。
-### 0x00 主机基本信息
-集群部署有三台主机（1 master + 2 worker），操作系统均为Ubuntu 18.04 (LTS)，主机间通过mininet互联。
 
 ### 0x01 配置三台主机接入互联网
 
-为每台主机配置一张网卡（NAT模式）用于连接互联网
+各台主机在创建时，网卡1的连接方式选择NAT网络，界面名称选择NatNetwork。
 
 ### 0x02 配置三台主机接入mininet
-三台主机除了各有一张用于连接互联网的网卡（NAT），还各有一张与mininet位于同一个内部网络的网卡，要注意的是这三台主机分别在不同的内部网络。
+1. 各台主机的网卡2分别接入内部网络internet、internet1、internet2，这里的混杂模式保持为关闭
 
+2. 将各台主机接入内部网络的网卡配置为静态公网ip（模拟实际环境）（配置前先提前ping一下这个ip是否存活，尽量选择ping不通的）（子网掩码尽可能大，比如长度为30），网关设置为自己，可通过命令或者/etc/netplan/里的配置文件更改
 
+3. 在三台主机上都使用`route add -host x.x.x.x dev ethxx`添加到各自到另外两台主机的静态路由，切记一定要使用-host选项
 
+4. 用`route delete -net xxx dev ethxx`命令删除在配置内部网络网卡时生成的默认路由，此步也可不执行
 
 ### 0x03 在三台主机上安装openssh并配置root远程登陆
 TIPS：需要使用`sudo chpasswd`命令提前为root设置密码
