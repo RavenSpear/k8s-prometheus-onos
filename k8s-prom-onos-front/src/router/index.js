@@ -5,7 +5,7 @@ import Home from '../components/common/Home.vue'
 import Dashboard from '../components/page/Dashboard.vue'
 
 import VirtualNetworkDashboard from '../components/page/Network/VirtualNetworkDashboard.vue'
-import AddTenant from '../components/page/Network/AddTenant.vue'
+//mport AddTenant from '../components/page/Network/AddTenant.vue'
 import TenantList from '../components/page/Network/TenantList.vue'
 import Piplines from '../components/page/Network/Pipelines.vue'
 import TopoConfig from '../components/page/Network/TopoConfig.vue'
@@ -73,7 +73,7 @@ const routes = [
       {
         path: "/taskCreate",
         component: TaskCreate,
-        meta: { title: '任务创建' }
+        meta: { title: '任务部署' }
       },
 
       //传输资源虚拟化控制资源
@@ -82,11 +82,11 @@ const routes = [
         component: VirtualNetworkDashboard,
         meta: { title: '传输资源控制首页' }
       },
-      {
-        path: "/addTenant",
-        component: AddTenant,
-        meta: { title: '添加租户' }
-      },
+      // {
+      //   path: "/addTenant",
+      //   component: AddTenant,
+      //   meta: { title: '添加租户' }
+      // },
       {
         path: "/tenantList",
         component: TenantList,

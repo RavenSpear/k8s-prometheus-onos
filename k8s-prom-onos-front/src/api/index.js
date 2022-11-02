@@ -1,5 +1,4 @@
 import request from '../utils/request'
-require('events').EventEmitter.defaultMaxListeners = 20;
 //================ Tenant API =================
 export const fetchTenantData = query => {
     return request({
@@ -94,11 +93,18 @@ export const embedVirtualNetworkTopo = query => {
 }
 
 
-/* API for dashboard*/
-
-export const getNodes = () => {
+/* Api to get nodes from k8s api/v1*/
+export const getClusterNodes = () => {
     return request({
         url: 'cluster/nodes',
+        method: 'get'
+    })
+}
+
+/* Api to get devices from onos api*/
+export const getNetworkNodes = () => {
+    return request({
+        url: 'network/devices',
         method: 'get'
     })
 }

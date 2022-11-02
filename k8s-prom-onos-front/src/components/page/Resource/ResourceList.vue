@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { getNodes } from "../../../api/index";
+import { getClusterNodes, getNetworkNodes } from "../../../api/index";
 export default {
     data() {
         return {
@@ -208,18 +208,11 @@ export default {
     },
     methods: {
         getData() {
-            getNodes();
-        },
-        getNodes(){
-            let nodes = getNodes();
+            let nodes = getClusterNodes();
+            let switches = getNetworkNodes();
             console.log(nodes);
-        },
-        topoShow() {
-
-        },
-        embed() {
-
-        },
+            console.log(switches);
+        }
     },
 };
 </script>
