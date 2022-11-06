@@ -1,8 +1,8 @@
 require('events').EventEmitter.defaultMaxListeners = 20;
 module.exports = {
     devServer: {
-        host:"223.3.94.112",
-        port:"80",
+        host:"127.0.0.1",
+        port:"8080",
         proxy: {
             '/tenants': {
                 target: 'http://127.0.0.1:8181/onos/p4virtex',
@@ -47,6 +47,14 @@ module.exports = {
                 changeOrigin: true,
                 pathRewrite: {
    				 '^/cluster': '',  
+ 			    },
+            },
+
+            'task': {
+                target: 'http://192.168.1.104:8009/apis/apps/v1',
+                changeOrigin: true,
+                pathRewrite: {
+   				 '^/task': '',  
  			    },
             },
 

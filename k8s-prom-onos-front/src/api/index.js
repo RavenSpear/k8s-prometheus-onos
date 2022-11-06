@@ -1,5 +1,7 @@
+
 import request from '../utils/request'
 //================ Tenant API =================
+
 export const fetchTenantData = query => {
     return request({
         url: '/tenants',
@@ -93,11 +95,28 @@ export const embedVirtualNetworkTopo = query => {
 }
 
 
-/* Api to get nodes from k8s api/v1*/
+/* Api to get nodes from k8s api/v1 */
 export const getClusterNodes = () => {
     return request({
         url: 'cluster/nodes',
         method: 'get'
+    })
+}
+
+/* Api to get node according to its name from k8s api/v1 */
+export const getClusterNode = nodename => {
+    return request({
+        url: 'cluster/nodes/'+nodename,
+        method: 'get'
+    })
+}
+
+/* Api to get pods from k8s api/v1 */
+export const getClusterPods = query => {
+    return request({
+        url: 'cluster/namespaces/kube-system/pods',
+        method: 'get',
+        params: query
     })
 }
 
@@ -106,5 +125,30 @@ export const getNetworkNodes = () => {
     return request({
         url: 'network/devices',
         method: 'get'
+    })
+}
+
+/* Api to get tasks from k8s apis/apps/v1 */
+export const getTaskList = () => {
+    return request({
+        url: 'task/namespaces/kube-system/deployments',
+        method: 'get'
+    })
+}
+
+/* Api to post tasks to k8s apis/apps/v1 */
+export const createTask = formData => {
+    return request({
+        url: 'task/namespaces/kube-system/deployments',
+        method: 'post',
+        data: formData
+    })
+}
+
+/* Api to post tasks to k8s apis/apps/v1 */
+export const deleteTask = name => {
+    return request({
+        url: 'task/namespaces/kube-system/deployments/' + name,
+        method: 'delete'
     })
 }

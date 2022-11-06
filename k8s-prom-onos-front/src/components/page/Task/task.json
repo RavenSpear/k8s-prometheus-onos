@@ -1,0 +1,52 @@
+{
+    "apiVersion": "apps/v1",
+    "kind": "Deployment",
+    "metadata": {
+        "name": "nginx-dp"
+    },
+    "spec": {
+        "replicas": 1,
+        "revisionHistoryLimit": 10,
+        "selector": {
+            "matchLabels": {
+                "app": "nginx"
+            }
+        },
+        "template": {
+            "metadata": {
+                "labels": {
+                    "app": "nginx"
+                },
+                "annotations": {
+                    "kubernetes.io/ingress-bandwidth": "1M",
+                    "kubernetes.io/egress-bandwidth": "1M"
+                }
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "name": "nginx",
+                        "image": "nginx:1.14",
+                        "resources": {
+                            "requests": {
+                                "memory": "64Mi",
+                                "cpu": "250m",
+                                "ephemeral-storage": "2Gi"
+                            },
+                            "limits": {
+                                "memory": "128Mi",
+                                "cpu": "500m",
+                                "ephemeral-storage": "4Gi"
+                            }
+                        },
+                        "ports": [
+                            {
+                                "containerPort": 80
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

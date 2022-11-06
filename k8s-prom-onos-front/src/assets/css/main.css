@@ -95,7 +95,7 @@ a {
 /*BaseForm*/
 
 .form-box {
-    width: 600px;
+    width: 1000px;
 }
 
 .form-box .line {
@@ -210,5 +210,13 @@ a {
 }
 
 .table{
+    font-size: 20px;
+}
+
+.el-form-item__label{
+    font-size: 20px;
+}
+
+.el-input{
     font-size: 20px;
 }
