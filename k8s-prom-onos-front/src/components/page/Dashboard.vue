@@ -5,7 +5,7 @@
 </template>
       
 <script>
-
+import { getNetworkTopoDevices, getNetworkTopoLinks, getHosts } from '../../api'
 require("vis-network/dist/dist/vis-network.min.css");
 const vis = require("vis-network/dist/vis-network.min");
 export default {
@@ -86,6 +86,7 @@ export default {
                 }
         },
         mounted() {
+                this.collectTopoInfo()
                 this.makeVis();
         },
         methods: {
@@ -191,6 +192,14 @@ export default {
                                         this.network.clustering.updateClusteredNode(i,{hidden : val});
                                 }
                         }
+                },
+                collectTopoInfo(){
+                        var links = getNetworkTopoLinks();
+                        var hosts = getHosts();
+                        var devices = getNetworkTopoDevices();
+                        console.log(links)
+                        console.log(hosts)
+                        console.log(devices)
                 }
         }
 }
