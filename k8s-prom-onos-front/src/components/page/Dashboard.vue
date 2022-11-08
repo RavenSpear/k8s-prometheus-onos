@@ -11,6 +11,8 @@ const vis = require("vis-network/dist/vis-network.min");
 export default {
         data() {
                 return {
+                        devicehashs:{},
+                        edgehashs:{},
                         nodes: [
                                 {
                                         id: 0,
@@ -86,8 +88,7 @@ export default {
                 }
         },
         mounted() {
-                this.collectTopoInfo()
-                this.makeVis();
+                this.collectTopoInfo();
         },
         methods: {
                 makeVis() {
@@ -97,6 +98,7 @@ export default {
                                 nodes: this.nodes,
                                 edges: this.edges,
                         };
+                        //console.log(data)
                         var container = document.getElementById("mynetwork");
                         var options = {
                                 nodes: {
@@ -194,12 +196,65 @@ export default {
                         }
                 },
                 async collectTopoInfo(){
-                        var links =  await (await getNetworkTopoLinks()).data;
-                        var hosts = await (await getHosts()).data;
-                        var devices = await (await getNetworkTopoDevices()).data;
-                        console.log(links)
-                        console.log(hosts)
-                        console.log(devices)
+                        this.nodes = [];
+                        this.edges = [];
+                        var links =  await (await getNetworkTopoLinks()).data.links;
+                        var hosts = await (await getHosts()).data.hosts;
+                        var devices = await (await getNetworkTopoDevices()).data.devices;
+
+                        //console.log(links)
+                        //console.log(hosts)
+                        //console.log(devices)
+                        let i=0;
+                        for(;i<devices.length;i++){
+                                let device = {
+                                        id: i,
+                                        group: 0, 
+                                        title: devices[i],
+                                        label: "Sw-"+i,
+                                        shape: "circle", 
+                                        physics: false
+                                }
+                                this.devicehashs[device.title] = i;
+                                //console.log(this.devicehashs)
+                                this.nodes.push(device);
+                        }
+                        for(var j=0;j<links.length;j++){
+                                let link = {
+                                        from: this.devicehashs[links[j].src.device],
+                                        to: this.devicehashs[links[j].dst.device],
+                                }
+                                if(this.edgehashs[this.edgeHashCode(link.from,link.to)]==null){
+                                        this.edgehashs[this.edgeHashCode(link.from,link.to)]=1;
+                                        this.edges.push(link);
+                                }
+                                
+                        }
+                        //console.log(this.edgehashs);
+                        for(;i<hosts.length+devices.length;i++){
+                                let node = {
+                                        id: i,
+                                        title: hosts[i-devices.length].id,
+                                        label: "Node-"+(i-devices.length),
+                                        shape: "box",
+                                        group: 1,
+                                        margin: 40,
+                                        mass:10
+                                }
+                                let loc = {
+                                        from: i,
+                                        to: this.devicehashs[hosts[i-devices.length].locations[0].elementId]
+                                }
+                                this.nodes.push(node);
+                                this.edges.push(loc);
+                                //console.log(this.nodes)
+                        }
+                        //console.log(this.nodes)
+                        //console.log(this.edges)
+                        this.makeVis();
+                },
+                edgeHashCode(a,b){
+                        return a>b?(a+"."+b):(b+"."+a);
                 }
         }
 }
