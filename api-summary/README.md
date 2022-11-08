@@ -221,12 +221,12 @@ GET /network/topology/clusters/{id}/links
   ]
 }
 ```
-### `/cluster`
+### `/terminal`
 
 #### API映射
 
 ```
-http://front-ip:port/cluster -> http://k8s-ip:port/api/v1
+http://front-ip:port/terminal -> http://k8s-ip:port/api/v1
 ```
 
 #### API资源
@@ -236,7 +236,7 @@ http://front-ip:port/cluster -> http://k8s-ip:port/api/v1
 - Request
 
 ```
-GET /cluster/nodes
+GET /terminal/nodes
 ```
 
 - Response
@@ -456,7 +456,7 @@ http://front-ip:port/custom-metrics -> http://onos-ip:port/apis/custom.metrics.k
 
 展示系统全局拓扑。
 
-拓扑中存在四种节点：cluster节点、network节点、task节点和IoT节点。节点之间通过链路连接，task节点和IoT节点仅能连接到cluster节点，network节点可以连接其他network节点以及cluster节点。双击cluster节点以显示/隐藏接入的task节点和IoT节点。
+拓扑中存在四种节点：terminal节点、network节点、task节点和IoT节点。节点之间通过链路连接，task节点和IoT节点仅能连接到terminal节点，network节点可以连接其他network节点以及terminal节点。双击terminal节点以显示/隐藏接入的task节点和IoT节点。
 
 -  `全局拓扑图`
 
@@ -474,17 +474,17 @@ http://front-ip:port/custom-metrics -> http://onos-ip:port/apis/custom.metrics.k
 
 ### `III. 资源感知列表`
 
-展示集群中cluster节点，network节点的列表。
+展示集群中terminal节点，network节点的列表。
 
 - `云端资源列表`
 
 | 表项 | 资源 |
 | :-: | :-: |
-| 节点名 | cluster/node.item[i].metadata.name |
-| IP地址 | cluster/node.item[i].status.addresses[x(type==InternalIP)].address |
-| 操作系统 | cluster/node.item[i].nodeInfo.operatingSystem |
-| 创建时间 | cluster/node.item[i].metadata.creationTimestamp |
-| 状态 | cluster/node.item[i].status.conditions[x(type==Ready)].status==True?就绪:未就绪 |
+| 节点名 | terminal/node.item[i].metadata.name |
+| IP地址 | terminal/node.item[i].status.addresses[x(type==InternalIP)].address |
+| 操作系统 | terminal/node.item[i].nodeInfo.operatingSystem |
+| 创建时间 | terminal/node.item[i].metadata.creationTimestamp |
+| 状态 | terminal/node.item[i].status.conditions[x(type==Ready)].status==True?就绪:未就绪 |
 | 查看详情 | button(name) |
 
 - `边端资源列表`
@@ -503,7 +503,7 @@ http://front-ip:port/custom-metrics -> http://onos-ip:port/apis/custom.metrics.k
 | 查看详情 | button(id) |
 
 
-### `子页面：Cluster节点资源详情页`
+### `子页面：Terminal节点资源详情页`
 
 跳转自`资源感知列表`-云端资源列表/边端资源列表中的查看详情按钮。
 
@@ -511,7 +511,7 @@ http://front-ip:port/custom-metrics -> http://onos-ip:port/apis/custom.metrics.k
 
 包含节点磁盘总量、内存总量、总运行时间、CPU总数。动态展示实时CPU负载，内存负载，磁盘负载。节点CPU使用情况，全局内存使用情况，全局磁盘使用情况。
 
-- `Cluster节点资源详情页`
+- `Terminal节点资源详情页`
 
 页面通过嵌入grafana Dashboard实现。
 
@@ -530,7 +530,7 @@ http://front-ip:port/custom-metrics -> http://onos-ip:port/apis/custom.metrics.k
 
 ### `IV. 设备感知列表`
 
-展示系统Cluster节点接入的设备列表。
+展示系统Terminal节点接入的设备列表。
 
 - `设备感知列表`
 
