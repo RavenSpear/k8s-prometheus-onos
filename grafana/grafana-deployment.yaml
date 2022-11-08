@@ -63,8 +63,12 @@ spec:
           readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/cluster-overview
           name: grafana-dashboard-cluster-overview
+          readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/task-overview
           name: grafana-dashboard-task-overview
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/node-overview
+          name: grafana-dashboard-node-overview
           readOnly: false
         - mountPath: /etc/grafana
           name: grafana-config
@@ -94,6 +98,9 @@ spec:
       - configMap:
           name: grafana-dashboard-task-overview
         name: grafana-dashboard-task-overview
+      - configMap:
+          name: grafana-dashboard-node-overview
+        name: grafana-dashboard-node-overview
       - name: grafana-config
         secret:
           secretName: grafana-config

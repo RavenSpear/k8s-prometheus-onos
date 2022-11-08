@@ -72,6 +72,15 @@ export const getHosts = () =>{
     })
 }
 
+export const getDeviceOpenPort = deviceId =>{
+    return request({
+        // 原映射
+        //url:'/devices',
+        url:`/network/devices/${deviceId}/ports`,
+        method:'get'
+    })
+}
+
 //================ Virtual Network API =================
 export const fetchVirtualNetworkData = query => {
     return request({

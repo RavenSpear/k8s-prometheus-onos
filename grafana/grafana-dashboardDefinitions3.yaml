@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-  cluster-overview.json: |-
+  node-overview.json: |-
     {
       "__inputs": [
         {
@@ -71,6 +71,7 @@ data:
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
       "id": null,
+      "iteration": 1667910922085,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -115,7 +116,7 @@ data:
             "x": 0,
             "y": 0
           },
-          "id": 5,
+          "id": 2,
           "options": {
             "colorMode": "none",
             "graphMode": "none",
@@ -141,7 +142,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(node_filesystem_size_bytes{mountpoint=\"/\"})",
+              "expr": "sum(node_filesystem_size_bytes{mountpoint=\"/\",instance=\"$nodeName\"})",
               "range": true,
               "refId": "A"
             }
@@ -217,7 +218,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(node_memory_MemTotal_bytes)",
+              "expr": "node_memory_MemTotal_bytes{instance=\"$nodeName\"}",
               "range": true,
               "refId": "A"
             }
@@ -336,7 +337,7 @@ data:
             "x": 12,
             "y": 0
           },
-          "id": 13,
+          "id": 12,
           "options": {
             "legend": {
               "calcs": [],
@@ -355,37 +356,13 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "(sum(rate(node_cpu_seconds_total{instance=\"master\"}[1m])) - sum(rate(node_cpu_seconds_total{instance=\"master\",mode=\"idle\"}[1m]))) / sum(rate(node_cpu_seconds_total[1m])) * 100",
-              "legendFormat": "云节点",
+              "expr": "(sum(rate(node_cpu_seconds_total{instance=\"$nodeName\"}[1m])) - sum(rate(node_cpu_seconds_total{instance=\"$nodeName\",mode=\"idle\"}[1m]))) / sum(rate(node_cpu_seconds_total{instance=\"$nodeName\"}[1m])) * 100",
+              "legendFormat": "节点",
               "range": true,
               "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
-              },
-              "editorMode": "code",
-              "expr": "(sum(rate(node_cpu_seconds_total{instance!=\"master\"}[1m])) - sum(rate(node_cpu_seconds_total{instance!=\"master\",mode=\"idle\"}[1m]))) / sum(rate(node_cpu_seconds_total[1m])) * 100",
-              "hide": false,
-              "legendFormat": "边节点",
-              "range": true,
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
-              },
-              "editorMode": "code",
-              "expr": "sum(rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) / sum(rate(node_cpu_seconds_total[1m])) * 100",
-              "hide": false,
-              "legendFormat": "未占用",
-              "range": true,
-              "refId": "C"
             }
           ],
-          "title": "全局CPU使用情况",
+          "title": "CPU使用情况",
           "type": "timeseries"
         },
         {
@@ -429,7 +406,7 @@ data:
             "x": 0,
             "y": 5
           },
-          "id": 7,
+          "id": 8,
           "options": {
             "colorMode": "none",
             "graphMode": "none",
@@ -455,7 +432,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "node_time_seconds{instance=\"master\"} - node_boot_time_seconds{instance=\"master\"}",
+              "expr": "node_time_seconds{instance=\"$nodeName\"} - node_boot_time_seconds{instance=\"$nodeName\"}",
               "range": true,
               "refId": "A"
             }
@@ -529,7 +506,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(kube_node_status_allocatable{resource=\"cpu\"})",
+              "expr": "sum(kube_node_status_allocatable{resource=\"cpu\",node=\"$nodeName\"})",
               "range": true,
               "refId": "A"
             }
@@ -645,7 +622,7 @@ data:
             "x": 12,
             "y": 7
           },
-          "id": 9,
+          "id": 14,
           "options": {
             "legend": {
               "calcs": [],
@@ -664,37 +641,13 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "node_memory_MemTotal_bytes{instance=\"master\"} - node_memory_MemFree_bytes{instance=\"master\"} - (node_memory_Cached_bytes{instance=\"master\"} + node_memory_Buffers_bytes{instance=\"master\"} + node_memory_SReclaimable_bytes{instance=\"master\"})",
-              "legendFormat": "云节点",
+              "expr": "node_memory_MemTotal_bytes{instance=\"$nodeName\"} - node_memory_MemFree_bytes{instance=\"$nodeName\"} - (node_memory_Cached_bytes{instance=\"$nodeName\"} + node_memory_Buffers_bytes{instance=\"$nodeName\"} + node_memory_SReclaimable_bytes{instance=\"$nodeName\"})",
+              "legendFormat": "节点",
               "range": true,
               "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
-              },
-              "editorMode": "code",
-              "expr": "sum(node_memory_MemTotal_bytes{instance!=\"master\"} - node_memory_MemFree_bytes{instance!=\"master\"} - (node_memory_Cached_bytes{instance!=\"master\"} + node_memory_Buffers_bytes{instance!=\"master\"} + node_memory_SReclaimable_bytes{instance!=\"master\"}))",
-              "hide": false,
-              "legendFormat": "边节点",
-              "range": true,
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
-              },
-              "editorMode": "code",
-              "expr": "sum(node_memory_MemFree_bytes + (node_memory_Cached_bytes + node_memory_Buffers_bytes+ node_memory_SReclaimable_bytes))",
-              "hide": false,
-              "legendFormat": "未占用",
-              "range": true,
-              "refId": "C"
             }
           ],
-          "title": "全局内存使用情况",
+          "title": "内存使用情况",
           "type": "timeseries"
         },
         {
@@ -738,7 +691,7 @@ data:
             "x": 0,
             "y": 10
           },
-          "id": 12,
+          "id": 10,
           "options": {
             "displayMode": "lcd",
             "minVizHeight": 10,
@@ -764,7 +717,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "100 - (sum(rate(node_cpu_seconds_total{mode=\"idle\"}[1m]))/ sum(rate(node_cpu_seconds_total[1m])) ) * 100",
+              "expr": "100 - (sum(rate(node_cpu_seconds_total{mode=\"idle\",instance=\"$nodeName\"}[1m]))/ sum(rate(node_cpu_seconds_total{instance=\"$nodeName\"}[1m])) ) * 100",
               "hide": false,
               "legendFormat": "CPU负载",
               "range": true,
@@ -776,7 +729,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "100 - sum(node_memory_MemFree_bytes + (node_memory_Cached_bytes + node_memory_Buffers_bytes + node_memory_SReclaimable_bytes))*100 / sum(node_memory_MemTotal_bytes)",
+              "expr": "100 - (node_memory_MemFree_bytes{instance=\"$nodeName\"} + (node_memory_Cached_bytes{instance=\"$nodeName\"} + node_memory_Buffers_bytes{instance=\"$nodeName\"} + node_memory_SReclaimable_bytes{instance=\"$nodeName\"}))*100 / node_memory_MemTotal_bytes{instance=\"$nodeName\"}",
               "format": "time_series",
               "interval": "",
               "legendFormat": "内存负载",
@@ -789,7 +742,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "100 - sum(node_filesystem_avail_bytes) * 100 / sum(node_filesystem_size_bytes)",
+              "expr": "100 - sum(node_filesystem_avail_bytes{instance=\"$nodeName\"}) * 100 / sum(node_filesystem_size_bytes{instance=\"$nodeName\"})",
               "hide": false,
               "legendFormat": "磁盘负载",
               "range": true,
@@ -821,9 +774,6 @@ data:
                   "viz": false
                 },
                 "lineInterpolation": "linear",
-                "lineStyle": {
-                  "fill": "solid"
-                },
                 "lineWidth": 1,
                 "pointSize": 5,
                 "scaleDistribution": {
@@ -839,6 +789,7 @@ data:
                   "mode": "off"
                 }
               },
+              "decimals": 3,
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -855,53 +806,7 @@ data:
               },
               "unit": "bytes"
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "云节点"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "dark-blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "未占用"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "dark-green",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "边节点"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "dark-yellow",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
             "h": 7,
@@ -909,7 +814,7 @@ data:
             "x": 12,
             "y": 14
           },
-          "id": 10,
+          "id": 17,
           "options": {
             "legend": {
               "calcs": [],
@@ -928,69 +833,55 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "node_filesystem_size_bytes{instance=\"master\",mountpoint=\"/\"} - node_filesystem_avail_bytes{instance=\"master\",mountpoint=\"/\"}",
-              "legendFormat": "云节点",
+              "expr": "node_filesystem_size_bytes{instance=\"$nodeName\",mountpoint=\"/\"} - node_filesystem_avail_bytes{instance=\"$nodeName\",mountpoint=\"/\"}",
+              "legendFormat": "节点",
               "range": true,
               "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
-              },
-              "editorMode": "code",
-              "expr": "sum(node_filesystem_size_bytes{instance!=\"master\",mountpoint=\"/\"} - node_filesystem_avail_bytes{instance!=\"master\",mountpoint=\"/\"})",
-              "hide": false,
-              "legendFormat": "边节点",
-              "range": true,
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
-              },
-              "editorMode": "code",
-              "expr": "sum(node_filesystem_avail_bytes{mountpoint=\"/\"})",
-              "hide": false,
-              "legendFormat": "未占用",
-              "range": true,
-              "refId": "C"
             }
           ],
-          "title": "全局磁盘使用情况",
+          "title": "磁盘使用情况",
           "type": "timeseries"
         }
       ],
-      "refresh": "5s",
       "schemaVersion": 36,
       "style": "dark",
       "tags": [],
       "templating": {
-        "list": []
+        "list": [
+          {
+            "current": {},
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "definition": "up{job=\"node-exporter\"}",
+            "hide": 0,
+            "includeAll": false,
+            "label": "节点名称",
+            "multi": false,
+            "name": "nodeName",
+            "options": [],
+            "query": {
+              "query": "up{job=\"node-exporter\"}",
+              "refId": "StandardVariableQuery"
+            },
+            "refresh": 1,
+            "regex": ".*instance=\"(.*?)\".*",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          }
+        ]
       },
       "time": {
         "from": "now-6h",
         "to": "now"
       },
-      "timepicker": {
-        "refresh_intervals": [
-          "5s",
-          "10s",
-          "30s",
-          "1m",
-          "5m",
-          "15m",
-          "30m",
-          "1h",
-          "2h",
-          "1d"
-        ]
-      },
+      "timepicker": {},
       "timezone": "",
-      "title": "Dev",
-      "uid": "exHP2ON4",
-      "version": 3,
+      "title": "nodeInfo",
+      "uid": "NHhq3tv4z",
+      "version": 14,
       "weekStart": ""
     }
 kind: ConfigMap
@@ -1000,5 +891,5 @@ metadata:
     app.kubernetes.io/name: grafana
     app.kubernetes.io/part-of: kube-prometheus
     app.kubernetes.io/version: 8.5.5
-  name: grafana-dashboard-cluster-overview
+  name: grafana-dashboard-node-overview
   namespace: monitoring
