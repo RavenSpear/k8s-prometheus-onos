@@ -5,19 +5,19 @@ module.exports = {
         //port:"8080",
         proxy: {
             '/tenants': {
-                target: 'http://127.0.0.1:8181/onos/p4virtex',
+                target: 'http://223.3.94.112:8181/onos/p4virtex',
                 changeOrigin: true
             },
             '/vnets': {
-                target: 'http://127.0.0.1:8181/onos/p4virtex',
+                target: 'http://223.3.94.112:8181/onos/p4virtex',
                 changeOrigin: true
             },
             '/vnets/topology': {
-                target: 'http://127.0.0.1:8181/onos/p4virtex',
+                target: 'http://223.3.94.112:8181/onos/p4virtex',
                 changeOrigin: true
             },
             '/vnets/embed': {
-                target: 'http://127.0.0.1:8181/onos/p4virtex',
+                target: 'http://223.3.94.112:8181/onos/p4virtex',
                 changeOrigin: true
             },
             // 原映射，与新端口合并
@@ -50,16 +50,16 @@ module.exports = {
             // },
 
             /* Apis for k8s api/v1 */
-            '/cluster': {
-                target: 'http://192.168.1.104:8009/api/v1',
+            '/terminal': {
+                target: 'http://223.3.94.112:8009/api/v1',
                 changeOrigin: true,
                 pathRewrite: {
-   				 '^/cluster': '',  
+   				 '^/terminal': '',  
  			    },
             },
 
             '/task': {
-                target: 'http://192.168.1.104:8009/apis/apps/v1',
+                target: 'http://223.3.94.112:8009/apis/apps/v1',
                 changeOrigin: true,
                 pathRewrite: {
    				 '^/task': '',  
@@ -86,7 +86,7 @@ module.exports = {
 
             /* Apis for onos api/v1 */
             '/network': {
-                target: 'http://192.168.1.104:8181/onos/v1',
+                target: 'http://223.3.94.112:8181/onos/v1',
                 changeOrigin: true,
                 pathRewrite: {
    				 '^/network': '',   

@@ -108,7 +108,7 @@ export const embedVirtualNetworkTopo = query => {
 /* Api to get nodes from k8s api/v1 */
 export const getClusterNodes = () => {
     return request({
-        url: 'cluster/nodes',
+        url: 'terminal/nodes',
         method: 'get'
     })
 }
@@ -116,7 +116,7 @@ export const getClusterNodes = () => {
 /* Api to get node according to its name from k8s api/v1 */
 export const getClusterNode = nodename => {
     return request({
-        url: 'cluster/nodes/'+nodename,
+        url: 'terminal/nodes/'+nodename,
         method: 'get'
     })
 }
@@ -124,7 +124,7 @@ export const getClusterNode = nodename => {
 /* Api to get pods from k8s api/v1 */
 export const getClusterPods = query => {
     return request({
-        url: 'cluster/namespaces/monitoring/pods',
+        url: 'terminal/namespaces/monitoring/pods',
         method: 'get',
         params: query
     })

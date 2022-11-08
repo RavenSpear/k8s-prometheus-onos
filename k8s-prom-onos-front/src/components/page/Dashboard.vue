@@ -193,10 +193,10 @@ export default {
                                 }
                         }
                 },
-                collectTopoInfo(){
-                        var links = getNetworkTopoLinks();
-                        var hosts = getHosts();
-                        var devices = getNetworkTopoDevices();
+                async collectTopoInfo(){
+                        var links =  await (await getNetworkTopoLinks()).data;
+                        var hosts = await (await getHosts()).data;
+                        var devices = await (await getNetworkTopoDevices()).data;
                         console.log(links)
                         console.log(hosts)
                         console.log(devices)
