@@ -1,0 +1,28 @@
+name: "pressure-device-profile"
+manufacturer: "RYSIM"
+model: "HX71B0"
+description: "RYSIM pressure device profile"
+labels:
+  - "mqtt"
+deviceResources:
+  -
+    name: ping
+    isHidden: true
+    description: "device liveness probe"
+    properties:
+      valueType: "String"
+      readWrite: "R"
+  -
+    name: pressurevalue
+    isHidden: true
+    description: "read pressure value of sensor"
+    properties:
+      valueType: "String"
+      readWrite: "R"
+deviceCommands:
+  -
+    name: devicelivenessprobe
+    readWrite: "R"
+    isHidden: false
+    resourceOperations:
+        - { deviceResource: "ping" }
