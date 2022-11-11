@@ -13,10 +13,13 @@ https://docs.docker.com/compose/install/other/
 ### 生成部署脚本
 
 ```
+$ cd ~/k8s-prometheus-onos/IoT
 $ git clone https://github.com/edgexfoundry/edgex-compose.git
+$ cd edgex-compose 
 $ git checkout main
-$ ./edgex-compose/compose-builder/make gen ds-mqtt mqtt-broker no-secty ui
-$ cp ./edgex-compose/compose-builder/docker-compose.yml docker-compose.yml
+$ cd compose-builder
+$ make gen ds-mqtt mqtt-broker no-secty ui
+$ cp docker-compose.yml ~/k8s-prometheus-onos/IoT/
 ```
 
 ### 配置部署脚本
