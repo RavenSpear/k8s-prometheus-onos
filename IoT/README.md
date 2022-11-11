@@ -1,6 +1,6 @@
 # 于边缘节点部署EdgeX Foundey物联网网关
 
-## `一、部署流程`
+## 一、部署流程
 
 ### 安装docker-compose
 
@@ -15,7 +15,7 @@ https://docs.docker.com/compose/install/other/
 ```
 $ git clone https://github.com/edgexfoundry/edgex-compose.git
 $ git checkout main
-$ ./edgex-compose/compose-builder/make gen ds-mqtt mqtt-broker no-secty ui
+$ cd ./edgex-compose/compose-builder/ && make gen ds-mqtt mqtt-broker no-secty ui
 $ cp ./edgex-compose/compose-builder/docker-compose.yml docker-compose.yml
 ```
 
@@ -58,7 +58,41 @@ $ docker-compose up -d
 $ docker run -d --restart=always --name=mqtt-scripts -v {absolute path to ./mqtt-scripts}:/scripts dersimn/mqtt-scripts --net={edgex-network} --url mqtt://{docker ip of container:edgex-mqtt-broker} --dir /scripts
 ```
 
-## `二、服务状态检查`
+### 建立edgex-nginx反向代理
+
+为使edgex服务同k8s集群中的节点相关联，建立nginx反向代理以按节点名访问各edgex网关服务。
+
+```
+$ cd edgex-nginx-deployment/
+```
+
+对`edgex-nginx-configMap.yaml`作如下修改
+
+```
+...
+        server {
+            listen 8888;
+            location /{node-name}/command/ {
+                proxy_pass http://{node-ip}:59882/;
+            }
+
+            location /{node-name}/data/ {
+                proxy_pass http://{node-ip}:59880/;
+            }
+
+            location /{node-name}/metadata/ {
+                proxy_pass http://{node-ip}:59881/;
+            }
+        }
+...
+```
+启动代理服务
+```
+$ kubectl apply -f ./
+```
+
+
+## 二、服务状态检查
 
 ### 通过MQTT客户端检查虚拟IoT设备状态
 
@@ -112,7 +146,15 @@ $ curl --request GET http://localhost:59880/api/v2/reading/resourceName/{resourc
 $ curl http://localhost:59882/api/v2/device/name/{device-name}/ping
 ```
 
-## `三、服务重置`
+- 检查反向代理服务状态
+
+```
+$ curl http://127.0.0.1:30080/{node-name}/data/api/v2/reading/all
+$ curl http://127.0.0.1:30080/{node-name}/metadata/api/v2/deviceprofile/all
+$ curl http://127.0.0.1:30080/{node-name}/command/api/v2/device/all
+```
+
+## 三、服务重置
 
 ### 关闭虚拟设备
 
