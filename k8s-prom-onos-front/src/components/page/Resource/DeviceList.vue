@@ -38,8 +38,10 @@ export default {
             for (let i = 0; i < nodes.length; i++) {
                 if (nodes[i].metadata.labels.cluster == "edge") {
                     let edge = {
-                        name: nodes[i].metadata.name
+                        name: nodes[i].metadata.name,
+                        ip: nodes[i].status.addresses[0].address
                     }
+                    console.log(edge);
                     this.edgeList.push(edge)
                 }
             }

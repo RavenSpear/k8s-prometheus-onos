@@ -55,7 +55,7 @@ $ docker-compose up -d
 
 
 ```
-$ docker run -d --restart=always --name=mqtt-scripts -v {absolute path to ./mqtt-scripts}:/scripts dersimn/mqtt-scripts --net={edgex-network} --url mqtt://{docker ip of container:edgex-mqtt-broker} --dir /scripts
+$ docker run -d --restart=always --name=mqtt-scripts --net={edgex-network} -v {absolute path to ./mqtt-scripts}:/scripts dersimn/mqtt-scripts --url mqtt://{docker ip of container:edgex-mqtt-broker} --dir /scripts
 ```
 
 ## `二、服务状态检查`
