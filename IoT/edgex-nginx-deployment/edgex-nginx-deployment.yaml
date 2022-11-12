@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
-  namespace: device
+  namespace: iot
 spec:
   selector:
     matchLabels:
