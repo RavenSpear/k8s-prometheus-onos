@@ -185,3 +185,24 @@ export const getNetworkTopoLinks = ()=>{
         method: 'get'
     })
 }
+
+export const getIoTDeviceData = nodename =>{
+    return request({
+        url: '/IoT/'+nodename+'/data/api/v2/',
+        method: 'get'
+    })
+}
+
+export const getIoTDevices = nodename =>{
+    return request({
+        url: '/IoT/'+nodename+'/metadata/api/v2/device/all',
+        method: 'get'
+    })
+}
+
+export const getEdgexCommand = nodename =>{
+    return request({
+        url: '/IoT/'+nodename+'/command',
+        method: 'get'
+    })
+}
