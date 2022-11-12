@@ -13,18 +13,10 @@ https://docs.docker.com/compose/install/other/
 ### 生成部署脚本
 
 ```
-$ cd ~/k8s-prometheus-onos/IoT
 $ git clone https://github.com/edgexfoundry/edgex-compose.git
-$ cd edgex-compose 
 $ git checkout main
-<<<<<<< HEAD
-$ cd compose-builder
-$ make gen ds-mqtt mqtt-broker no-secty ui
-$ cp docker-compose.yml ~/k8s-prometheus-onos/IoT/
-=======
 $ cd ./edgex-compose/compose-builder/ && make gen ds-mqtt mqtt-broker no-secty ui
 $ cp ./edgex-compose/compose-builder/docker-compose.yml docker-compose.yml
->>>>>>> upstream/main
 ```
 
 ### 配置部署脚本
@@ -192,7 +184,6 @@ $ curl --request DELETE http://localhost:8500/v1/kv/edgex/devices/2.0/device-mqt
 docker-compose stop device-mqtt
 docker rm edgex-device-mqtt
 ```
-
 
 
 
