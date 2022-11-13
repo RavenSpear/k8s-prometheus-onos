@@ -6,7 +6,7 @@
 export default {
     data() {
         return {
-            url: "http://223.3.94.112:3000/d/h2UbV_D4z/ren-wu-zi-yuan-xiang-qing-ye?orgId=1",
+            url: "http://223.3.94.112:3000/d/h2UbV_D4z/ren-wu-zi-yuan-xiang-qing-ye?orgId=1&refresh=5s&theme=light&kiosk",
             load: false
         };
     },
@@ -18,13 +18,17 @@ export default {
     methods: {
         makeURL() {
             let containers = this.$route.query;
-            console.log(containers);
-            for (var val in containers) {
-                this.url += ("&var-container=" + containers[val]);
-            }
+            //console.log(containers);
+            this.url += ("&var-deployment=" + containers["deployment"]);
+            this.url += ("&var-container=" + containers["deployment"]);
+            // let pods = containers["pods"]
+            // console.log(pods)
+            // for (var val in pods) {
+            //     this.url += ("&var-container=" + pods[val]);
+            // }
             console.log(this.url);
             return this.$route.query;
         }
-    },
+    }
 };
 </script>
