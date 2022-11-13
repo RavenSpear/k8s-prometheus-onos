@@ -23,6 +23,7 @@ import DeviceList from '../components/page/Resource/DeviceList.vue'
 import TaskDashboard from '../components/page/Task/TaskDashboard.vue'
 import TaskList from '../components/page/Task/TaskList.vue'
 import TaskCreate from '../components/page/Task/TaskCreate.vue'
+import TaskDetail from '../components/page/Task/TaskDetail.vue'
 
 Vue.use(VueRouter)
 
@@ -74,6 +75,11 @@ const routes = [
         path: "/taskCreate",
         component: TaskCreate,
         meta: { title: '任务部署' }
+      },
+      {
+        path: "/taskDetail",
+        component: TaskDetail,
+        meta: { title: '任务资源详情' }
       },
 
       //传输资源虚拟化控制资源
