@@ -94,7 +94,7 @@ export default {
                     var annotations = tasks[i].spec.template.metadata.annotations;
                     console.log(annotations)
                     if ("kubernetes.io/egress-bandwidth" in annotations) task.bandReq = annotations['kubernetes.io/egress-bandwidth'];
-                    if ("kubernetes.io/ingress-bandwidth" in annotations) task.bandReq += "/" +annotations['kubernetes.io/ingress-bandwidth'];
+                    if ("kubernetes.io/ingress-bandwidth" in annotations) task.bandReq += "/" + annotations['kubernetes.io/ingress-bandwidth'];
 
                 }
 
@@ -137,6 +137,12 @@ export default {
         },
         detail(row) {
             console.log(row);
+            this.$router.push(
+                {
+                    path: '/TaskDetail',
+                    query: ["prometheus","grafana"]
+                }
+            );
         }
     }
 };
