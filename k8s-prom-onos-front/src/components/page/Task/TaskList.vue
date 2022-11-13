@@ -74,11 +74,12 @@ export default {
             this.tableData = []
             let tasks = await (await getTaskList()).data.items;
             for (var i = 0; i < tasks.length; i++) {
-                var task = { name: "-", version: "-", creationTimestamp: "-", taskNum: "-", CPUReq: "-", memReq: "-", diskReq: "-", bandReq: "-", ratio: "-" };
+                var task = { name: "-", version: "-", creationTimestamp: "-", taskNum: "-", CPUReq: "-", memReq: "-", diskReq: "-", bandReq: "-", ratio: "-", pods:[] };
                 task.name = tasks[i].metadata.name;
                 task.version = tasks[i].spec.template.spec.containers[0].image;
                 task.creationTimestamp = tasks[i].metadata.creationTimestamp;
                 task.taskNum = tasks[i].spec.replicas;
+                console.log(tasks[i]);
                 var resources = tasks[i].spec.template.spec.containers[0].resources;
                 if ("limits" in resources) {
                     if ("cpu" in resources.limits) task.CPUReq = resources.limits.cpu;
@@ -92,7 +93,7 @@ export default {
                 }
                 if ("annotations" in tasks[i].spec.template.metadata) {
                     var annotations = tasks[i].spec.template.metadata.annotations;
-                    console.log(annotations)
+                    //console.log(annotations)
                     if ("kubernetes.io/egress-bandwidth" in annotations) task.bandReq = annotations['kubernetes.io/egress-bandwidth'];
                     if ("kubernetes.io/ingress-bandwidth" in annotations) task.bandReq += "/" + annotations['kubernetes.io/ingress-bandwidth'];
 
@@ -105,11 +106,13 @@ export default {
 
                 var params = { "labelSelector": labelSelector };
                 let pods = await (await getClusterPods(params)).data.items;
+                //console.log(pods)
                 let distributions = [];
                 for (var j = 0; j < pods.length; j++) {
                     let node = pods[j].spec.nodeName;
                     let distribution = await (await getClusterNode(node)).data.metadata.labels.cluster;
                     distributions.push(distribution);
+                    task.pods.push(pods[j].metadata.name);
                 }
                 var clouds = 0;
                 var edges = 0;
@@ -119,7 +122,7 @@ export default {
                 }
                 task.ratio = clouds + "/" + edges;
                 //console.log(distributions);
-                //console.log(this.tableData);
+                //console.log(task);
 
                 this.tableData.push(task);
             }
@@ -136,11 +139,16 @@ export default {
             });
         },
         detail(row) {
-            console.log(row);
+
+            let param = {
+                deployment: row.name
+            };
+            param.pods = row.pods
+            console.log(param);
             this.$router.push(
                 {
                     path: '/TaskDetail',
-                    query: ["prometheus","grafana"]
+                    query: param
                 }
             );
         }
