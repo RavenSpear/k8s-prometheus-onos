@@ -21,6 +21,18 @@ stringData:
                 "type": "prometheus",
                 "url": "http://223.3.94.112:9090",
                 "version": 1
+            },
+            {
+                "orgId": 1
+                "name": "Infinity"
+                "type": "yesoreyeram-infinity-datasource"
+                "url": ""
+                "basicAuth": false
+                "basicAuthUser": ""
+                "isDefault": false
+                "jsonData":
+                    "global_queries": []
+                "readOnly": true
             }
         ]
     }
