@@ -122,12 +122,12 @@ TIPS: 下列命令以root身份运行，且仅在master主机上运行。配置�
 
 1. 根据三台主机在mininet中的实际ip修改k8s-ansible-no-sona/inventory/default/host.ini文件；
 2. `cd k8s-ansible-no-sona && ansible-playbook inventory/default/sitewithoutsona.yml`，此命令用于在集群所有主机中安装Kubernetes 1.23.12与Docker；
-3. `cd calico && kubectl apply -f ./`，此命令用于部署calico网络插件以启用k8s虚拟网络，执行`kubectl get nodes`命令，看到所有节点状态STATUS为Ready表示网络建立成功，再执行后续命令；
+3. `cd kube-flannel && kubectl apply -f ./`，此命令用于部署calico网络插件以启用k8s虚拟网络，执行`kubectl get nodes`命令，看到所有节点状态STATUS为Ready表示网络建立成功，再执行后续命令；
 4. `cd kube-prometheus && kubectl apply --server-side -f manifests/setup`，此命令用于在部署prometheus-operater，执行`kubectl get all -A`命令，看到所有pod和service全部部署完毕，再执行后续命令；
 5. `cd kube-prometheus && kubectl apply -f manifests/`，此命令用于部署prometheus其余组件，执行`kubectl get all -A`命令，看到所有pod和service全部部署完毕，再执行后续命令；
 6. `cd grafana && kubectl apply -f ./`，此命令用于部署grafana，执行`kubectl get all -A`命令，检查所有pod和service是否部署完毕。
 7. 使用`kubectl label nodes master cluster=cloud`、`kubectl label nodes worker2 cluster=edge`、`kubectl label nodes worker1 cluster=edge`命令给三个节点打上云/边标签。
-8. 使用`kubectl proxy --address='0.0.0.0' --accept-hosts='^*$' --port=8009`暴露8009端口
+8. 使用`nohup kubectl proxy --address='0.0.0.0' --accept-hosts='^*$' --port=8009 2>&1 &`暴露8009端口
 TIPS: 运行`cd k8s-ansible-no-sona && ansible-playbook inventory/default/reset-site.yml`命令可以重置集群，再使用`cd k8s-ansible-no-sona && ansible-playbook inventory/default/sitewithoutsona.yml`重新部署。
 
 ## 前端部署
@@ -136,4 +136,3 @@ TIPS: 运行`cd k8s-ansible-no-sona && ansible-playbook inventory/default/reset-
 TIPS: 修改k8s-prom-onos-front中的vue.config.js文件中的host和port字段可以更改前端应用的ip与端口
 1. `cd k8s-prom-onos-front && npm install`
 2. `npm run serve` 
-

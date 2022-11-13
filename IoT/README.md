@@ -187,4 +187,3 @@ docker rm edgex-device-mqtt
 
 
 
-
