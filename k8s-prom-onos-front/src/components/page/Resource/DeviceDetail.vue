@@ -26,7 +26,6 @@ export default {
                 this.url = `http://223.3.94.112:3000/d/lNgro_vVk/wen-du-chuan-gan-qi?orgId=1&var-nodeName=${containers['nodeName']}&refresh=30s&theme=light&kiosk`
             }
             console.log(this.url);
-            return containers
         }
     }
 };
