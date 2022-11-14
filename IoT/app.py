@@ -14,5 +14,5 @@ def data():
         r["readings"][i]["origin"] = int(str(r["readings"][i]["origin"])[:-6])
     return r
 
-if __name__ == '__main__':
-  app.run(host = '0.0.0.0')
+# if __name__ == '__main__':
+#   app.run(host = '0.0.0.0')
