@@ -24,7 +24,8 @@ import TaskDashboard from '../components/page/Task/TaskDashboard.vue'
 import TaskList from '../components/page/Task/TaskList.vue'
 import TaskCreate from '../components/page/Task/TaskCreate.vue'
 import TaskDetail from '../components/page/Task/TaskDetail.vue'
-
+import DeviceDetail from '../components/page/Resource/DeviceDetail.vue'
+import NodeDetail from '../components/page/Resource/NodeDetail.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -55,9 +56,19 @@ const routes = [
         meta: { title: '设备感知列表' }
       },
       {
+        path: "/deviceDetail",
+        component: DeviceDetail,
+        meta: { title: '设备详情' }
+      },
+      {
         path: "/resourceList",
         component: ResourceList,
         meta: { title: '资源感知列表' }
+      },
+      {
+        path: "/nodeDetail",
+        component: NodeDetail,
+        meta: { title: '节点详情' }
       },
 
       //边云协同任务调度资源

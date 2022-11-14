@@ -27,7 +27,7 @@
                             </el-table-column>
                             <el-table-column label="查看详情" align="center">
                                 <template slot-scope="scope">
-                                    <el-button type="text" icon="el-icon-ali-eye iconfont" @click="topoShow(scope.row)">
+                                    <el-button type="text" icon="el-icon-ali-eye iconfont" @click="nodeDetail(scope.row)">
                                         查看</el-button>
                                 </template>
                             </el-table-column>
@@ -52,7 +52,7 @@
                             </el-table-column>
                             <el-table-column label="查看详情" align="center">
                                 <template slot-scope="scope">
-                                    <el-button type="text" icon="el-icon-ali-eye iconfont" @click="topoShow(scope.row)">
+                                    <el-button type="text" icon="el-icon-ali-eye iconfont" @click="nodeDetail(scope.row)">
                                         查看</el-button>
                                 </template>
                             </el-table-column>
@@ -243,6 +243,18 @@ export default {
                 console.log(device)
                 this.switchData.push(device);
             }
+        },
+        nodeDetail(row) {
+            let param = {
+                nodeName: row.name
+            };
+            console.log(param);
+            this.$router.push(
+                {
+                    path: '/nodeDetail',
+                    query: param
+                }
+            );
         }
     },
 };
