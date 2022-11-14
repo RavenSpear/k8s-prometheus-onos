@@ -23,15 +23,13 @@ stringData:
                 "version": 1
             },
             {
-                "orgId": 1
-                "name": "Infinity"
-                "type": "yesoreyeram-infinity-datasource"
-                "url": ""
-                "basicAuth": false
-                "basicAuthUser": ""
-                "isDefault": false
-                "jsonData":
-                    "global_queries": []
+                "orgId": 1,
+                "name": "Infinity",
+                "type": "yesoreyeram-infinity-datasource",
+                "url": "",
+                "basicAuth": false,
+                "basicAuthUser": "",
+                "isDefault": false,
                 "readOnly": true
             }
         ]
