@@ -25,7 +25,7 @@
                             </el-table-column>
                             <el-table-column label="查看详情" align="center">
                                 <template slot-scope="scope">
-                                    <el-button type="text" icon="el-icon-ali-eye iconfont" @click="inspect(scope.row)">
+                                    <el-button type="text" icon="el-icon-ali-eye iconfont" @click="detail(scope.row)">
                                         查看</el-button>
                                 </template>
                             </el-table-column>
@@ -79,14 +79,25 @@ export default {
                     devices[j].protocols = devices[j].protocols.substring(2);
                     //console.log(devices[j].protocols)
                     devices[j].operatingState = devices[j].operatingState == "UP"?"就绪":"未就绪";
+                    devices[j].node = this.edgeList[i]
                 }
                 this.edgeDevices[this.edgeList[i]] = devices;
             }
             console.log(this.edgeDevices);
         },
 
-        inspect(){
-            console.log(this.edgeList);
+        detail(row) {
+            let param = {
+                nodeName: row.node,
+                deviceName: row.name
+            };
+            console.log(param);
+            this.$router.push(
+                {
+                    path: '/deviceDetail',
+                    query: param
+                }
+            );
         }
     },
 };

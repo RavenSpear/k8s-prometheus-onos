@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-  cluster-overview.json: |-
+  node-overview.json: |-
     {
       "__inputs": [
         {
@@ -988,7 +988,7 @@ data:
         ]
       },
       "timezone": "",
-      "title": "Dev",
+      "title": "节点感知首页",
       "uid": "exHP2ON4",
       "version": 3,
       "weekStart": ""
@@ -1000,5 +1000,5 @@ metadata:
     app.kubernetes.io/name: grafana
     app.kubernetes.io/part-of: kube-prometheus
     app.kubernetes.io/version: 8.5.5
-  name: grafana-dashboard-cluster-overview
+  name: grafana-dashboard-node-overview
   namespace: monitoring

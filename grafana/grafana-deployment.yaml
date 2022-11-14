@@ -26,9 +26,11 @@ spec:
       nodeName: worker1
       automountServiceAccountToken: false
       containers:
-      - env: []
+      - name: grafana
         image: grafana/grafana:8.5.5
-        name: grafana
+        env:
+        - name: GF_INSTALL_PLUGINS
+          value: yesoreyeram-infinity-datasource
         ports:
         - containerPort: 3000
           name: http
@@ -62,14 +64,26 @@ spec:
         - mountPath: /tmp
           name: tmp-plugins
           readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/cluster-overview
-          name: grafana-dashboard-cluster-overview
+        - mountPath: /grafana-dashboard-definitions/0/node-overview
+          name: grafana-dashboard-node-overview
           readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/task-overview
           name: grafana-dashboard-task-overview
           readOnly: false
-        - mountPath: /grafana-dashboard-definitions/0/node-overview
-          name: grafana-dashboard-node-overview
+        - mountPath: /grafana-dashboard-definitions/0/node-detail
+          name: grafana-dashboard-node-detail
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/task-detail
+          name: grafana-dashboard-task-detail
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/temperature-sensor
+          name: grafana-dashboard-temperature-sensor
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/pm-sensor
+          name: grafana-dashboard-pm-sensor
+          readOnly: false
+        - mountPath: /grafana-dashboard-definitions/0/pressure-sensor
+          name: grafana-dashboard-pressure-sensor
           readOnly: false
         - mountPath: /etc/grafana
           name: grafana-config
@@ -94,14 +108,26 @@ spec:
           medium: Memory
         name: tmp-plugins
       - configMap:
-          name: grafana-dashboard-cluster-overview
-        name: grafana-dashboard-cluster-overview
+          name: grafana-dashboard-node-overview
+        name: grafana-dashboard-node-overview
       - configMap:
           name: grafana-dashboard-task-overview
         name: grafana-dashboard-task-overview
       - configMap:
-          name: grafana-dashboard-node-overview
-        name: grafana-dashboard-node-overview
+          name: grafana-dashboard-node-detail
+        name: grafana-dashboard-node-detail
+      - configMap:
+          name: grafana-dashboard-task-detail
+        name: grafana-dashboard-task-detail
+      - configMap:
+          name: grafana-dashboard-pressure-sensor
+        name: grafana-dashboard-pressure-sensor
+      - configMap:
+          name: grafana-dashboard-pm-sensor
+        name: grafana-dashboard-pm-sensor
+      - configMap:
+          name: grafana-dashboard-temperature-sensor
+        name: grafana-dashboard-temperature-sensor
       - name: grafana-config
         secret:
           secretName: grafana-config
