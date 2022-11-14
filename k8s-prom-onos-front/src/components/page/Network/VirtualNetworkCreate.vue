@@ -2,34 +2,65 @@
   <div>
     <div class="crumbs">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item>虚拟网络管理</el-breadcrumb-item>
-        <el-breadcrumb-item>创建新的虚拟网络</el-breadcrumb-item>
+        <el-breadcrumb-item>传输资源虚拟化控制</el-breadcrumb-item>
+        <el-breadcrumb-item>创建虚拟网络</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
     <div class="container">
       <div class="form-box">
-        <el-form :model="form" label-width="80px">
-
-          <el-form-item label="带宽需求(MB)" label-width="150px">
-            <el-col :span="11"><el-input v-model="form.minBandwidth" placeholder="最小带宽"></el-input></el-col>
-            <el-col class="line" :span="2">-</el-col>
-            <el-col :span="11"><el-input v-model="form.maxBandwidth" placeholder="最大带宽"></el-input></el-col>
+        <el-form
+          ref="vnrFormRef"
+          :model="form"
+          :rules="rules"
+          label-width="180px"
+        >
+          <el-form-item label="带宽需求(Mbps)" prop="bandwidth">
+            <el-col :span="10">
+              <el-input
+                v-model.number="form.bandwidth"
+                placeholder="最大带宽需求"
+              ></el-input>
+            </el-col>
           </el-form-item>
 
-          <el-form-item label="时延需求(MS)" label-width="150px">
-            <el-col :span="11"><el-input v-model="form.minDelay" placeholder="最低时延"></el-input></el-col>
-            <el-col class="line" :span="2">-</el-col>
-            <el-col :span="11"><el-input v-model="form.maxDelay" placeholder="最高时延"></el-input></el-col>
+          <el-form-item label="时延需求(毫秒)" prop="latency">
+            <el-col :span="10">
+              <el-input
+                v-model.number="form.latency"
+                placeholder="最大传输时延"
+              ></el-input>
+            </el-col>
           </el-form-item>
 
-          <el-form-item label="业务流量特征" label-width="150px">
-            <el-input v-model="form.traffic" placeholder="以五元组的形式描述业务流量"></el-input>
+          <el-form-item label="节点1选择" prop="cluster1IP">
+            <el-select v-model="form.cluster1IP" placeholder="请选择">
+              <el-option
+                v-for="node in clusterNodes"
+                :key="node.ip"
+                :label="node.name"
+                :value="node.ip"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
 
-          <el-form-item label-width="150px">
-            <el-button type="primary" @click="submit">创建</el-button>
+          <el-form-item label="节点2选择" prop="cluster2IP">
+            <el-select v-model="form.cluster2IP" placeholder="请选择">
+              <el-option
+                v-for="node in clusterNodes"
+                :key="node.ip"
+                :label="node.name"
+                :value="node.ip"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" @click="submit">提交</el-button>
             <el-button @click="cancel">取消</el-button>
+            <el-button type="warning" @click="reset">重置</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -38,64 +69,115 @@
 </template>
 
 <script>
-import { addVirtualNetwork, fetchTenantData } from "../../../api";
+import { submitVNR } from "../../../api";
 export default {
   data() {
+    var checkBandwidthValue = (rule, value, callback) => {
+      if (!Number.isInteger(value)) {
+        callback(new Error("请输入值"));
+      } else {
+        if (value == 0) {
+          callback(new Error("带宽值不能为0"));
+        } else if (value < 0) {
+          callback(new Error("带宽值不能为负数"));
+        } else {
+          callback();
+        }
+      }
+    };
+    var checkLatencyValue = (rule, value, callback) => {
+      if (!Number.isInteger(value)) {
+        callback(new Error("请输入值"));
+      } else {
+        if (value == 0) {
+          callback(new Error("传输延时值不能为0"));
+        } else if (value < 0) {
+          callback(new Error("传输延时值不能为负数"));
+        } else {
+          callback();
+        }
+      }
+    };
+    var checkCluster1IP = (rule, value, callback) => {
+      if (this.form.cluster2IP && value === this.form.cluster2IP) {
+        callback(new Error("节点1不能选择与节点2同一个节点"));
+      } else {
+        callback();
+      }
+    };
+    var checkCluster2IP = (rule, value, callback) => {
+      if (this.form.cluster1IP && value === this.form.cluster1IP) {
+        callback(new Error("节点2不能选择与节点1同一个节点"));
+      } else {
+        callback();
+      }
+    };
     return {
       tenants: [],
       form: {
-        tenantId: "",
-        topo: { nodes: { switches: [], hosts: [] }, links: [] },
+        bandwidth: "",
+        latency: "",
+        cluster1IP: "",
+        cluster2IP: "",
       },
+      rules: {
+        bandwidth: [
+          { required: true, message: "带宽需求不为空" },
+          { validator: checkBandwidthValue, trigger: "blur" },
+        ],
+        latency: [
+          { required: true, message: "延时需求不为空" },
+          { validator: checkLatencyValue, trigger: "blur" },
+        ],
+        cluster1IP: [
+          { required: true, message: "节点1未选择" },
+          { validator: checkCluster1IP, trigger: "change" },
+        ],
+        cluster2IP: [
+          { required: true, message: "节点2未选择" },
+          { validator: checkCluster2IP, trigger: "change" },
+        ],
+      },
+      clusterNodes: [
+        {
+          name: "边缘节点1",
+          ip: "17.125.36.1",
+        },
+        {
+          name: "边缘节点2",
+          ip: "223.26.35.1",
+        },
+        {
+          name: "云端节点",
+          ip: "20.20.20.1",
+        },
+      ],
     };
   },
   created() {
-    fetchTenantData().then((res) => {
-      this.tenants = res.data.tenants;
-    });
+    console.log(this.tagList);
   },
 
   methods: {
-    parseTopoFile() {
-      let fileName = this.$refs.vTopo.files[0].name;
-      let a = fileName.split(".");
-      let suffix = a[a.length - 1];
-      if (suffix == "json") {
-        let _that = this;
-        const file = this.$refs.vTopo.files[0];
-        const reader = new FileReader();
-        reader.readAsBinaryString(file);
-        reader.onload = function () {
-          let json = JSON.parse(this.result);
-          _that.form.topo = json;
-        };
-      } else {
-        alert("不能解析该类型文件，请重新上传文件！");
-      }
-    },
+    parseTopoFile() {},
+
     submit() {
-      if (this.form.tenantId == "") {
-        this.$message({
-          showClose: true,
-          type: "error",
-          message: "请选择用户！",
-        });
-      } else if (this.$refs.vTopo.files.length == 0) {
-        this.$message({
-          showClose: true,
-          type: "error",
-          message: "请上传虚拟拓扑文件",
-        });
-      } else {
-        addVirtualNetwork(this.form).then((res) => {
-          if (res.data.status == "successful") {
-            alert("虚拟网络创建成功！");
-            this.$router.push("/virtualNetworkList");
-          } else {
-            alert("虚拟网络创建失败，请上传正确的虚拟拓扑文件！");
-          }
-        });
-      }
+      // 先校验表单提交的数据是否符合规范
+      this.$refs.vnrFormRef.validate((valid) => {
+        if (valid) {
+          submitVNR(this.form).then((res) => {
+            console.log(res);
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+    cancel() {
+      this.$router.push("/");
+    },
+    reset() {
+      this.$refs.vnrFormRef.resetFields();
     },
   },
 };

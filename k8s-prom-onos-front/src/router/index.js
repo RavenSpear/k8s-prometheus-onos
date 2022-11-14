@@ -15,6 +15,7 @@ import VirtualNetworkCreate from '../components/page/Network/VirtualNetworkCreat
 import VirtualNetworkList from '../components/page/Network/VirtualNetworkList.vue'
 import VirtualNetworkTopo from '../components/page/Network/VirtualNetworkTopo.vue'
 import CollectorConfig from '../components/page/Network/CollectorConfig.vue'
+import VirtualNetworkRequest from '../components/page/Network/VirtualNetworkRequest.vue'
 
 import ResourceDashboard from '../components/page/Resource/ResourceDashboard.vue'
 import ResourceList from '../components/page/Resource/ResourceList.vue'
@@ -23,6 +24,7 @@ import DeviceList from '../components/page/Resource/DeviceList.vue'
 import TaskDashboard from '../components/page/Task/TaskDashboard.vue'
 import TaskList from '../components/page/Task/TaskList.vue'
 import TaskCreate from '../components/page/Task/TaskCreate.vue'
+
 
 Vue.use(VueRouter)
 
@@ -116,6 +118,11 @@ const routes = [
         path: '/createVirtualNetwork',
         component: VirtualNetworkCreate,
         meta: { title: '创建虚拟网络' }
+      },
+      {
+        path: '/virtualNetworkRequest',
+        component: VirtualNetworkRequest,
+        meta: { title: '虚拟网络请求' }
       },
       {
         path: '/virtualNetworkList',

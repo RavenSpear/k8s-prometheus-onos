@@ -99,23 +99,15 @@ export default {
               title: "虚拟网络列表",
             },
             {
+              index: "virtualNetworkRequest",
+              title: "虚拟网络请求",
+            },
+            {
               index: "createVirtualNetwork",
               title: "创建虚拟网络",
             }
           ],
         }
-        // {
-        //   icon: "el-icon-folder",
-        //   index: "INTManagement",
-        //   title: "网络监测",
-        //   subs: [
-        //     {
-        //       icon: "el-icon-folder",
-        //       index: "CollectorConfig",
-        //       title: "收集器",
-        //     }
-        //   ]
-        // }
       ],
     };
   },

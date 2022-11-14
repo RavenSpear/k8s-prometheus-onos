@@ -81,7 +81,33 @@ export const getDeviceOpenPort = deviceId =>{
     })
 }
 
+
+//================ Virtual Network Request API =================
+
+export const submitVNR = formData => {
+    return request({
+        url: "/vnr",
+        method: "post",
+        headers: { 'Content-Type': 'application/json' },
+        data: formData
+    })
+}
+
+
+
+export const getAllVNRs = () => {
+    return request({
+        url: "/vnr",
+        method: "get"
+    })
+}
+
+
+
+
 //================ Virtual Network API =================
+
+
 export const fetchVirtualNetworkData = query => {
     return request({
         url: '/vnets',

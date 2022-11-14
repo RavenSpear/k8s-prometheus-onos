@@ -9,7 +9,7 @@
 
     <div class="container">
       <div class="handle-box">
-        <el-button type="primary" class="mr10" @click="toAddTenantPage"
+        <el-button size="small" type="primary" class="mr10" @click="toCreateVNetPage"
           >创建虚拟网络</el-button
         >
       </div>
@@ -84,6 +84,13 @@ export default {
     this.getData();
   },
   methods: {
+    toCreateVNetPage(){
+      this.$router.push(
+        {
+          path:"/createVirtualNetwork"
+        }
+      )
+    },
     getData() {
       fetchVirtualNetworkData(this.query).then((res) => {
         this.tableData = res.data.vnets;
@@ -97,6 +104,7 @@ export default {
         },
       });
     },
+    
     embed(row) {
       let q = {};
       q.id = row.virtualNetworkId;
