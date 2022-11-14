@@ -257,7 +257,7 @@ data:
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "sum(container_memory_working_set_bytes{namespace=\"monitoring\"})"
+                  "options": "sum(container_memory_working_set_bytes{container!=\"POD\", namespace=\"monitoring\"})"
                 },
                 "properties": [
                   {
@@ -293,7 +293,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(container_memory_working_set_bytes{namespace=\"monitoring\"})",
+              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", namespace=\"monitoring\"})",
               "range": true,
               "refId": "A"
             }
@@ -358,7 +358,7 @@ data:
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "sum(container_fs_usage_bytes{namespace=\"monitoring\"})"
+                  "options": "sum(container_fs_usage_bytes{container!=\"POD\", namespace=\"monitoring\"})"
                 },
                 "properties": [
                   {
@@ -393,7 +393,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "sum(container_fs_usage_bytes{namespace=\"monitoring\"})",
+              "expr": "sum(container_fs_usage_bytes{container!=\"POD\", namespace=\"monitoring\"})",
               "refId": "A"
             }
           ],
@@ -461,7 +461,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"monitoring\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", namespace=\"monitoring\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100",
               "format": "time_series",
               "interval": "",
               "legendFormat": "任务CPU使用率",
@@ -474,7 +474,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(container_memory_working_set_bytes{namespace=\"monitoring\"})/sum(node_memory_MemTotal_bytes)*100",
+              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", namespace=\"monitoring\"})/sum(node_memory_MemTotal_bytes)*100",
               "hide": false,
               "legendFormat": "任务内存使用率",
               "range": true,
@@ -552,7 +552,7 @@ data:
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "sum(rate(container_cpu_usage_seconds_total{namespace=\"monitoring\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100"
+                  "options": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", namespace=\"monitoring\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100"
                 },
                 "properties": [
                   {
@@ -587,7 +587,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"monitoring\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", namespace=\"monitoring\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100",
               "refId": "A"
             }
           ],
@@ -610,7 +610,7 @@ data:
       "timezone": "",
       "title": "资源感知首页",
       "uid": "Hp_-pVD4k",
-      "version": 19,
+      "version": 1,
       "weekStart": ""
     }
 kind: ConfigMap

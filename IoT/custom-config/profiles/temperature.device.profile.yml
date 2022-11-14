@@ -1,0 +1,28 @@
+name: "temperature-device-profile"
+manufacturer: "vemsee"
+model: "RS485"
+description: "vemsee temperature device profile"
+labels:
+  - "mqtt"
+deviceResources:
+  -
+    name: ping
+    isHidden: true
+    description: "device liveness probe"
+    properties:
+      valueType: "String"
+      readWrite: "R"
+  -
+    name: temperaturevalue
+    isHidden: true
+    description: "read temperature value of sensor"
+    properties:
+      valueType: "String"
+      readWrite: "R"
+deviceCommands:
+  -
+    name: devicelivenessprobe
+    readWrite: "R"
+    isHidden: false
+    resourceOperations:
+        - { deviceResource: "ping" }

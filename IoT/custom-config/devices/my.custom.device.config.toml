@@ -1,0 +1,36 @@
+# Pre-define Devices
+[[DeviceList]]
+  Name = "temperature-sensor"
+  ProfileName = "temperature-device-profile"
+  Description = "vemsee温度传感器"
+  Labels = [ "MQTT" ]
+  [DeviceList.Protocols]
+    [DeviceList.Protocols.mqtt]
+       # Comment out/remove below to use multi-level topics
+       CommandTopic = "CommandTopic"
+       # Uncomment below to use multi-level topics
+       # CommandTopic = "command/my-custom-device"
+
+[[DeviceList]]
+  Name = "pm-sensor"
+  ProfileName = "pm-device-profile"
+  Description = "RYSIM PM2.5传感器"
+  Labels = [ "MQTT" ]
+  [DeviceList.Protocols]
+    [DeviceList.Protocols.mqtt]
+       # Comment out/remove below to use multi-level topics
+       CommandTopic = "CommandTopic"
+       # Uncomment below to use multi-level topics
+       # CommandTopic = "command/my-custom-device"
+
+[[DeviceList]]
+  Name = "pressure-sensor"
+  ProfileName = "pressure-device-profile"
+  Description = "RYSIM 气压传感器"
+  Labels = [ "MQTT" ]
+  [DeviceList.Protocols]
+    [DeviceList.Protocols.mqtt]
+       # Comment out/remove below to use multi-level topics
+       CommandTopic = "CommandTopic"
+       # Uncomment below to use multi-level topics
+       # CommandTopic = "command/my-custom-device"

@@ -19,8 +19,18 @@ stringData:
                 "name": "prometheus",
                 "orgId": 1,
                 "type": "prometheus",
-                "url": "http://prometheus-k8s.monitoring.svc:9090",
+                "url": "http://223.3.94.112:9090",
                 "version": 1
+            },
+            {
+                "orgId": 1,
+                "name": "Infinity",
+                "type": "yesoreyeram-infinity-datasource",
+                "url": "",
+                "basicAuth": false,
+                "basicAuthUser": "",
+                "isDefault": false,
+                "readOnly": true
             }
         ]
     }

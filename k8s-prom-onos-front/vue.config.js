@@ -95,6 +95,15 @@ module.exports = {
                 pathRewrite: {
    				 '^/network': '',   
  			    },
+            },
+
+            /* Apis for edgex foundry */
+            '/IoT': {
+                target: 'http://223.3.94.112:30080',
+                changeOrigin: true,
+                pathRewrite: {
+   				 '^/IoT': '',   
+ 			    },
             }
         }
     }
