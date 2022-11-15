@@ -15,6 +15,17 @@
         ></span>
       </li>
     </ul>
+    <div class="tags-close-box">
+      <el-dropdown size="medium" @command="handleTags" trigger="click">
+        <el-button type="primary" class="h70">
+          标签选项<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="other">关闭其他</el-dropdown-item>
+          <el-dropdown-item command="all">关闭所有</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
   </div>
 </template>
 
@@ -28,31 +39,20 @@ export default {
     };
   },
   methods: {
-    setTags(route) {
-      
-      // some函数依次检查数组中的内容，若遇到第一个满足条件的元素，直接返回true
-      const isExist = this.tagsList.some((item) => {
-        return item.path === route.fullPath;
-      });
-
-      // 如果不存在
-      if (!isExist) {
-        // 目前暂时支持最多存8个标签，超过8个需要移除多余的
-        if (this.tagsList.length >= 8) {
-          this.tagsList.shift();
-        }
-        this.tagsList.push({
-          title: route.meta.title,
-          path: route.fullPath,
-          // 携带component的name
-          name: route.matched[1].components.default.name,
-        });
-        
-        bus.$emit("tags", this.tagsList);
-      }
-    },
     isActive(path) {
       return path === this.$route.fullPath;
+    },
+    // 关闭全部标签
+    closeAll() {
+      this.tagsList = [];
+      this.$router.push("/");
+    },
+    // 关闭其他标签
+    closeOther() {
+      const curItem = this.tagsList.filter((item) => {
+        return item.path === this.$route.fullPath;
+      });
+      this.tagsList = curItem;
     },
     // 关闭单个标签
     closeTags(index) {
@@ -70,6 +70,31 @@ export default {
         this.$router.push("/");
       }
     },
+    // 设置标签
+    setTags(route) {
+      // some函数依次检查数组中的内容，若遇到第一个满足条件的元素，直接返回true
+      const isExist = this.tagsList.some((item) => {
+        return item.path === route.fullPath;
+      });
+
+      // 如果不存在
+      if (!isExist) {
+        // 目前暂时支持最多存10个标签，超过10个需要移除多余的
+        if (this.tagsList.length >= 10) {
+          this.tagsList.shift();
+        }
+        this.tagsList.push({
+          title: route.meta.title,
+          path: route.fullPath,
+          // 携带component的name
+          name: route.matched[1].components.default.name,
+        });
+      }
+      bus.$emit("tags", this.tagsList);
+    },
+    handleTags(command) {
+      command === "other" ? this.closeOther() : this.closeAll();
+    },
   },
   computed: {
     showTags() {
@@ -81,6 +106,30 @@ export default {
     $route(newValue) {
       this.setTags(newValue);
     },
+  },
+  created() {
+    this.setTags(this.$route);
+    // 监听关闭当前页面的标签页
+    bus.$on("close_current_tags", (next) => {
+      for (let i = 0, len = this.tagsList.length; i < len; i++) {
+        const item = this.tagsList[i];
+        if (item.path === this.$route.fullPath) {
+          if (next == "") {
+            if (i < len - 1) {
+              this.$router.push(this.tagsList[i + 1].path);
+            } else if (i > 0) {
+              this.$router.push(this.tagsList[i - 1].path);
+            } else {
+              this.$router.push("/");
+            }
+          }else{
+            this.$router.push(next);
+          }
+          this.tagsList.splice(i, 1);
+          break;
+        }
+      }
+    });
   },
 };
 </script>
@@ -140,5 +189,23 @@ export default {
 
 .tags-li.active .tags-li-title {
   color: #fff;
+}
+
+.tags-close-box {
+  position: absolute;
+  right: 0;
+  top: 0;
+  box-sizing: border-box;
+  padding-top: 1px;
+  text-align: center;
+  width: 150px;
+  height: 70px;
+  background: #fff;
+  box-shadow: -3px 0 15px 3px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.h70 {
+  height: 70px;
 }
 </style>

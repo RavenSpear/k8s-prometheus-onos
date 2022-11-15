@@ -8,14 +8,8 @@
     </div>
 
     <div class="container">
-      <div class="handle-box">
-        <el-button size="small" type="primary" class="mr10" @click="toCreateVNetPage"
-          >创建虚拟网络</el-button
-        >
-      </div>
 
       <el-table :data="tableData" class="table">
-        <!-- <el-table-column type="index" width="100"></el-table-column> -->
         <el-table-column
           prop="virtualNetworkId"
           label="虚拟网络Id"
@@ -82,15 +76,11 @@ export default {
   },
   created() {
     this.getData();
+
+
+
   },
   methods: {
-    toCreateVNetPage(){
-      this.$router.push(
-        {
-          path:"/createVirtualNetwork"
-        }
-      )
-    },
     getData() {
       fetchVirtualNetworkData(this.query).then((res) => {
         this.tableData = res.data.vnets;

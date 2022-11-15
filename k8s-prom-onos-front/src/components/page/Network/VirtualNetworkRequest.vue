@@ -10,23 +10,39 @@
 
     <!-- 统计虚拟网络请求数据 -->
     <div class="container">
-      <!-- <div class="handle-box">
+      <div class="handle-box">
         <el-button
+          size="mini"
           type="primary"
           icon="el-icon-plus"
-          class="handle-del mr10"
-          @click="delAllSelection"
-          >创建新请求</el-button
+          @click="createVNR"
+          class="mr10"
+          >创建请求</el-button
         >
+
+        <el-select
+          v-model="query.status"
+          placeholder="处理状态"
+          class="handle-select mr10"
+        >
+          <el-option key="0" label="队列中" value="0"></el-option>
+          <el-option key="1" label="已嵌入" value="1"></el-option>
+          <el-option key="2" label="拒绝" value="2"></el-option>
+        </el-select>
+
         <el-input
-          v-model="query.name"
-          placeholder="用户名"
+          v-model="query.seqNo"
+          placeholder="输入请求编号"
           class="handle-input mr10"
         ></el-input>
-        <el-button size="mini" type="primary" icon="el-icon-search" @click="handleSearch"
+        <el-button
+          size="mini"
+          type="primary"
+          icon="el-icon-search"
+          @click="handleSearch"
           >搜索</el-button
         >
-      </div> -->
+      </div>
 
       <el-table :data="tableData" class="table">
         <el-table-column
@@ -52,11 +68,17 @@
         <el-table-column align="center" prop="status" label="处理状态">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.status === 0" :type="info">队列中</el-tag>
-            <el-tag v-else-if="scope.row.status === 1" :type="success">已嵌入</el-tag>
+            <el-tag v-else-if="scope.row.status === 1" :type="success"
+              >已嵌入</el-tag
+            >
             <el-tag v-else :type="danger">拒绝</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="提交时间"></el-table-column>
+        <el-table-column
+          align="center"
+          prop="createTime"
+          label="提交时间"
+        ></el-table-column>
       </el-table>
     </div>
   </div>
@@ -68,7 +90,8 @@ export default {
   data() {
     return {
       query: {
-        name: "",
+        seqNo: "",
+        status: "",
       },
       tableData: [],
     };
@@ -86,10 +109,33 @@ export default {
             bandwidth: item.bandwidth + " Mbps",
             latency: item.latency + " ms",
             status: item.status,
+            createTime: this.formatDate(item.createTime),
           });
-          console.log(item);
         });
       });
+    },
+    createVNR() {
+      this.$router.push({
+        path: "/createVirtualNetworkRequest",
+      });
+    },
+    formatDate(timestamp) {
+      var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      var Y = date.getFullYear() + "-";
+      var M =
+        (date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1)
+          : date.getMonth() + 1) + "-";
+      var D =
+        (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
+      var h =
+        (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":";
+      var m =
+        (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
+        ":";
+      var s =
+        date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+      return Y + M + D + h + m + s;
     },
     delAllSelection() {},
     handleSearch() {},
@@ -97,10 +143,15 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .handle-box {
   margin-bottom: 20px;
 }
+
+.handle-select {
+  width: 180px;
+}
+
 .handle-input {
   width: 300px;
   display: inline-block;
@@ -110,116 +161,7 @@ export default {
   margin-right: 10px;
 }
 
-.icon-lg-size {
-  font-size: 40px;
-}
-
-.el-row {
-  margin-bottom: 20px;
-}
-
-.grid-content {
-  display: flex;
-  align-items: center;
-  height: 80px;
-}
-
-.grid-cont-right {
-  flex: 1;
-  text-align: center;
-  font-size: 14px;
-  color: #999;
-}
-
-.grid-num {
-  font-size: 30px;
-  font-weight: bold;
-}
-
-.grid-con-icon {
-  font-size: 50px;
-  width: 100px;
-  height: 100px;
-  text-align: center;
-  line-height: 100px;
-  color: #fff;
-}
-
-.grid-con-1 .grid-con-icon {
-  background: rgb(45, 140, 240);
-}
-
-.grid-con-1 .grid-num {
-  color: rgb(45, 140, 240);
-}
-
-.grid-con-2 .grid-con-icon {
-  background: rgb(100, 213, 114);
-}
-
-.grid-con-2 .grid-num {
-  color: rgb(45, 140, 240);
-}
-
-.grid-con-3 .grid-con-icon {
-  background: rgb(242, 94, 67);
-}
-
-.grid-con-3 .grid-num {
-  color: rgb(242, 94, 67);
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  padding-bottom: 20px;
-  border-bottom: 2px solid #ccc;
-  margin-bottom: 20px;
-}
-
-.user-avator {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-}
-
-.user-info-cont {
-  padding-left: 50px;
-  flex: 1;
-  font-size: 14px;
-  color: #999;
-}
-
-.user-info-cont div:first-child {
-  font-size: 30px;
-  color: #222;
-}
-
-.user-info-list {
-  font-size: 14px;
-  color: #999;
-  line-height: 25px;
-}
-
-.user-info-list span {
-  margin-left: 70px;
-}
-
 .mgb20 {
   margin-bottom: 20px;
-}
-
-.todo-item {
-  font-size: 14px;
-}
-
-.todo-item-del {
-  text-decoration: line-through;
-  color: #999;
-}
-
-.schart {
-  width: 100%;
-  height: 300px;
 }
 </style>
