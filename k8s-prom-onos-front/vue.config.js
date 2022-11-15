@@ -5,7 +5,7 @@ module.exports = {
         //port:"8080",
         proxy: {
             "/vnr": {
-                target: "http://127.0.0.1:8181/onos/nvh",
+                target: "http://223.3.94.112:8181/onos/nvh",
                 changeOrigin: true,
             },
             '/tenants': {
