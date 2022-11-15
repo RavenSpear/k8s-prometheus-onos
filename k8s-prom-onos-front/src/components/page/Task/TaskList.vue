@@ -31,7 +31,9 @@
 </template>
 
 <script>
-import { getTaskList, getClusterPods, getClusterNode, deleteTask } from '../../../api';
+import { getTaskList, getClusterPods, 
+    getClusterNode, 
+    deleteTask } from '../../../api';
 export default {
     data() {
         return {
@@ -73,13 +75,15 @@ export default {
         async getData() {
             this.tableData = []
             let tasks = await (await getTaskList()).data.items;
+            let podlist = await (await getClusterPods()).data.items;
+            //console.log(podlist)
             for (var i = 0; i < tasks.length; i++) {
                 var task = { name: "-", version: "-", creationTimestamp: "-", taskNum: "-", CPUReq: "-", memReq: "-", diskReq: "-", bandReq: "-", ratio: "-", pods:[] };
                 task.name = tasks[i].metadata.name;
                 task.version = tasks[i].spec.template.spec.containers[0].image;
                 task.creationTimestamp = tasks[i].metadata.creationTimestamp;
                 task.taskNum = tasks[i].spec.replicas;
-                console.log(tasks[i]);
+                //console.log(tasks[i]);
                 var resources = tasks[i].spec.template.spec.containers[0].resources;
                 if ("limits" in resources) {
                     if ("cpu" in resources.limits) task.CPUReq = resources.limits.cpu;
@@ -100,20 +104,31 @@ export default {
                 }
 
 
-                var labelSelectorobj = tasks[i].spec.selector.matchLabels;
-                var labelSelector = Object.keys(labelSelectorobj)[0] + "=" + Object.values(labelSelectorobj)[0];
-                //console.log(labelSelector);
+                // var labelSelectorobj = tasks[i].spec.selector.matchLabels;
+                // var labelSelector = Object.keys(labelSelectorobj)[0] + "=" + Object.values(labelSelectorobj)[0];
+                // var params = { "labelSelector": labelSelector };
 
-                var params = { "labelSelector": labelSelector };
-                let pods = await (await getClusterPods(params)).data.items;
-                //console.log(pods)
+                
+                let pods = [];
+                let nodes = [];
+                for (var j = 0; j < podlist.length; j++) {
+                    let podname = podlist[j].metadata.name;
+                    var reg = new RegExp("^"+task.name+"-([a-z]|[0-9])+-([a-z]|[0-9])+$","");    
+                    if(reg.test(podname)){
+                        pods.push(podname);
+                        nodes.push(podlist[j].spec.nodeName);
+                    }
+                }
+                //console.log(pods);
                 let distributions = [];
-                for (var j = 0; j < pods.length; j++) {
-                    let node = pods[j].spec.nodeName;
+                for (j = 0; j < pods.length; j++) {
+                    let node = nodes[j];
                     let distribution = await (await getClusterNode(node)).data.metadata.labels.cluster;
                     distributions.push(distribution);
-                    task.pods.push(pods[j].metadata.name);
+                    
                 }
+                task.pods = pods;
+                //console.log(distributions);
                 var clouds = 0;
                 var edges = 0;
                 for (j = 0; j < distributions.length; j++) {

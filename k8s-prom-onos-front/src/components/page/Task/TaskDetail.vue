@@ -20,12 +20,12 @@ export default {
             let containers = this.$route.query;
             //console.log(containers);
             this.url += ("&var-deployment=" + containers["deployment"]);
-            this.url += ("&var-container=" + containers["deployment"]);
-            // let pods = containers["pods"]
+            //this.url += ("&var-container=" + containers["deployment"]);
+            let pods = containers["pods"]
             // console.log(pods)
-            // for (var val in pods) {
-            //     this.url += ("&var-container=" + pods[val]);
-            // }
+            for (var val in pods) {
+                this.url += ("&var-pod=" + pods[val]);
+            }
             console.log(this.url);
             return this.$route.query;
         }
