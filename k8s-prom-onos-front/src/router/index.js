@@ -11,11 +11,12 @@ import Piplines from '../components/page/Network/Pipelines.vue'
 import TopoConfig from '../components/page/Network/TopoConfig.vue'
 import TopoShow from '../components/page/Network/TopoShow.vue'
 import PhysicalNetwork from '../components/page/Network/PhysicalNetwork.vue'
-import VirtualNetworkCreate from '../components/page/Network/VirtualNetworkCreate.vue'
+
 import VirtualNetworkList from '../components/page/Network/VirtualNetworkList.vue'
 import VirtualNetworkTopo from '../components/page/Network/VirtualNetworkTopo.vue'
 import CollectorConfig from '../components/page/Network/CollectorConfig.vue'
 import VirtualNetworkRequest from '../components/page/Network/VirtualNetworkRequest.vue'
+import VirtualNetworkRequestCreate from '../components/page/Network/VirtualNetworkRequestCreate.vue'
 
 import ResourceDashboard from '../components/page/Resource/ResourceDashboard.vue'
 import ResourceList from '../components/page/Resource/ResourceList.vue'
@@ -102,11 +103,6 @@ const routes = [
         component: VirtualNetworkDashboard,
         meta: { title: '传输资源控制首页' }
       },
-      // {
-      //   path: "/addTenant",
-      //   component: AddTenant,
-      //   meta: { title: '添加租户' }
-      // },
       {
         path: "/tenantList",
         component: TenantList,
@@ -133,9 +129,9 @@ const routes = [
         meta: { title: '物理网络' }
       },
       {
-        path: '/createVirtualNetwork',
-        component: VirtualNetworkCreate,
-        meta: { title: '创建虚拟网络' }
+        path: '/createVirtualNetworkRequest',
+        component: VirtualNetworkRequestCreate,
+        meta: { title: '创建虚拟网络请求' }
       },
       {
         path: '/virtualNetworkRequest',

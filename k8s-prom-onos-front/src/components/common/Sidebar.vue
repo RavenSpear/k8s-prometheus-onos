@@ -95,16 +95,12 @@ export default {
               title: "虚拟网络首页",
             },
             {
-              index: "virtualNetworkList",
-              title: "虚拟网络列表",
-            },
-            {
               index: "virtualNetworkRequest",
               title: "虚拟网络请求",
             },
             {
-              index: "createVirtualNetwork",
-              title: "创建虚拟网络",
+              index: "virtualNetworkList",
+              title: "虚拟网络列表",
             }
           ],
         }

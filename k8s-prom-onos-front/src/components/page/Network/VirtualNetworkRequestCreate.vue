@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>传输资源虚拟化控制</el-breadcrumb-item>
-        <el-breadcrumb-item>创建虚拟网络</el-breadcrumb-item>
+        <el-breadcrumb-item>创建虚拟网络请求</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
@@ -70,6 +70,7 @@
 
 <script>
 import { submitVNR } from "../../../api";
+import bus from "../../common/bus";
 export default {
   data() {
     var checkBandwidthValue = (rule, value, callback) => {
@@ -113,7 +114,6 @@ export default {
       }
     };
     return {
-      tenants: [],
       form: {
         bandwidth: "",
         latency: "",
@@ -155,7 +155,6 @@ export default {
     };
   },
   created() {
-    console.log(this.tagList);
   },
 
   methods: {
@@ -166,7 +165,12 @@ export default {
       this.$refs.vnrFormRef.validate((valid) => {
         if (valid) {
           submitVNR(this.form).then((res) => {
-            console.log(res);
+            if(res.data.status == "success"){
+              alert("虚拟网络请求提交成功！");
+              bus.$emit("close_current_tags","/virtualNetworkRequest");
+            }else{
+              alert("虚拟网络请求提交失败！");
+            }
           });
         } else {
           return false;
@@ -174,7 +178,8 @@ export default {
       });
     },
     cancel() {
-      this.$router.push("/");
+      // 关闭当前页面，跳转到虚拟网络请求详情页
+      bus.$emit("close_current_tags","/virtualNetworkRequest");
     },
     reset() {
       this.$refs.vnrFormRef.resetFields();
