@@ -12,8 +12,8 @@ module.exports = {
                 target: 'http://223.3.94.112:8181/onos/p4virtex',
                 changeOrigin: true
             },
-            '/vnets': {
-                target: 'http://223.3.94.112:8181/onos/p4virtex',
+            '/vnet': {
+                target: 'http://223.3.94.112:8181/onos/nvh',
                 changeOrigin: true
             },
             '/vnets/topology': {

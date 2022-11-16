@@ -8,16 +8,10 @@
     </div>
 
     <div class="container">
-
       <el-table :data="tableData" class="table">
-        <el-table-column
-          prop="virtualNetworkId"
-          label="虚拟网络Id"
-        ></el-table-column>
-        <el-table-column prop="bandwidth" label="带宽需求"></el-table-column>
-        <el-table-column prop="delay" label="时延需求"></el-table-column>
-        <el-table-column prop="traffic" label="业务流量"></el-table-column>
-        <el-table-column prop="status" label="网络状态"></el-table-column>
+        <el-table-column prop="vnetId" label="虚拟网络Id"></el-table-column>
+        <el-table-column prop="vnrId" label="请求编号"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
@@ -41,67 +35,49 @@
 </template>
 
 <script>
-import { fetchVirtualNetworkData, embedVirtualNetworkTopo } from "../../../api";
+import { getVirtualNetwors} from "../../../api";
 export default {
   data() {
     return {
       query: {},
-      tableData: [{
-        virtualNetworkId: "1546137",
-        bandwidth: "10M",
-        delay: "1ms",
-        traffic: "10.0.0.1->10.0.0.2",
-        status: "正在运行"
-
-      },
-      {
-        virtualNetworkId: "1546137",
-        bandwidth: "10M",
-        delay: "1ms",
-        traffic: "10.0.0.1->10.0.0.2",
-        status: "正在运行"
-
-      },
-      {
-        virtualNetworkId: "1546137",
-        bandwidth: "10M",
-        delay: "1ms",
-        traffic: "10.0.0.1->10.0.0.2",
-        status: "正在运行"
-
-      }
-    
-    ],
+      tableData: [
+      ],
     };
   },
   created() {
     this.getData();
-
-
-
   },
   methods: {
     getData() {
-      fetchVirtualNetworkData(this.query).then((res) => {
-        this.tableData = res.data.vnets;
+      getVirtualNetwors().then((res) => {
+        res.data.VNets.forEach((item) => {
+          this.tableData.push({
+            vnetId: item.vnetId,
+            vnrId: item.vnrId,
+            createTime: this.formatDate(item.createTime)
+          });
+        });
+
+       console.log(res);
       });
     },
-    topoShow(row) {
-      this.$router.push({
-        path: "/virtualNetworkTopo",
-        query: {
-          id: row.virtualNetworkId,
-        },
-      });
-    },
-    
-    embed(row) {
-      let q = {};
-      q.id = row.virtualNetworkId;
-      console.log(q.id);
-      embedVirtualNetworkTopo(q).then((res) => {
-        console.log(res);
-      });
+    formatDate(timestamp) {
+      var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+      var Y = date.getFullYear() + "-";
+      var M =
+        (date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1)
+          : date.getMonth() + 1) + "-";
+      var D =
+        (date.getDate() < 10 ? "0" + date.getDate() : date.getDate()) + " ";
+      var h =
+        (date.getHours() < 10 ? "0" + date.getHours() : date.getHours()) + ":";
+      var m =
+        (date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()) +
+        ":";
+      var s =
+        date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+      return Y + M + D + h + m + s;
     },
   },
 };

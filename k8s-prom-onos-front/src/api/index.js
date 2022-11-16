@@ -93,8 +93,6 @@ export const submitVNR = formData => {
     })
 }
 
-
-
 export const getAllVNRs = () => {
     return request({
         url: "/vnr",
@@ -102,17 +100,12 @@ export const getAllVNRs = () => {
     })
 }
 
-
-
-
 //================ Virtual Network API =================
 
-
-export const fetchVirtualNetworkData = query => {
+export const getVirtualNetwors = () => {
     return request({
-        url: '/vnets',
-        method: 'get',
-        params: query
+        url: '/vnet',
+        method: 'get'
     })
 }
 
