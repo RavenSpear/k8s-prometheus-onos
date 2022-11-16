@@ -429,27 +429,82 @@ POST task/namespaces/default/deployments
   }
 }
 ```
-### `/metrics`
 
-1. 映射
-
+### `/IoT`
+#### API映射
 ```
-http://front-ip:port/metrics -> http://onos-ip:port/apis/metrics.k8s.io/v1beta1
-```
-2. 资源
-
-### `/custom-metrics`
-
-1. 映射
-
-```
-http://front-ip:port/custom-metrics -> http://onos-ip:port/apis/custom.metrics.k8s.io/v1beta1
+http://front-ip:port/IoT -> http://k8s-ip:port/
 ```
 
-2. 资源
+#### API资源
 
+1. `获取边节点IoT设备列表`
 
+- Request
 
+```
+GET IoT/{nodename}/metadata/api/v2/device/all
+```
+
+- Response
+
+```
+{
+    "apiVersion":"v2",
+    "statusCode":200,
+    "totalCount":3,
+    "devices":[
+        {
+            "created":1668128330690,
+            "modified":1668128330690,
+            "id":"efbaf607-48f7-4eec-90b5-27717ad7474a",
+            "name":"pressure-sensor",
+            "description":"RYSIM 气压传感器",
+            "adminState":"UNLOCKED",
+            "operatingState":"UP",
+            "labels":[
+                "MQTT"
+            ],
+            "serviceName":"device-mqtt",
+            "profileName":"pressure-device-profile",
+            "protocols":{
+                "mqtt":{
+                    "CommandTopic":"CommandTopic"
+                }
+            }
+        }
+    ]
+}
+```
+
+2. `获取设备数据`
+
+- Request
+
+```
+GET IoT/{nodename}/data/api/v2/
+```
+
+- Response
+
+```
+{
+    "apiVersion":"v2",
+    "statusCode":200,
+    "totalCount":61791,
+    "readings":[
+        {
+            "id":"4693ca7d-cabe-453e-a0ad-aad31059fd07",
+            "origin":1668515670007453700,
+            "deviceName":"temperature-sensor",
+            "resourceName":"temperaturevalue",
+            "profileName":"temperature-device-profile",
+            "valueType":"String",
+            "value":"25.7"
+        }
+    ]
+}
+```
 ## 二、前端页面
 
 ### `I. 系统首页`
@@ -534,17 +589,37 @@ http://front-ip:port/custom-metrics -> http://onos-ip:port/apis/custom.metrics.k
 
 - `设备感知列表`
 
-实现待定
+| 表项 | 资源 |
+| :-: | :-: |
+| 设备名 | IoT/{nodename}/metadata/api/v2/device/all.devices[i].name |
+| 描述 | IoT/{nodename}/metadata/api/v2/device/all.devices[i].description |
+| 创建时间 | IoT/{nodename}/metadata/api/v2/device/all.devices[i].created |
+| 协议 | IoT/{nodename}/metadata/api/v2/device/all.devices[i].protocols |
+| 状态 | IoT/{nodename}/metadata/api/v2/device/all.devices[i].operatingState |
+| 查看详情 | button(name) |
+
+- `设备详情`
+
+页面通过嵌入grafana Dashboard实现。
 
 ### `V. 任务首页`
 
 展示集群中部署任务的资源使用情况。
 
-
-
 - `任务首页`
 
 页面通过嵌入grafana Dashboard实现。
+
+| Panel | promSQL |
+| :-: | :-: |
+| 总任务数 | count(kube_deployment_created{namespace="monitoring"}) |
+| 总任务副本数 | sum(kube_deployment_spec_replicas{namespace="monitoring"}) |
+| 任务内存使用率 | sum(container_memory_working_set_bytes{container!="POD", namespace="monitoring"})/sum(node_memory_MemTotal_bytes)*100 |
+| 任务磁盘使用率 | sum(container_fs_usage_bytes{namespace="monitoring"}) /sum(node_filesystem_size_bytes)*100 |
+| 任务CPU使用率 | sum(rate(container_cpu_usage_seconds_total{container!="POD", namespace="monitoring"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100 |
+| 任务内存用量 | sum(container_memory_working_set_bytes{container!="POD", namespace="monitoring"}) |
+| 任务磁盘用量 | sum(container_fs_usage_bytes{container!="POD", namespace="monitoring"}) |
+| 任务CPU用量 | sum(rate(container_cpu_usage_seconds_total{container!="POD", namespace="monitoring"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100 |
 
 ### `VI. 任务列表`
 
@@ -564,6 +639,20 @@ http://front-ip:port/custom-metrics -> http://onos-ip:port/apis/custom.metrics.k
 | 带宽需求 | task/item[i].metadata.annotations."kubernetes.io/ingress-bandwidth/kubernetes.io/egress-bandwidth |
 | 边云负载比 |  |
 | 查看详情  | button(id) |
+
+- `任务资源详情页`
+
+页面通过嵌入grafana Dashboard实现。
+
+| Panel | promSQL |
+| :-: | :-: |
+| 当前任务副本数 | sum(kube_deployment_spec_replicas{deployment=~"$deployment",namespace="monitoring"}) |
+| 当前任务CPU使用率 | sum(rate(container_cpu_usage_seconds_total{container!="POD", pod=~"$pod",namespace="monitoring"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100 |
+| 当前任务内存使用率 | sum(container_memory_working_set_bytes{container!="POD", pod=~"$pod", namespace="monitoring"})/sum(node_memory_MemTotal_bytes)*100 |
+| 当前任务磁盘使用率 | sum(container_fs_usage_bytes{container!="POD", pod=~"$pod", namespace="monitoring"}) /sum(node_filesystem_size_bytes)*100 |
+| 当前任务内存用量 | sum(container_memory_working_set_bytes{container!="POD", pod=~"$pod",namespace="monitoring"}) by (pod) |
+| 当前任务磁盘用量 | sum(container_fs_usage_bytes{container!="POD", pod=~"$pod",namespace="monitoring"}) by (pod) |
+| 当前任务CPU用量 | sum(rate(container_cpu_usage_seconds_total{container!="POD", pod=~"$pod", namespace="monitoring"}[1m])) by (pod) / on() group_left() sum(rate(node_cpu_seconds_total[1m])) |
 
 ### `VII. 任务部署`
 

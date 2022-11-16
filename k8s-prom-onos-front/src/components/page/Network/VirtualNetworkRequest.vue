@@ -67,11 +67,11 @@
         ></el-table-column>
         <el-table-column align="center" prop="status" label="处理状态">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status === 0" :type="info">队列中</el-tag>
-            <el-tag v-else-if="scope.row.status === 1" :type="success"
+            <el-tag v-if="scope.row.status === 0" type="info">队列中</el-tag>
+            <el-tag v-else-if="scope.row.status === 1" type="success"
               >已嵌入</el-tag
             >
-            <el-tag v-else :type="danger">拒绝</el-tag>
+            <el-tag v-else type="danger">拒绝</el-tag>
           </template>
         </el-table-column>
         <el-table-column
