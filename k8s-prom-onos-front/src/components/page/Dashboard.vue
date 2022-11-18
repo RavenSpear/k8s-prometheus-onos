@@ -5,14 +5,18 @@
 </template>
       
 <script>
-import { getNetworkTopoDevices, getNetworkTopoLinks, getHosts } from '../../api'
+import { getNetworkTopoDevices, getNetworkTopoLinks, getHosts, getClusterNodes, getIoTDevices, getClusterPods, getTaskList } from '../../api'
 require("vis-network/dist/dist/vis-network.min.css");
 const vis = require("vis-network/dist/vis-network.min");
 export default {
         data() {
                 return {
-                        devicehashs:{},
-                        edgehashs:{},
+                        distributionhashs: {},//node name to cloud/edge
+                        taskhashs: {},//{ grafana: { seq: 0, count:0 }}
+                        devicehashs: {},//device name to node no.
+                        edgehashs: {},//pair hashcode to if its exists.
+                        nodehashs: {},//node name to node no.
+                        iphashs: {},//ip to node no.
                         nodes: [
                                 {
                                         id: 0,
@@ -22,23 +26,31 @@ export default {
                                         group: 0,
                                         isCloud: true,
                                         margin: 40,
-                                        mass:5
+                                        mass: 5
                                 },
-                                
-                                { id: 1, label: "Edge-1", group: 0, isEdge: true, shape: "box", margin: 40,mass:10},
-                                { id: 2, label: "Edge-2", group: 0, isEdge: true, shape: "box", margin: 40,mass:10},
-                                { id: 3, label: "Sw-1", group: 1, shape: "circle", physics: false},
-                                { id: 4, label: "Sw-2", group: 1, shape: "circle", physics: false},
-                                { id: 5, label: "Sw-3", group: 1, shape: "circle", physics: false},
 
-                                { id: 6, label: "Task-1", group: 2, shape: "box", parent: 0, hidden: true, margin: 20,
-                                        mass:10},
-                                { id: 7, label: "Task-2", group: 2, shape: "box", parent: 0, hidden: true,margin: 20,
-                                        mass:10},
-                                { id: 8, label: "IoT-1", group: 3, shape: "box", parent: 1, hidden: true,margin: 20 ,
-                                        mass:10},
-                                { id: 9, label: "IoT-2", group: 3, shape: "box", parent: 1, hidden: true,margin: 20 ,
-                                        mass:10},
+                                { id: 1, label: "Edge-1", group: 0, isEdge: true, shape: "box", margin: 40, mass: 10 },
+                                { id: 2, label: "Edge-2", group: 0, isEdge: true, shape: "box", margin: 40, mass: 10 },
+                                { id: 3, label: "Sw-1", group: 1, shape: "circle", physics: false },
+                                { id: 4, label: "Sw-2", group: 1, shape: "circle", physics: false },
+                                { id: 5, label: "Sw-3", group: 1, shape: "circle", physics: false },
+
+                                {
+                                        id: 6, label: "Task-1", group: 2, shape: "box", parent: 0, hidden: true, margin: 20,
+                                        mass: 10
+                                },
+                                {
+                                        id: 7, label: "Task-2", group: 2, shape: "box", parent: 0, hidden: true, margin: 20,
+                                        mass: 10
+                                },
+                                {
+                                        id: 8, label: "IoT-1", group: 3, shape: "box", parent: 1, hidden: true, margin: 20,
+                                        mass: 10
+                                },
+                                {
+                                        id: 9, label: "IoT-2", group: 3, shape: "box", parent: 1, hidden: true, margin: 20,
+                                        mass: 10
+                                },
 
                                 {
                                         id: 10,
@@ -47,15 +59,15 @@ export default {
                                         group: 0,
                                         isCloud: true,
                                         margin: 40,
-                                        mass:5
+                                        mass: 5
                                 },
 
-                                { id: 11, label: "Sw-4", group: 1, isCloud: true, shape: "circle", physics: false},
-                                { id: 12, label: "Sw-5", group: 1, isCloud: true, shape: "circle", physics: false},
-                                { id: 13, label: "Sw-6", group: 1, isCloud: true, shape: "circle", physics: false},
+                                { id: 11, label: "Sw-4", group: 1, isCloud: true, shape: "circle", physics: false },
+                                { id: 12, label: "Sw-5", group: 1, isCloud: true, shape: "circle", physics: false },
+                                { id: 13, label: "Sw-6", group: 1, isCloud: true, shape: "circle", physics: false },
 
-                                { id: 14, label: "Sw-7", group: 1, shape: "circle", physics: false},
-                                { id: 15, label: "Edge-3", group: 0, isEdge: true, shape: "box", margin: 40,mass:10},
+                                { id: 14, label: "Sw-7", group: 1, shape: "circle", physics: false },
+                                { id: 15, label: "Edge-3", group: 0, isEdge: true, shape: "box", margin: 40, mass: 10 },
                         ],
                         edges: [
                                 { from: 1, to: 4 },
@@ -70,7 +82,7 @@ export default {
                                 { from: 8, to: 1 },
                                 { from: 9, to: 1 },
 
-                                
+
                                 { from: 11, to: 12 },
                                 { from: 11, to: 13 },
                                 { from: 12, to: 13 },
@@ -78,11 +90,11 @@ export default {
                                 { from: 0, to: 11 },
                                 { from: 10, to: 13 },
 
-                                { from: 14, to: 3},
-                                { from: 14, to: 4},
-                                { from: 14, to: 5},
+                                { from: 14, to: 3 },
+                                { from: 14, to: 4 },
+                                { from: 14, to: 5 },
 
-                                { from: 15, to: 14},
+                                { from: 15, to: 14 },
 
                         ]
                 }
@@ -123,10 +135,54 @@ export default {
                         });
                         this.network.on("doubleClick", (params) => {
                                 var id = params.nodes[0];
+                                if(id==null) return;
+                                var cnode = this.nodes[id];
+                                var param = {};
+                                switch (this.nodes[id].group) {
+                                        case 0:
+                                                param['nodeName'] = cnode.title;
+                                                //console.log(param);
+                                                this.$router.push(
+                                                        {
+                                                                path: '/nodeDetail',
+                                                                query: param
+                                                        }
+                                                );
+                                                break;
+                                        case 1:
+                                                break;
+                                        case 2:
+                                                param['deployment'] = cnode.taskName;
+                                                param['pods'] = this.taskhashs[cnode.taskName].pods;
+                                                //console.log(param);
+                                                this.$router.push(
+                                                        {
+                                                                path: '/TaskDetail',
+                                                                query: param
+                                                        }
+                                                );
+                                                break;
+                                        case 3:
+                                                param['deviceName'] = cnode.deviceName;
+                                                param['nodeName'] = this.nodes[cnode.parent].title;
+                                                //console.log(param);
+                                                this.$router.push(
+                                                        {
+                                                                path: '/deviceDetail',
+                                                                query: param
+                                                        }
+                                                );
+                                                break;
+                                        default:
+                                                break;
+                                }
+                        });
+                        this.network.on("click", (params) => {
+                                var id = params.nodes[0];
                                 if (id >= 0 && this.nodes[id].group == 0) {
                                         this.changeSubNodeVisibility(id);
-                                }else if(id >= 0 && (this.nodes[id].group == 2 || this.nodes[id].group == 3)){
-                                        console.log(this.nodes[id].hidden)
+                                } else if (id >= 0 && (this.nodes[id].group == 2 || this.nodes[id].group == 3)) {
+                                        //console.log(this.nodes[id].hidden)
                                 }
                                 //params.restore();
                                 //this.network.redraw()
@@ -188,73 +244,179 @@ export default {
                 changeSubNodeVisibility(id) {
                         for (var i = 0; i < this.nodes.length; i++) {
                                 if (this.nodes[i].parent == id) {
-                                        console.log(i)
+                                        //console.log(i)
                                         let val = !this.nodes[i].hidden;
                                         this.nodes[i].hidden = !this.nodes[i].hidden;
-                                        this.network.clustering.updateClusteredNode(i,{hidden : val});
+                                        this.network.clustering.updateClusteredNode(i, { hidden: val });
                                 }
                         }
                 },
-                async collectTopoInfo(){
+                async collectTopoInfo() {
                         this.nodes = [];
                         this.edges = [];
-                        var links =  await (await getNetworkTopoLinks()).data.links;
-                        var hosts = await (await getHosts()).data.hosts;
-                        var devices = await (await getNetworkTopoDevices()).data.devices;
+                        var linklist = await (await getNetworkTopoLinks()).data.links;
+                        var hostlist = await (await getHosts()).data.hosts;
+                        var swlist = await (await getNetworkTopoDevices()).data.devices;
 
+                        //console.log(hostlist)
+                        let nodelist = await (await getClusterNodes()).data.items;
+                        //console.log(nodelist)
+                        let tasklist = await (await getTaskList()).data.items;
                         //console.log(links)
                         //console.log(hosts)
-                        //console.log(devices)
-                        let i=0;
-                        for(;i<devices.length;i++){
-                                let device = {
+
+                        let i = 0;//i for nodes
+                        for (; i < swlist.length; i++) {
+                                let sw = {
                                         id: i,
-                                        group: 0, 
-                                        title: devices[i],
-                                        label: "Sw-"+i,
-                                        shape: "circle", 
+                                        group: 1,
+                                        title: swlist[i],
+                                        label: "Sw-" + i,
+                                        shape: "circle",
                                         physics: false
                                 }
-                                this.devicehashs[device.title] = i;
+                                this.devicehashs[sw.title] = i;
                                 //console.log(this.devicehashs)
-                                this.nodes.push(device);
+                                this.nodes.push(sw);
                         }
-                        for(var j=0;j<links.length;j++){
+
+                        //j for else
+                        for (var j = 0; j < linklist.length; j++) {
                                 let link = {
-                                        from: this.devicehashs[links[j].src.device],
-                                        to: this.devicehashs[links[j].dst.device],
+                                        from: this.devicehashs[linklist[j].src.device],
+                                        to: this.devicehashs[linklist[j].dst.device],
                                 }
-                                if(this.edgehashs[this.edgeHashCode(link.from,link.to)]==null){
-                                        this.edgehashs[this.edgeHashCode(link.from,link.to)]=1;
+                                if (this.edgehashs[this.edgeHashCode(link.from, link.to)] == null) {
+                                        this.edgehashs[this.edgeHashCode(link.from, link.to)] = 1;
                                         this.edges.push(link);
                                 }
-                                
+
                         }
-                        //console.log(this.edgehashs);
-                        for(;i<hosts.length+devices.length;i++){
+
+                        for (j = 0; j < tasklist.length; j++) {
+                                this.taskhashs[tasklist[j].metadata.name] = { seq: j, count: 0, pods:[] };
+                        }
+                        //console.log(this.taskhashs)
+
+                        var nodeslength = this.nodes.length;
+
+                        //initialize iphashs according to hostlist
+                        for (j = nodeslength; j < nodelist.length + nodeslength; j++) {
+                                this.iphashs[hostlist[j - nodeslength].ipAddresses[0]] = j;
+                        }
+                        //console.log(hostlist);
+                        for (; i < nodelist.length + nodeslength; i++) {
+
+                                let nodename = nodelist[i - nodeslength].metadata.name;
+                                let distribute = nodelist[i - nodeslength].metadata.labels.cluster
+                                let ip;
+                                for (const address of nodelist[i - nodeslength].status.addresses) {
+                                        if (address.type == "InternalIP") {
+                                                ip = address.address;
+                                        }
+                                }
+
+                                //console.log(nodename + " "+ distribute+" "+ip+" "+i);
+                                //console.log(this.iphashs);
+                                //console.log(this.iphashs[ip]);
+
+                                this.nodehashs[nodename] = this.iphashs[ip];
+                                this.distributionhashs[nodename] = distribute;
                                 let node = {
                                         id: i,
-                                        title: hosts[i-devices.length].id,
-                                        label: "Node-"+(i-devices.length),
+                                        title: nodename,
+                                        label: "节点-" + (i - nodeslength),
                                         shape: "box",
-                                        group: 1,
+                                        group: 0,
                                         margin: 40,
-                                        mass:10
+                                        mass: 10
                                 }
+                                if (distribute == "cloud") node['isCloud'] = true;
                                 let loc = {
                                         from: i,
-                                        to: this.devicehashs[hosts[i-devices.length].locations[0].elementId]
+                                        to: this.devicehashs[hostlist[i - nodeslength].locations[0].elementId]
                                 }
                                 this.nodes.push(node);
                                 this.edges.push(loc);
-                                //console.log(this.nodes)
+                                //console.log(ip);
+
                         }
+                        //console.log( this.distributionhashs)
+                        //console.log(this.nodehashs)
+                        //console.log(this.iphashs)
+
+
+                        for (var key in this.nodehashs) {
+                                //console.log(this.distributionhashs[key])
+                                if (this.distributionhashs[key] == "cloud") continue;
+                                let devices = await (await getIoTDevices(key)).data.devices;
+                                //console.log(devices);
+                                nodeslength = this.nodes.length;
+                                for (; i < nodeslength + devices.length; i++) {
+                                        let node = {
+                                                id: i,
+                                                //label: devices[i - nodeslength].name,
+                                                label: "传感器-" + (i - nodeslength),
+                                                title: devices[i - nodeslength].description,
+                                                deviceName: devices[i - nodeslength].name,
+                                                group: 3,
+                                                shape: "box",
+                                                parent: this.nodehashs[key],
+                                                hidden: false,
+                                                margin: 20,
+                                                mass: 5
+                                        }
+                                        let loc = {
+                                                from: i,
+                                                to: this.nodehashs[key]
+                                        }
+                                        this.nodes.push(node);
+                                        this.edges.push(loc);
+                                }
+                        }
+
+                        let podlist = await (await getClusterPods()).data.items;
+                        //console.log(podlist);
+
+                        nodeslength = this.nodes.length;
+                        var seq = i;
+                        var reg = /^(.*)-([a-z]|[0-9])+-([a-z]|[0-9])+$/
+                        for (; i < nodeslength + podlist.length; i++) {
+                                var podname = podlist[i - nodeslength].metadata.name;
+                                var taskname = podname.replace(reg, "$1");
+                                if (!(taskname in this.taskhashs)) {
+                                        continue;
+                                }
+                                this.taskhashs[taskname].pods.push(podname);
+                                let node = {
+                                        id: seq,
+                                        //label: podlist[i - nodeslength].metadata.name,
+                                        label: "任务-" + this.taskhashs[taskname].seq + ": " + this.taskhashs[taskname].count++,
+                                        title: podname,
+                                        taskName: taskname,
+                                        group: 2,
+                                        shape: "box",
+                                        parent: this.nodehashs[podlist[i - nodeslength].spec.nodeName],
+                                        hidden: false,
+                                        margin: 20,
+                                        mass: 5
+                                }
+                                let loc = {
+                                        from: seq,
+                                        to: this.nodehashs[podlist[i - nodeslength].spec.nodeName]
+                                }
+                                this.nodes.push(node);
+                                this.edges.push(loc);
+                                seq++;
+                        }
+                        
+                        //console.log(this.taskhashs);
                         //console.log(this.nodes)
                         //console.log(this.edges)
                         this.makeVis();
                 },
-                edgeHashCode(a,b){
-                        return a>b?(a+"."+b):(b+"."+a);
+                edgeHashCode(a, b) {
+                        return a > b ? (a + "." + b) : (b + "." + a);
                 }
         }
 }
