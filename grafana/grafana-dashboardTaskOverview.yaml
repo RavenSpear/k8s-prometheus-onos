@@ -10,6 +10,14 @@ data:
           "type": "datasource",
           "pluginId": "prometheus",
           "pluginName": "Prometheus"
+        },
+        {
+          "name": "DS_INFINITY",
+          "label": "Infinity",
+          "description": "",
+          "type": "datasource",
+          "pluginId": "yesoreyeram-infinity-datasource",
+          "pluginName": "Infinity"
         }
       ],
       "__elements": [],
@@ -43,6 +51,12 @@ data:
           "id": "timeseries",
           "name": "Time series",
           "version": ""
+        },
+        {
+          "type": "datasource",
+          "id": "yesoreyeram-infinity-datasource",
+          "name": "Infinity",
+          "version": "1.1.0"
         }
       ],
       "annotations": {
@@ -101,7 +115,7 @@ data:
           },
           "gridPos": {
             "h": 9,
-            "w": 6,
+            "w": 3,
             "x": 0,
             "y": 0
           },
@@ -167,8 +181,8 @@ data:
           },
           "gridPos": {
             "h": 9,
-            "w": 6,
-            "x": 6,
+            "w": 3,
+            "x": 3,
             "y": 0
           },
           "id": 2,
@@ -198,6 +212,79 @@ data:
             }
           ],
           "title": "任务副本数",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "#ffffff",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 6,
+            "x": 6,
+            "y": 0
+          },
+          "id": 14,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "/^ratio$/",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "table",
+              "global_query_id": "",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "url": "http://223.3.94.112:5000/ratio",
+              "url_options": {
+                "data": "",
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "云边负载比",
           "type": "stat"
         },
         {

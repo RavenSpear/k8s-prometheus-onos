@@ -10,6 +10,14 @@ data:
           "type": "datasource",
           "pluginId": "prometheus",
           "pluginName": "Prometheus"
+        },
+        {
+          "name": "DS_INFINITY",
+          "label": "Infinity",
+          "description": "",
+          "type": "datasource",
+          "pluginId": "yesoreyeram-infinity-datasource",
+          "pluginName": "Infinity"
         }
       ],
       "__elements": [],
@@ -43,6 +51,12 @@ data:
           "id": "timeseries",
           "name": "Time series",
           "version": ""
+        },
+        {
+          "type": "datasource",
+          "id": "yesoreyeram-infinity-datasource",
+          "name": "Infinity",
+          "version": "1.1.0"
         }
       ],
       "annotations": {
@@ -71,7 +85,7 @@ data:
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
       "id": null,
-      "iteration": 1668499739859,
+      "iteration": 1668844434668,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -103,8 +117,8 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 11,
-            "w": 12,
+            "h": 12,
+            "w": 5,
             "x": 0,
             "y": 0
           },
@@ -135,6 +149,85 @@ data:
             }
           ],
           "title": "当前任务副本数",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "#ffffff",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 12,
+            "w": 7,
+            "x": 5,
+            "y": 0
+          },
+          "id": 12,
+          "options": {
+            "colorMode": "background",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "/^ratio$/",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "table",
+              "global_query_id": "",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "url": "http://223.3.94.112:5000/ratio",
+              "url_options": {
+                "data": "",
+                "method": "GET",
+                "params": [
+                  {
+                    "key": "taskName",
+                    "value": "${deployment}"
+                  }
+                ]
+              }
+            }
+          ],
+          "title": "当前任务云边负载比",
           "type": "stat"
         },
         {
@@ -396,7 +489,7 @@ data:
             "h": 13,
             "w": 12,
             "x": 0,
-            "y": 11
+            "y": 12
           },
           "id": 10,
           "options": {
