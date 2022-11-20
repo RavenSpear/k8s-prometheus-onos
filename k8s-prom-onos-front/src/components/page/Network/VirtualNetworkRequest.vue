@@ -3,7 +3,7 @@
     <!-- 面包导航 -->
     <div class="crumbs">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item>传输资源虚拟化控制</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/virtualNetworkDashboard' }">传输资源虚拟化控制</el-breadcrumb-item>
         <el-breadcrumb-item>虚拟网络请求</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
