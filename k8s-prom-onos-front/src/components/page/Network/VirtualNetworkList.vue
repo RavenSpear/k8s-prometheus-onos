@@ -16,16 +16,9 @@
           <template slot-scope="scope">
             <el-button
               type="text"
-              icon="el-icon-ali-eye iconfont"
-              @click="topoShow(scope.row)"
-              >查看</el-button
-            >
-            <el-button
-              type="text"
-              icon="el-icon-delete"
-              class="red"
-              @click="topoShow(scope.row)"
-              >删除</el-button
+              icon="el-icon-document"
+              @click="showVnetDetail(scope.row)"
+              >详情</el-button
             >
           </template>
         </el-table-column>
@@ -57,10 +50,19 @@ export default {
             createTime: this.formatDate(item.createTime)
           });
         });
-
-       console.log(res);
       });
     },
+    showVnetDetail(row){
+      let param = {
+        vnetId: row.vnetId
+      }
+      this.$router.push({
+        path: "/virtualNetworkDetail",
+        query: param
+      });
+
+    },
+
     formatDate(timestamp) {
       var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
       var Y = date.getFullYear() + "-";

@@ -32,52 +32,52 @@ export const uploadNetConfigFile = cfgJSON => {
         //url: '/network/configuration',
         url: '/network/network/configuration',
         method: 'post',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         data: cfgJSON
     })
 }
 
-export const getDevices = () =>{
+export const getDevices = () => {
     return request({
         // 原映射
         //url:'/devices',
-        url:'/network/devices',
-        method:'get'
+        url: '/network/devices',
+        method: 'get'
     })
 }
-export const getPorts = () =>{
+export const getPorts = () => {
     return request({
         // 原映射
         //url:'/devices/ports',
-        url:'/network/devices/ports',
-        method:'get'
+        url: '/network/devices/ports',
+        method: 'get'
     })
 }
 
-export const getLinks = () =>{
+export const getLinks = () => {
     return request({
         // 原映射
         // url:'/links',
-        url:'/network/links',
-        method:'get'
+        url: '/network/links',
+        method: 'get'
     })
 }
 
-export const getHosts = () =>{
+export const getHosts = () => {
     return request({
         // 原映射
         // url:'/hosts',
-        url:'/network/hosts',
-        method:'get'
+        url: '/network/hosts',
+        method: 'get'
     })
 }
 
-export const getDeviceOpenPort = deviceId =>{
+export const getDeviceOpenPort = deviceId => {
     return request({
         // 原映射
         //url:'/devices',
-        url:`/network/devices/${deviceId}/ports`,
-        method:'get'
+        url: `/network/devices/${deviceId}/ports`,
+        method: 'get'
     })
 }
 
@@ -109,6 +109,13 @@ export const getVirtualNetwors = () => {
     })
 }
 
+export const getVirtualNetworkById = vnetId => {
+    return request({
+        url: '/vnet/' + vnetId,
+        method: 'get'
+    });
+}
+
 export const addVirtualNetwork = formData => {
     return request({
         url: '/vnets',
@@ -120,14 +127,14 @@ export const addVirtualNetwork = formData => {
 
 export const getVirtualNetworkTopo = query => {
     return request({
-        url: '/vnets/topology/'+query.id,
+        url: '/vnets/topology/' + query.id,
         method: 'get'
     })
 }
 
 export const embedVirtualNetworkTopo = query => {
     return request({
-        url: '/vnets/embed/'+query.id,
+        url: '/vnets/embed/' + query.id,
         method: 'get'
     })
 }
@@ -144,7 +151,7 @@ export const getClusterNodes = () => {
 /* Api to get node according to its name from k8s api/v1 */
 export const getClusterNode = nodename => {
     return request({
-        url: 'terminal/nodes/'+nodename,
+        url: 'terminal/nodes/' + nodename,
         method: 'get'
     })
 }
@@ -191,37 +198,37 @@ export const deleteTask = name => {
     })
 }
 
-export const getNetworkTopoDevices = ()=>{
+export const getNetworkTopoDevices = () => {
     return request({
         url: '/network/topology/clusters/0/devices',
         method: 'get'
     })
 }
 
-export const getNetworkTopoLinks = ()=>{
+export const getNetworkTopoLinks = () => {
     return request({
         url: '/network/topology/clusters/0/links',
         method: 'get'
     })
 }
 
-export const getIoTDeviceData = nodename =>{
+export const getIoTDeviceData = nodename => {
     return request({
-        url: '/IoT/'+nodename+'/data/api/v2/',
+        url: '/IoT/' + nodename + '/data/api/v2/',
         method: 'get'
     })
 }
 
-export const getIoTDevices = nodename =>{
+export const getIoTDevices = nodename => {
     return request({
-        url: '/IoT/'+nodename+'/metadata/api/v2/device/all',
+        url: '/IoT/' + nodename + '/metadata/api/v2/device/all',
         method: 'get'
     })
 }
 
-export const getEdgexCommand = nodename =>{
+export const getEdgexCommand = nodename => {
     return request({
-        url: '/IoT/'+nodename+'/command',
+        url: '/IoT/' + nodename + '/command',
         method: 'get'
     })
 }

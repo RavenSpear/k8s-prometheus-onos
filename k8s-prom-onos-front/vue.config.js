@@ -8,22 +8,18 @@ module.exports = {
                 target: "http://223.3.94.112:8181/onos/nvh",
                 changeOrigin: true,
             },
-            '/tenants': {
-                target: 'http://223.3.94.112:8181/onos/p4virtex',
-                changeOrigin: true
-            },
             '/vnet': {
                 target: 'http://223.3.94.112:8181/onos/nvh',
                 changeOrigin: true
             },
-            '/vnets/topology': {
-                target: 'http://223.3.94.112:8181/onos/p4virtex',
-                changeOrigin: true
-            },
-            '/vnets/embed': {
-                target: 'http://223.3.94.112:8181/onos/p4virtex',
-                changeOrigin: true
-            },
+            // '/vnets/topology': {
+            //     target: 'http://223.3.94.112:8181/onos/p4virtex',
+            //     changeOrigin: true
+            // },
+            // '/vnets/embed': {
+            //     target: 'http://223.3.94.112:8181/onos/p4virtex',
+            //     changeOrigin: true
+            // },
             // 原映射，与新端口合并
             // '/network/configuration': {
             //     target: 'http://127.0.0.1:8181/onos/v1',

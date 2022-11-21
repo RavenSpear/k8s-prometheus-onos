@@ -5,16 +5,8 @@ import Home from '../components/common/Home.vue'
 import Dashboard from '../components/page/Dashboard.vue'
 
 import VirtualNetworkDashboard from '../components/page/Network/VirtualNetworkDashboard.vue'
-//mport AddTenant from '../components/page/Network/AddTenant.vue'
-import TenantList from '../components/page/Network/TenantList.vue'
-import Piplines from '../components/page/Network/Pipelines.vue'
-import TopoConfig from '../components/page/Network/TopoConfig.vue'
-import TopoShow from '../components/page/Network/TopoShow.vue'
-import PhysicalNetwork from '../components/page/Network/PhysicalNetwork.vue'
-
 import VirtualNetworkList from '../components/page/Network/VirtualNetworkList.vue'
-import VirtualNetworkTopo from '../components/page/Network/VirtualNetworkTopo.vue'
-import CollectorConfig from '../components/page/Network/CollectorConfig.vue'
+import VirtualNetworkDetail from '../components/page/Network/VirtualNetworkDetail.vue'
 import VirtualNetworkRequest from '../components/page/Network/VirtualNetworkRequest.vue'
 import VirtualNetworkRequestCreate from '../components/page/Network/VirtualNetworkRequestCreate.vue'
 
@@ -104,31 +96,6 @@ const routes = [
         meta: { title: '传输资源控制首页' }
       },
       {
-        path: "/tenantList",
-        component: TenantList,
-        meta: { title: '租户列表' }
-      },
-      {
-        path: '/pipelines',
-        component: Piplines,
-        meta: { title: 'P4 Pipeline' }
-      },
-      {
-        path: '/topoConfig',
-        component: TopoConfig,
-        meta: { title: '网络配置' }
-      },
-      {
-        path: '/topoShow',
-        component: TopoShow,
-        meta: { title: '网络拓扑' }
-      },
-      {
-        path: '/physicalNetwork',
-        component: PhysicalNetwork,
-        meta: { title: '物理网络' }
-      },
-      {
         path: '/createVirtualNetworkRequest',
         component: VirtualNetworkRequestCreate,
         meta: { title: '创建虚拟网络请求' }
@@ -144,16 +111,10 @@ const routes = [
         meta: { title: '虚拟网络列表' }
       },
       {
-        path: '/virtualNetworkTopo',
-        name: "virtualNetworkTopo",
-        component: VirtualNetworkTopo,
-        meta: { title: '虚拟网络拓扑'}
-      },
-      {
-        path: '/CollectorConfig',
-        component: CollectorConfig,
-        meta: { title: 'Collecter配置' }
-      },
+        path: "/virtualNetworkDetail",
+        component: VirtualNetworkDetail,
+        meta: { title: '虚拟网络详情' }
+      }
     ]
   }
 ]

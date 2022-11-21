@@ -16,7 +16,7 @@
       </li>
     </ul>
     <div class="tags-close-box">
-      <el-dropdown size="medium" @command="handleTags" trigger="click">
+      <el-dropdown @command="handleTags" trigger="click">
         <el-button type="primary" class="h70">
           标签选项<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
@@ -196,7 +196,7 @@ export default {
   right: 0;
   top: 0;
   box-sizing: border-box;
-  padding-top: 1px;
+  padding-top: 2px;
   text-align: center;
   width: 150px;
   height: 70px;
@@ -206,6 +206,6 @@ export default {
 }
 
 .h70 {
-  height: 70px;
+  height: 65px;
 }
 </style>
