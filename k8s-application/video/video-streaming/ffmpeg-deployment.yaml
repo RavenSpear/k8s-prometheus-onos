@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-streaming
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: ffmpeg
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: ffmpeg
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: k8s-app
+                    operator: In
+                    values:
+                      - ffmpeg
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - name: ffmpeg
+        image: jrottenberg/ffmpeg:latest
+        imagePullPolicy: Never
+        #command: ["/bin/sh", "-c", "while true; do sleep 2; done;"]
+        command: ["/bin/sh", "-c", "ffmpeg -re -stream_loop -1 -i /video/demo.mp4 -c:v copy -c:a copy -f flv rtmp://video-proxy-service.default.svc:1935/live/`hostname`"]
+        volumeMounts:
+          - name: video-source
+            mountPath: /video/demo.mp4
+          - name: video-dir
+            mountPath: /video
+      volumes:
+        - name: video-source
+          hostPath:
+            path: /video/demo.mp4
+            type: File # target file must exist
+        - name: video-dir
+          hostPath:
+            path: /video
+            type: DirectoryOrCreate # target dir not exist then create

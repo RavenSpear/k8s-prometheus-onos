@@ -1,0 +1,1 @@
+ffmpeg -re -stream_loop -1 -i /video/demo.mp4 -c:v copy -c:a copy -f flv rtmp://192.168.1.104:31935/live/test
