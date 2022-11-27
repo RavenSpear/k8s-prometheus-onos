@@ -26,7 +26,7 @@ spec:
       containers:
       - name: ffmpeg
         image: jrottenberg/ffmpeg:latest
-        imagePullPolicy: Never
+        #imagePullPolicy: Never
         #command: ["/bin/sh", "-c", "while true; do sleep 2; done;"]
         command: ["/bin/sh", "-c", "ffmpeg -re -stream_loop -1 -i /video/demo.mp4 -c:v copy -c:a copy -f flv rtmp://video-proxy-service.default.svc:1935/live/`hostname`"]
         volumeMounts:
