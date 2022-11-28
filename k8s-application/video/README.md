@@ -26,7 +26,7 @@ $ chmod -R 777 /video
 按需求修改副本数，视频推流服务的pod被强制分散部署，因此副本数应小于等于节点数，副本数将决定最终代理处可访问的视频url资源数量
 
 ```
-$ cat /video-streaming/ffmpeg-deployment.yaml
+$ cat video-streaming/ffmpeg-deployment.yaml
 ...
     replicas: 1
 ...
