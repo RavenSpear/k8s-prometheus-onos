@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-proxy
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: nginx-rtmp
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx-rtmp
+    spec:
+      containers:
+      - name: nginx-rtmp
+        image: tiangolo/nginx-rtmp:latest
+        resources:
+          requests:
+            memory: 500Mi
+            cpu: 500m
+            ephemeral-storage: 500Mi
+          limits:
+            memory: 2048Mi
+            cpu: 2000m
+            ephemeral-storage: 4Gi
+        ports:
+        - containerPort: 1935
+        - containerPort: 80
+        volumeMounts:
+          - name: nginx-rtmp-config
+            mountPath: /etc/nginx/nginx.conf # dir in pod
+            subPath: nginx.conf # match the key defined in configmap-data, but now for path
+          - name: nginx-rtmp-config
+            mountPath: /usr/local/nginx/html/stat.xsl
+            subPath: stat.xsl
+      volumes:
+        - name: nginx-rtmp-config # volume name
+          configMap:
+            name: nginx-rtmp-config # configmap name
+            items:
+            - key: nginx.conf # a file defined in configmap-data
+              path: nginx.conf # rename the key
+            - key: stat.xsl 
+              path: stat.xsl
