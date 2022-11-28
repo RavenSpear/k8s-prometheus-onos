@@ -16,6 +16,15 @@ spec:
       containers:
       - name: nginx-rtmp
         image: tiangolo/nginx-rtmp:latest
+        resources:
+          requests:
+            memory: 500Mi
+            cpu: 500m
+            ephemeral-storage: 500Mi
+          limits:
+            memory: 2048Mi
+            cpu: 2000m
+            ephemeral-storage: 4Gi
         ports:
         - containerPort: 1935
         - containerPort: 80

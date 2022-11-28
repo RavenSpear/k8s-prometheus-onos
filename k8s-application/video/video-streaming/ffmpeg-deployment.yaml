@@ -12,6 +12,9 @@ spec:
     metadata:
       labels:
         app: ffmpeg
+      annotations:
+        kubernetes.io/ingress-bandwidth: 3M
+        kubernetes.io/egress-bandwidth: 3M
     spec:
       affinity:
         podAntiAffinity:
@@ -26,6 +29,15 @@ spec:
       containers:
       - name: ffmpeg
         image: jrottenberg/ffmpeg:latest
+        resources:
+          requests:
+            memory: 50Mi
+            cpu: 200m
+            ephemeral-storage: 50Mi
+          limits:
+            memory: 500Mi
+            cpu: 1000m
+            ephemeral-storage: 1Gi
         #imagePullPolicy: Never
         #command: ["/bin/sh", "-c", "while true; do sleep 2; done;"]
         command: ["/bin/sh", "-c", "ffmpeg -re -stream_loop -1 -i /video/demo.mp4 -c:v copy -c:a copy -f flv rtmp://video-proxy-service.default.svc:1935/live/`hostname`"]
