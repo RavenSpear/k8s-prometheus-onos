@@ -141,7 +141,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "count(kube_deployment_created{namespace=\"monitoring\"})",
+              "expr": "count(kube_deployment_created{namespace=\"default\"})",
               "refId": "A"
             }
           ],
@@ -207,7 +207,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "sum(kube_deployment_spec_replicas{namespace=\"monitoring\"})",
+              "expr": "sum(kube_deployment_spec_replicas{namespace=\"default\"})",
               "refId": "A"
             }
           ],
@@ -338,13 +338,14 @@ data:
                     "value": 80
                   }
                 ]
-              }
+              },
+              "unit": "bytes"
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "sum(container_memory_working_set_bytes{container!=\"POD\", namespace=\"monitoring\"})"
+                  "options": "sum(container_memory_working_set_bytes{container!=\"POD\", namespace=\"default\"})"
                 },
                 "properties": [
                   {
@@ -380,7 +381,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", namespace=\"monitoring\"})",
+              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", namespace=\"default\"})",
               "range": true,
               "refId": "A"
             }
@@ -439,13 +440,14 @@ data:
                     "value": 80
                   }
                 ]
-              }
+              },
+              "unit": "bytes"
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "sum(container_fs_usage_bytes{container!=\"POD\", namespace=\"monitoring\"})"
+                  "options": "sum(container_fs_usage_bytes{container!=\"POD\", namespace=\"default\"})"
                 },
                 "properties": [
                   {
@@ -480,7 +482,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "sum(container_fs_usage_bytes{container!=\"POD\", namespace=\"monitoring\"})",
+              "expr": "sum(container_fs_usage_bytes{container!=\"POD\", namespace=\"default\"})",
               "refId": "A"
             }
           ],
@@ -548,7 +550,7 @@ data:
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", namespace=\"monitoring\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", namespace=\"default\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100",
               "format": "time_series",
               "interval": "",
               "legendFormat": "任务CPU使用率",
@@ -561,7 +563,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", namespace=\"monitoring\"})/sum(node_memory_MemTotal_bytes)*100",
+              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", namespace=\"default\"})/sum(node_memory_MemTotal_bytes)*100",
               "hide": false,
               "legendFormat": "任务内存使用率",
               "range": true,
@@ -573,7 +575,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(container_fs_usage_bytes{namespace=\"monitoring\"}) /sum(node_filesystem_size_bytes)*100",
+              "expr": "sum(container_fs_usage_bytes{namespace=\"default\"}) /sum(node_filesystem_size_bytes)*100",
               "hide": false,
               "legendFormat": "任务磁盘使用率",
               "range": true,
@@ -620,6 +622,7 @@ data:
                   "mode": "off"
                 }
               },
+              "decimals": 2,
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -633,13 +636,14 @@ data:
                     "value": 80
                   }
                 ]
-              }
+              },
+              "unit": "percent"
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", namespace=\"monitoring\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100"
+                  "options": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", namespace=\"default\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100"
                 },
                 "properties": [
                   {
@@ -674,7 +678,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", namespace=\"monitoring\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", namespace=\"default\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100",
               "refId": "A"
             }
           ],

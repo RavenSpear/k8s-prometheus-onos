@@ -85,7 +85,7 @@ data:
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
       "id": null,
-      "iteration": 1668844434668,
+      "iteration": 1669689759469,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -144,7 +144,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "sum(kube_deployment_spec_replicas{deployment=~\"$deployment\",namespace=\"monitoring\"})",
+              "expr": "sum(kube_deployment_spec_replicas{deployment=~\"$deployment\",namespace=\"default\"})",
               "refId": "A"
             }
           ],
@@ -281,7 +281,8 @@ data:
                     "value": 80
                   }
                 ]
-              }
+              },
+              "unit": "bytes"
             },
             "overrides": [
               {
@@ -326,7 +327,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", pod=~\"$pod\",namespace=\"monitoring\"}) by (pod)",
+              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", pod=~\"$pod\",namespace=\"default\"}) by (pod)",
               "refId": "A"
             }
           ],
@@ -393,7 +394,8 @@ data:
                     "value": 80
                   }
                 ]
-              }
+              },
+              "unit": "bytes"
             },
             "overrides": [
               {
@@ -438,7 +440,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "sum(container_fs_usage_bytes{container!=\"POD\", pod=~\"$pod\",namespace=\"monitoring\"}) by (pod)",
+              "expr": "sum(container_fs_usage_bytes{container!=\"POD\", pod=~\"$pod\",namespace=\"default\"}) by (pod)",
               "refId": "A"
             }
           ],
@@ -514,7 +516,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", pod=~\"$pod\",namespace=\"monitoring\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", pod=~\"$pod\",namespace=\"default\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100",
               "legendFormat": "当前任务CPU使用率",
               "range": true,
               "refId": "A"
@@ -525,7 +527,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", pod=~\"$pod\", namespace=\"monitoring\"})/sum(node_memory_MemTotal_bytes)*100",
+              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", pod=~\"$pod\", namespace=\"default\"})/sum(node_memory_MemTotal_bytes)*100",
               "hide": false,
               "legendFormat": "当前任务内存使用率",
               "range": true,
@@ -537,7 +539,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(container_fs_usage_bytes{container!=\"POD\", pod=~\"$pod\", namespace=\"monitoring\"}) /sum(node_filesystem_size_bytes)*100",
+              "expr": "sum(container_fs_usage_bytes{container!=\"POD\", pod=~\"$pod\", namespace=\"default\"}) /sum(node_filesystem_size_bytes)*100",
               "hide": false,
               "legendFormat": "当前任务磁盘使用率",
               "range": true,
@@ -645,7 +647,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", pod=~\"$pod\", namespace=\"monitoring\"}[1m])) by (pod) / on() group_left() sum(rate(node_cpu_seconds_total[1m]))",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", pod=~\"$pod\", namespace=\"default\"}[1m])) by (pod) / on() group_left() sum(rate(node_cpu_seconds_total[1m]))",
               "range": true,
               "refId": "A"
             }
@@ -676,7 +678,7 @@ data:
               "type": "prometheus",
               "uid": "prometheus"
             },
-            "definition": "label_values(container_fs_usage_bytes{namespace=\"monitoring\"}, container)",
+            "definition": "label_values(container_fs_usage_bytes{namespace=\"default\"}, container)",
             "hide": 0,
             "includeAll": true,
             "label": "容器名",
@@ -684,7 +686,7 @@ data:
             "name": "container",
             "options": [],
             "query": {
-              "query": "label_values(container_fs_usage_bytes{namespace=\"monitoring\"}, container)",
+              "query": "label_values(container_fs_usage_bytes{namespace=\"default\"}, container)",
               "refId": "StandardVariableQuery"
             },
             "refresh": 1,
@@ -699,7 +701,7 @@ data:
               "type": "prometheus",
               "uid": "prometheus"
             },
-            "definition": "label_values(kube_deployment_spec_replicas{namespace=\"monitoring\"}, deployment)",
+            "definition": "label_values(kube_deployment_spec_replicas{namespace=\"default\"}, deployment)",
             "hide": 0,
             "includeAll": true,
             "label": "任务名",
@@ -707,7 +709,7 @@ data:
             "name": "deployment",
             "options": [],
             "query": {
-              "query": "label_values(kube_deployment_spec_replicas{namespace=\"monitoring\"}, deployment)",
+              "query": "label_values(kube_deployment_spec_replicas{namespace=\"default\"}, deployment)",
               "refId": "StandardVariableQuery"
             },
             "refresh": 1,
@@ -723,7 +725,7 @@ data:
               "type": "prometheus",
               "uid": "prometheus"
             },
-            "definition": "label_values(container_fs_usage_bytes{namespace=\"monitoring\"}, pod)",
+            "definition": "label_values(container_fs_usage_bytes{namespace=\"default\"}, pod)",
             "hide": 0,
             "includeAll": true,
             "label": "罐子名",
@@ -731,7 +733,7 @@ data:
             "name": "pod",
             "options": [],
             "query": {
-              "query": "label_values(container_fs_usage_bytes{namespace=\"monitoring\"}, pod)",
+              "query": "label_values(container_fs_usage_bytes{namespace=\"default\"}, pod)",
               "refId": "StandardVariableQuery"
             },
             "refresh": 1,
