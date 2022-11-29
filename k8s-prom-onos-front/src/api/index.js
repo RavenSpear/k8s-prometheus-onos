@@ -81,6 +81,16 @@ export const getDeviceOpenPort = deviceId => {
     })
 }
 
+//================ Physical Network API =================
+export const getAllLinkResources = () => {
+    return request({
+        url: "/pnet/resource/link",
+        method: "get"
+    })
+}
+
+
+
 
 //================ Virtual Network Request API =================
 
@@ -102,7 +112,7 @@ export const getAllVNRs = () => {
 
 //================ Virtual Network API =================
 
-export const getVirtualNetwors = () => {
+export const getVirtualNetworks = () => {
     return request({
         url: '/vnet',
         method: 'get'

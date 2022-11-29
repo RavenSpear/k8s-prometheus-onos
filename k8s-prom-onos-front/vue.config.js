@@ -4,6 +4,10 @@ module.exports = {
         //host:"127.0.0.1",
         //port:"8080",
         proxy: {
+            "/pnet": {
+                target: "http://223.3.94.112:8181/onos/nvh",
+                changeOrigin: true,
+            },
             "/vnr": {
                 target: "http://223.3.94.112:8181/onos/nvh",
                 changeOrigin: true,

@@ -28,13 +28,12 @@
 </template>
 
 <script>
-import { getVirtualNetwors} from "../../../api";
+import { getVirtualNetworks } from "../../../api";
 export default {
   data() {
     return {
       query: {},
-      tableData: [
-      ],
+      tableData: [],
     };
   },
   created() {
@@ -42,25 +41,24 @@ export default {
   },
   methods: {
     getData() {
-      getVirtualNetwors().then((res) => {
+      getVirtualNetworks().then((res) => {
         res.data.VNets.forEach((item) => {
           this.tableData.push({
             vnetId: item.vnetId,
             vnrId: item.vnrId,
-            createTime: this.formatDate(item.createTime)
+            createTime: this.formatDate(item.createTime),
           });
         });
       });
     },
-    showVnetDetail(row){
+    showVnetDetail(row) {
       let param = {
-        vnetId: row.vnetId
-      }
+        vnetId: row.vnetId,
+      };
       this.$router.push({
         path: "/virtualNetworkDetail",
-        query: param
+        query: param,
       });
-
     },
 
     formatDate(timestamp) {

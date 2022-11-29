@@ -3,7 +3,9 @@
     <!-- 面包导航 -->
     <div class="crumbs">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/virtualNetworkDashboard' }">传输资源虚拟化控制</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/virtualNetworkDashboard' }"
+          >传输资源虚拟化控制</el-breadcrumb-item
+        >
         <el-breadcrumb-item>虚拟网络请求</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -42,6 +44,14 @@
           @click="handleSearch"
           >搜索</el-button
         >
+
+        <el-button
+          icon="el-icon-refresh"
+          type="primary"
+          size="mini"
+          @click="refreshHandle"
+          >刷新
+        </el-button>
       </div>
 
       <el-table :data="tableData" class="table">
@@ -139,6 +149,10 @@ export default {
     },
     delAllSelection() {},
     handleSearch() {},
+    refreshHandle() {
+      this.tableData = [];
+      this.getTableData();
+    },
   },
 };
 </script>
