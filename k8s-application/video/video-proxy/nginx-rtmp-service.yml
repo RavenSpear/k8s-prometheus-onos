@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: video-proxy-service
+  namespace: default
+spec:
+  selector:
+    app: nginx-rtmp
+  ports:
+  - name: stream-stat
+    protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30800
+  - name: stream-rtmp
+    protocol: TCP
+    port: 1935
+    targetPort: 1935
+    nodePort: 31935
+  type: NodePort
+

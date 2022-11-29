@@ -169,7 +169,7 @@ export const getClusterNode = nodename => {
 /* Api to get pods from k8s api/v1 */
 export const getClusterPods = query => {
     return request({
-        url: 'terminal/namespaces/monitoring/pods',
+        url: 'terminal/namespaces/default/pods',
         method: 'get',
         params: query
     })
@@ -186,7 +186,7 @@ export const getClusterPods = query => {
 /* Api to get tasks from k8s apis/apps/v1 */
 export const getTaskList = () => {
     return request({
-        url: 'task/namespaces/monitoring/deployments',
+        url: 'task/namespaces/default/deployments',
         method: 'get'
     })
 }
@@ -194,7 +194,7 @@ export const getTaskList = () => {
 /* Api to post tasks to k8s apis/apps/v1 */
 export const createTask = formData => {
     return request({
-        url: 'task/namespaces/monitoring/deployments',
+        url: 'task/namespaces/default/deployments',
         method: 'post',
         data: formData
     })
@@ -203,7 +203,7 @@ export const createTask = formData => {
 /* Api to post tasks to k8s apis/apps/v1 */
 export const deleteTask = name => {
     return request({
-        url: 'task/namespaces/monitoring/deployments/' + name,
+        url: 'task/namespaces/default/deployments/' + name,
         method: 'delete'
     })
 }

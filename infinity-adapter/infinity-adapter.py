@@ -14,7 +14,7 @@ def ratio():
                      ] = item['metadata']['labels']['cluster']
     # print(nodetypehash)
 
-    url = "http://223.3.94.112:8009/api/v1/namespaces/monitoring/pods"
+    url = "http://223.3.94.112:8009/api/v1/namespaces/default/pods"
     podlist = requests.get(url).json()['items']
 
     taskName = request.args.get("taskName")
@@ -25,7 +25,7 @@ def ratio():
     }
     if taskName is None:
         taskarr = []
-        url = "http://223.3.94.112:8009/apis/apps/v1/namespaces/monitoring/deployments"
+        url = "http://223.3.94.112:8009/apis/apps/v1/namespaces/default/deployments"
         tasklist = requests.get(url).json()['items']
         for item in tasklist:
             taskarr.append(item['metadata']['name'])

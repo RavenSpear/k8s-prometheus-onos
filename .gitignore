@@ -1,6 +1,7 @@
 .DS_Store
 k8s-prom-onos-front/node_modules
 /dist
+*.pdf
 
 
 # local env files
