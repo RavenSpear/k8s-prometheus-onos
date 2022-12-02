@@ -56,7 +56,7 @@ data:
           "type": "datasource",
           "id": "yesoreyeram-infinity-datasource",
           "name": "Infinity",
-          "version": "1.1.0"
+          "version": "1.2.0"
         }
       ],
       "annotations": {
@@ -289,8 +289,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "datasource",
+            "uid": "-- Mixed --"
           },
           "fieldConfig": {
             "defaults": {
@@ -384,6 +384,27 @@ data:
               "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", namespace=\"default\"})",
               "range": true,
               "refId": "A"
+            },
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "timeseries",
+              "global_query_id": "",
+              "hide": false,
+              "refId": "B",
+              "root_selector": "",
+              "source": "url",
+              "type": "uql",
+              "uql": "parse-json\n| project \"values\"\n| project \"timestamp\"=unixtime_seconds_todatetime(\"timestamp\"),\"预测\"=\"value\"",
+              "url": "http://223.3.94.112:5000/memory",
+              "url_options": {
+                "data": "",
+                "method": "GET"
+              }
             }
           ],
           "title": "任务内存用量",
@@ -391,8 +412,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "datasource",
+            "uid": "-- Mixed --"
           },
           "fieldConfig": {
             "defaults": {
@@ -484,6 +505,27 @@ data:
               },
               "expr": "sum(container_fs_usage_bytes{container!=\"POD\", namespace=\"default\"})",
               "refId": "A"
+            },
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "timeseries",
+              "global_query_id": "",
+              "hide": false,
+              "refId": "B",
+              "root_selector": "",
+              "source": "url",
+              "type": "uql",
+              "uql": "parse-json\n| project \"values\"\n| project \"timestamp\"=unixtime_seconds_todatetime(\"timestamp\"),\"预测\"=\"value\"",
+              "url": "http://223.3.94.112:5000/fs",
+              "url_options": {
+                "data": "",
+                "method": "GET"
+              }
             }
           ],
           "title": "任务磁盘用量",
@@ -586,8 +628,8 @@ data:
         },
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "datasource",
+            "uid": "-- Mixed --"
           },
           "fieldConfig": {
             "defaults": {
@@ -680,6 +722,27 @@ data:
               },
               "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", namespace=\"default\"}[1m]))/sum(rate(node_cpu_seconds_total[1m]))*100",
               "refId": "A"
+            },
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "timeseries",
+              "global_query_id": "",
+              "hide": false,
+              "refId": "B",
+              "root_selector": "",
+              "source": "url",
+              "type": "uql",
+              "uql": "parse-json\n| project \"values\"\n| project \"timestamp\"=unixtime_seconds_todatetime(\"timestamp\"),\"预测\"=\"value\"",
+              "url": "http://223.3.94.112:5000/cpu",
+              "url_options": {
+                "data": "",
+                "method": "GET"
+              }
             }
           ],
           "title": "任务CPU使用率",
@@ -694,7 +757,7 @@ data:
         "list": []
       },
       "time": {
-        "from": "now-6h",
+        "from": "now-1h",
         "to": "now"
       },
       "timepicker": {},

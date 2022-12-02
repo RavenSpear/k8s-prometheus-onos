@@ -13,6 +13,16 @@
 - 流程
 
 ```
-> $env:FLASK_APP = "hello"
+> $env:FLASK_APP = "infinity-adapter"
+> flask run
+```
+
+- 环境:
+    Windows CMD
+
+- 流程:
+
+```
+> set FLASK_APP=infinity-adapter
 > flask run
 ```
