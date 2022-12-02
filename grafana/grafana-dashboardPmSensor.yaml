@@ -65,7 +65,7 @@ data:
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
       "id": null,
-      "iteration": 1668338466404,
+      "iteration": 1668571930884,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -138,8 +138,9 @@ data:
               "refId": "A",
               "root_selector": "readings",
               "source": "url",
-              "type": "json",
-              "url": "http://223.3.94.112:5000/data?nodeName=${nodeName}&deviceName=pm-sensor&limit=1",
+              "type": "uql",
+              "uql": "parse-json\n| project \"readings\"\n| project \"value\"",
+              "url": "http://223.3.94.112:30080/${nodeName}/data/api/v2/reading/device/name/pm-sensor?limit=1",
               "url_options": {
                 "data": "",
                 "method": "GET"
@@ -268,14 +269,15 @@ data:
                 "uid": "Infinity"
               },
               "filters": [],
-              "format": "table",
+              "format": "timeseries",
               "global_query_id": "",
               "parser": "backend",
               "refId": "颗粒物浓度",
               "root_selector": "readings",
               "source": "url",
-              "type": "json",
-              "url": "http://223.3.94.112:5000/data?nodeName=${nodeName}&deviceName=pm-sensor&limit=100",
+              "type": "uql",
+              "uql": "parse-json\n| project \"readings\"\n| project unixtime_nanoseconds_todatetime(\"origin\"),\"颗粒物浓度\"=\"value\"",
+              "url": "http://223.3.94.112:30080/${nodeName}/data/api/v2/reading/device/name/pm-sensor?limit=100",
               "url_options": {
                 "data": "",
                 "method": "GET"
@@ -321,7 +323,7 @@ data:
       "timezone": "",
       "title": "空气质量传感器",
       "uid": "y744ZuD4k",
-      "version": 5,
+      "version": 1,
       "weekStart": ""
     }
 kind: ConfigMap
