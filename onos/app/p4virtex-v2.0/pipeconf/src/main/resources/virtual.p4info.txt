@@ -1,0 +1,666 @@
+pkg_info {
+  arch: "v1model"
+}
+tables {
+  preamble {
+    id: 42083946
+    name: "ingress.basic_control.basic_table"
+    alias: "basic_table"
+  }
+  match_fields {
+    id: 1
+    name: "standard_metadata.ingress_port"
+    bitwidth: 9
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 2
+    name: "hdr.ethernet.src_addr"
+    bitwidth: 48
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 3
+    name: "hdr.ethernet.dst_addr"
+    bitwidth: 48
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 4
+    name: "hdr.ethernet.ether_type"
+    bitwidth: 16
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 5
+    name: "hdr.ipv4.src_addr"
+    bitwidth: 32
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 6
+    name: "hdr.ipv4.dst_addr"
+    bitwidth: 32
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 7
+    name: "hdr.ipv4.protocol"
+    bitwidth: 8
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 8
+    name: "local_metadata.l4_src_port"
+    bitwidth: 16
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 9
+    name: "local_metadata.l4_dst_port"
+    bitwidth: 16
+    match_type: TERNARY
+  }
+  action_refs {
+    id: 25372679
+  }
+  action_refs {
+    id: 22026145
+  }
+  action_refs {
+    id: 24254780
+  }
+  action_refs {
+    id: 31579878
+  }
+  action_refs {
+    id: 21257015
+  }
+  const_default_action_id: 21257015
+  size: 1024
+}
+tables {
+  preamble {
+    id: 40914296
+    name: "ingress.virtual_control.virtual_table"
+    alias: "virtual_table"
+  }
+  match_fields {
+    id: 1
+    name: "local_metadata.vnet_id"
+    bitwidth: 32
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 2
+    name: "standard_metadata.ingress_port"
+    bitwidth: 9
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 3
+    name: "hdr.ethernet.src_addr"
+    bitwidth: 48
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 4
+    name: "hdr.ethernet.dst_addr"
+    bitwidth: 48
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 5
+    name: "hdr.ethernet.ether_type"
+    bitwidth: 16
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 6
+    name: "hdr.ipv4.src_addr"
+    bitwidth: 32
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 7
+    name: "hdr.ipv4.dst_addr"
+    bitwidth: 32
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 8
+    name: "hdr.ipv4.protocol"
+    bitwidth: 8
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 9
+    name: "local_metadata.l4_src_port"
+    bitwidth: 16
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 10
+    name: "local_metadata.l4_dst_port"
+    bitwidth: 16
+    match_type: TERNARY
+  }
+  action_refs {
+    id: 21870528
+  }
+  action_refs {
+    id: 17424542
+  }
+  action_refs {
+    id: 28078021
+  }
+  action_refs {
+    id: 29632992
+  }
+  action_refs {
+    id: 26020293
+  }
+  action_refs {
+    id: 21257015
+  }
+  const_default_action_id: 21257015
+  size: 1024
+}
+tables {
+  preamble {
+    id: 42291212
+    name: "ingress.virtual_control.path_select_table"
+    alias: "path_select_table"
+  }
+  match_fields {
+    id: 1
+    name: "local_metadata.vnet_id"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  match_fields {
+    id: 2
+    name: "local_metadata.virtual_metadata.virtual_egress_port"
+    bitwidth: 8
+    match_type: EXACT
+  }
+  action_refs {
+    id: 32326375
+  }
+  action_refs {
+    id: 26666554
+  }
+  action_refs {
+    id: 31982301
+  }
+  action_refs {
+    id: 21257015
+    annotations: "@defaultonly"
+    scope: DEFAULT_ONLY
+  }
+  size: 1024
+}
+tables {
+  preamble {
+    id: 36285607
+    name: "ingress.virtual_control.sr_policy_table"
+    alias: "sr_policy_table"
+  }
+  match_fields {
+    id: 1
+    name: "local_metadata.virtual_metadata.selected_path_id"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  action_refs {
+    id: 28336685
+  }
+  action_refs {
+    id: 26763261
+  }
+  action_refs {
+    id: 26554362
+  }
+  action_refs {
+    id: 22186869
+  }
+  action_refs {
+    id: 18354431
+  }
+  action_refs {
+    id: 23973291
+  }
+  action_refs {
+    id: 21257015
+    annotations: "@defaultonly"
+    scope: DEFAULT_ONLY
+  }
+  size: 1024
+}
+tables {
+  preamble {
+    id: 45407475
+    name: "ingress.int_transit_control.tb_switch_id"
+    alias: "tb_switch_id"
+  }
+  match_fields {
+    id: 1
+    name: "int_is_valid"
+    bitwidth: 1
+    match_type: EXACT
+  }
+  action_refs {
+    id: 26558986
+  }
+  action_refs {
+    id: 21257015
+  }
+  const_default_action_id: 21257015
+  size: 1
+}
+actions {
+  preamble {
+    id: 21257015
+    name: "NoAction"
+    alias: "NoAction"
+    annotations: "@noWarn(\"unused\")"
+  }
+}
+actions {
+  preamble {
+    id: 25372679
+    name: "ingress.basic_control.set_egress_port"
+    alias: "basic_control.set_egress_port"
+  }
+  params {
+    id: 1
+    name: "port"
+    bitwidth: 9
+  }
+}
+actions {
+  preamble {
+    id: 22026145
+    name: "ingress.basic_control.send_to_controller"
+    alias: "basic_control.send_to_controller"
+  }
+}
+actions {
+  preamble {
+    id: 31579878
+    name: "ingress.basic_control.drop"
+    alias: "basic_control.drop"
+  }
+}
+actions {
+  preamble {
+    id: 24254780
+    name: "ingress.basic_control.encap_nv_header"
+    alias: "encap_nv_header"
+  }
+  params {
+    id: 1
+    name: "vnet_id"
+    bitwidth: 32
+  }
+}
+actions {
+  preamble {
+    id: 21870528
+    name: "ingress.virtual_control.set_virtual_egress_port"
+    alias: "set_virtual_egress_port"
+  }
+  params {
+    id: 1
+    name: "virtual_egress_port"
+    bitwidth: 8
+  }
+}
+actions {
+  preamble {
+    id: 17424542
+    name: "ingress.virtual_control.set_egress_port"
+    alias: "virtual_control.set_egress_port"
+  }
+  params {
+    id: 1
+    name: "port"
+    bitwidth: 9
+  }
+}
+actions {
+  preamble {
+    id: 29632992
+    name: "ingress.virtual_control.decap_nv_header"
+    alias: "decap_nv_header"
+  }
+  params {
+    id: 1
+    name: "port"
+    bitwidth: 9
+  }
+}
+actions {
+  preamble {
+    id: 28078021
+    name: "ingress.virtual_control.send_to_controller"
+    alias: "virtual_control.send_to_controller"
+  }
+}
+actions {
+  preamble {
+    id: 26020293
+    name: "ingress.virtual_control.drop"
+    alias: "virtual_control.drop"
+  }
+}
+actions {
+  preamble {
+    id: 32326375
+    name: "ingress.virtual_control.select_path_1"
+    alias: "select_path_1"
+  }
+  params {
+    id: 1
+    name: "pid1"
+    bitwidth: 32
+  }
+}
+actions {
+  preamble {
+    id: 26666554
+    name: "ingress.virtual_control.select_path_2"
+    alias: "select_path_2"
+  }
+  params {
+    id: 1
+    name: "pid1"
+    bitwidth: 32
+  }
+  params {
+    id: 2
+    name: "w1"
+    bitwidth: 32
+  }
+  params {
+    id: 3
+    name: "pid2"
+    bitwidth: 32
+  }
+  params {
+    id: 4
+    name: "w2"
+    bitwidth: 32
+  }
+}
+actions {
+  preamble {
+    id: 31982301
+    name: "ingress.virtual_control.select_path_3"
+    alias: "select_path_3"
+  }
+  params {
+    id: 1
+    name: "pid1"
+    bitwidth: 32
+  }
+  params {
+    id: 2
+    name: "w1"
+    bitwidth: 32
+  }
+  params {
+    id: 3
+    name: "pid2"
+    bitwidth: 32
+  }
+  params {
+    id: 4
+    name: "w2"
+    bitwidth: 32
+  }
+  params {
+    id: 5
+    name: "pid3"
+    bitwidth: 32
+  }
+  params {
+    id: 6
+    name: "w3"
+    bitwidth: 32
+  }
+}
+actions {
+  preamble {
+    id: 28336685
+    name: "ingress.virtual_control.insert_policy_1"
+    alias: "insert_policy_1"
+  }
+  params {
+    id: 1
+    name: "sid1"
+    bitwidth: 8
+  }
+}
+actions {
+  preamble {
+    id: 26763261
+    name: "ingress.virtual_control.insert_policy_2"
+    alias: "insert_policy_2"
+  }
+  params {
+    id: 1
+    name: "sid1"
+    bitwidth: 8
+  }
+  params {
+    id: 2
+    name: "sid2"
+    bitwidth: 8
+  }
+}
+actions {
+  preamble {
+    id: 26554362
+    name: "ingress.virtual_control.insert_policy_3"
+    alias: "insert_policy_3"
+  }
+  params {
+    id: 1
+    name: "sid1"
+    bitwidth: 8
+  }
+  params {
+    id: 2
+    name: "sid2"
+    bitwidth: 8
+  }
+  params {
+    id: 3
+    name: "sid3"
+    bitwidth: 8
+  }
+}
+actions {
+  preamble {
+    id: 22186869
+    name: "ingress.virtual_control.insert_policy_4"
+    alias: "insert_policy_4"
+  }
+  params {
+    id: 1
+    name: "sid1"
+    bitwidth: 8
+  }
+  params {
+    id: 2
+    name: "sid2"
+    bitwidth: 8
+  }
+  params {
+    id: 3
+    name: "sid3"
+    bitwidth: 8
+  }
+  params {
+    id: 4
+    name: "sid4"
+    bitwidth: 8
+  }
+}
+actions {
+  preamble {
+    id: 18354431
+    name: "ingress.virtual_control.insert_policy_5"
+    alias: "insert_policy_5"
+  }
+  params {
+    id: 1
+    name: "sid1"
+    bitwidth: 8
+  }
+  params {
+    id: 2
+    name: "sid2"
+    bitwidth: 8
+  }
+  params {
+    id: 3
+    name: "sid3"
+    bitwidth: 8
+  }
+  params {
+    id: 4
+    name: "sid4"
+    bitwidth: 8
+  }
+  params {
+    id: 5
+    name: "sid5"
+    bitwidth: 8
+  }
+}
+actions {
+  preamble {
+    id: 23973291
+    name: "ingress.virtual_control.insert_policy_6"
+    alias: "insert_policy_6"
+  }
+  params {
+    id: 1
+    name: "sid1"
+    bitwidth: 8
+  }
+  params {
+    id: 2
+    name: "sid2"
+    bitwidth: 8
+  }
+  params {
+    id: 3
+    name: "sid3"
+    bitwidth: 8
+  }
+  params {
+    id: 4
+    name: "sid4"
+    bitwidth: 8
+  }
+  params {
+    id: 5
+    name: "sid5"
+    bitwidth: 8
+  }
+  params {
+    id: 6
+    name: "sid6"
+    bitwidth: 8
+  }
+}
+actions {
+  preamble {
+    id: 29540728
+    name: "ingress.virtual_control.set_next_sr_hop"
+    alias: "set_next_sr_hop"
+  }
+}
+actions {
+  preamble {
+    id: 26558986
+    name: "ingress.int_transit_control.init_switch_id"
+    alias: "init_switch_id"
+  }
+  params {
+    id: 1
+    name: "switch_id"
+    bitwidth: 32
+  }
+}
+controller_packet_metadata {
+  preamble {
+    id: 81826293
+    name: "packet_in"
+    alias: "packet_in"
+    annotations: "@controller_header(\"packet_in\")"
+  }
+  metadata {
+    id: 1
+    name: "ingress_port"
+    bitwidth: 9
+  }
+  metadata {
+    id: 2
+    name: "_padding"
+    bitwidth: 7
+  }
+}
+controller_packet_metadata {
+  preamble {
+    id: 76689799
+    name: "packet_out"
+    alias: "packet_out"
+    annotations: "@controller_header(\"packet_out\")"
+  }
+  metadata {
+    id: 1
+    name: "op"
+    bitwidth: 16
+  }
+  metadata {
+    id: 2
+    name: "param"
+    bitwidth: 16
+  }
+}
+registers {
+  preamble {
+    id: 380959129
+    name: "reg_clock_offset"
+    alias: "reg_clock_offset"
+  }
+  type_spec {
+    bitstring {
+      int {
+        bitwidth: 48
+      }
+    }
+  }
+  size: 1
+}
+registers {
+  preamble {
+    id: 373176023
+    name: "ingress.virtual_control.bloom_filter"
+    alias: "bloom_filter"
+  }
+  type_spec {
+    bitstring {
+      bit {
+        bitwidth: 32
+      }
+    }
+  }
+  size: 4096
+}
+type_info {
+}
