@@ -77,7 +77,7 @@
                             </el-table-column>
                             <el-table-column label="查看详情" align="center">
                                 <template slot-scope="scope">
-                                    <el-button type="text" icon="el-icon-ali-eye iconfont" @click="topoShow(scope.row)">
+                                    <el-button type="text" icon="el-icon-ali-eye iconfont" @click="switchDetail(scope.row)">
                                         查看</el-button>
                                 </template>
                             </el-table-column>
@@ -255,6 +255,18 @@ export default {
                     query: param
                 }
             );
+        },
+        switchDetail(row){
+            let param = {
+                switchName: row.name
+            }
+            this.$router.push(
+                {
+                    path: '/switchDetail',
+                    query: param
+                }
+            );
+
         }
     },
 };

@@ -9,6 +9,8 @@ import VirtualNetworkList from '../components/page/Network/VirtualNetworkList.vu
 import VirtualNetworkDetail from '../components/page/Network/VirtualNetworkDetail.vue'
 import VirtualNetworkRequest from '../components/page/Network/VirtualNetworkRequest.vue'
 import VirtualNetworkRequestCreate from '../components/page/Network/VirtualNetworkRequestCreate.vue'
+import ServiceList from '../components/page/Network/ServiceList.vue'
+import ServiceRegister from '../components/page/Network/ServiceRegister.vue'
 
 import ResourceDashboard from '../components/page/Resource/ResourceDashboard.vue'
 import ResourceList from '../components/page/Resource/ResourceList.vue'
@@ -114,6 +116,16 @@ const routes = [
         path: "/virtualNetworkDetail",
         component: VirtualNetworkDetail,
         meta: { title: '虚拟网络详情' }
+      },
+      {
+        path: "/serviceList",
+        component: ServiceList,
+        meta: { title: '虚拟网络服务列表' }
+      },
+      {
+        path: "/serviceRegister",
+        component: ServiceRegister,
+        meta: { title: '虚拟网络服务注册' }
       }
     ]
   }

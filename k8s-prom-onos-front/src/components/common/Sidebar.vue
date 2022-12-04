@@ -101,6 +101,10 @@ export default {
             {
               index: "virtualNetworkList",
               title: "虚拟网络列表",
+            },
+            {
+              index: "serviceList",
+              title: "网络服务列表"
             }
           ],
         }

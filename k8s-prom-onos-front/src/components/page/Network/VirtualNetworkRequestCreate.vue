@@ -15,6 +15,15 @@
           :rules="rules"
           label-width="180px"
         >
+          <el-form-item label="虚拟网络名称" prop="vnetName">
+            <el-col :span="10">
+              <el-input
+                v-model="form.vnetName"
+                placeholder="输入虚拟网络名称"
+              ></el-input>
+            </el-col>
+          </el-form-item>
+
           <el-form-item label="带宽需求(Mbps)" prop="bandwidth">
             <el-col :span="10">
               <el-input
@@ -115,6 +124,7 @@ export default {
     };
     return {
       form: {
+        vnetName: "",
         bandwidth: "",
         latency: "",
         cluster1IP: "",
@@ -146,17 +156,27 @@ export default {
         {
           name: "边缘节点2",
           ip: "223.26.35.1",
-
         },
         {
           name: "云端节点",
           ip: "172.1.113.58",
         },
+        {
+          name: "本机测试节点1",
+          ip: "10.0.0.1",
+        },
+        {
+          name: "本机测试节点2",
+          ip: "10.0.0.2",
+        },
+        {
+          name: "本机测试节点3",
+          ip: "10.0.0.3",
+        },
       ],
     };
   },
-  created() {
-  },
+  created() {},
 
   methods: {
     parseTopoFile() {},
@@ -166,10 +186,10 @@ export default {
       this.$refs.vnrFormRef.validate((valid) => {
         if (valid) {
           submitVNR(this.form).then((res) => {
-            if(res.data.status == "success"){
+            if (res.data.status == "success") {
               alert("虚拟网络请求提交成功！");
-              bus.$emit("close_current_tags","/virtualNetworkRequest");
-            }else{
+              bus.$emit("close_current_tags", "/virtualNetworkRequest");
+            } else {
               alert("虚拟网络请求提交失败！");
             }
           });
@@ -180,7 +200,7 @@ export default {
     },
     cancel() {
       // 关闭当前页面，跳转到虚拟网络请求详情页
-      bus.$emit("close_current_tags","/virtualNetworkRequest");
+      bus.$emit("close_current_tags", "/virtualNetworkRequest");
     },
     reset() {
       this.$refs.vnrFormRef.resetFields();

@@ -62,6 +62,38 @@ org.onosproject.fwd
 在mininet文件夹下，主机端运行
 `make install_netcfg`
 ```
+### Mininet重启步骤
+
+1. 在关闭onos之前，需要先关闭reactive forwarding应用
+
+2. 关闭mininet，onos
+
+`
+  docker stop mn-stratum
+  docker stop onos
+`
+
+3. 重启onos, mininet
+
+```
+  # 重启onos
+  docker restart onos
+  
+  # 重启mn-stratum
+  docker restart mn-stratum
+  docker attach mn-stratum
+  cd /test
+  python topo.py
+
+  # onos完全启动后（可以进入onos管理页面），连接onos和mn-stratum
+  cd ~/mininet
+  make install_netcfg
+```
+
+4. 重启开启reactive forwarding app
+
+
+
 ## k8s集群部署
 k8s集群有三台主机（1 master + 2 worker），操作系统均为Ubuntu 18.04 (LTS)，主机间通过mininet互联。
 ### 前言

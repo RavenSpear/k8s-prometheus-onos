@@ -2,16 +2,50 @@
   <div>
     <div class="crumbs">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item>传输资源虚拟化控制</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/virtualNetworkDashboard' }"
+          >传输资源虚拟化控制</el-breadcrumb-item
+        >
         <el-breadcrumb-item>虚拟网络列表</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
 
     <div class="container">
+      <div class="handle-box">
+        <el-input
+          v-model="query.vnetName"
+          placeholder="输入虚拟网络名称"
+          class="handle-input mr10"
+        ></el-input>
+        <el-button
+          size="mini"
+          type="primary"
+          icon="el-icon-search"
+          @click="handleSearch"
+          >搜索</el-button
+        >
+      </div>
+
       <el-table :data="tableData" class="table">
-        <el-table-column prop="vnetId" label="虚拟网络Id"></el-table-column>
-        <el-table-column prop="vnrId" label="请求编号"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
+        <el-table-column
+          prop="vnetId"
+          label="虚拟网络Id"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="vnetName"
+          label="虚拟网络名称"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="vnrId"
+          label="请求编号"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="createTime"
+          label="嵌入时间"
+          align="center"
+        ></el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button
@@ -20,6 +54,13 @@
               @click="showVnetDetail(scope.row)"
               >详情</el-button
             >
+            <el-button
+              type="text"
+              icon="el-icon-plus"
+              @click="registerTraffic(scope.row)"
+            >
+              服务注册
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -46,6 +87,7 @@ export default {
           this.tableData.push({
             vnetId: item.vnetId,
             vnrId: item.vnrId,
+            vnetName: item.vnetName,
             createTime: this.formatDate(item.createTime),
           });
         });
@@ -60,7 +102,9 @@ export default {
         query: param,
       });
     },
-
+    registerService(row) {
+      console.log(row);
+    },
     formatDate(timestamp) {
       var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
       var Y = date.getFullYear() + "-";
@@ -95,10 +139,6 @@ export default {
 .handle-input {
   width: 300px;
   display: inline-block;
-}
-.table {
-  width: 100%;
-  font-size: 14px;
 }
 .red {
   color: #ff0000;
