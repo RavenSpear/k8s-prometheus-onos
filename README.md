@@ -64,7 +64,7 @@ org.onosproject.fwd
 ```
 ### Mininet重启步骤
 
-1. 在关闭onos之前，需要先关闭reactive forwarding应用
+1. 在关闭onos之前，需要先关闭cn.seu.p4virtex.nvh应用
 
 2. 关闭mininet，onos
 
@@ -90,7 +90,7 @@ org.onosproject.fwd
   make install_netcfg
 ```
 
-4. 重启开启reactive forwarding app
+4. 网络拓扑稳定后，重启开启cn.seu.p4virtex.nvh app
 
 
 
