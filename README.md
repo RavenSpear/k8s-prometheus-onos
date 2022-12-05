@@ -149,7 +149,7 @@ TIPS：以下命令以root身份，且仅在master主机上运行
 3. `ssh-copy-id worker2 ip`
 4. `cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys`
 
-### 0x06 配置三台主机运行环境并部署prometheus、grafana服务
+### 0x06 配置三台主机运行环境并部署集群服务
 TIPS: 下列命令以root身份运行，且仅在master主机上运行。配置环境全程采用ansible自动化脚本，所以master主机需要提前安装ansible(`sudo apt-get -y install ansible`)，ansible自动化脚本均在本仓库，可用git将本仓库下载至master主机中。
 
 1. 根据三台主机在mininet中的实际ip修改k8s-ansible-no-sona/inventory/default/host.ini文件；
@@ -162,10 +162,13 @@ TIPS: 下列命令以root身份运行，且仅在master主机上运行。配置�
 8. 使用`nohup kubectl proxy --address='0.0.0.0' --accept-hosts='^*$' --port=8009 2>&1 &`暴露8009端口
 9. 使用`cd /root/k8s-prometheus-onos/IoT/edgex-nginx-deployment && kubectl apply -f setup/`创建IOT命名空间
 10. 使用`cd /root/k8s-prometheus-onos/IoT/edgex-nginx-deployment && kubectl apply -f ./`创建用于反代edgex API的nginx服务
-
+11. 使用`cd /root/k8s-prometheus-onos/k8s-application/video && kubectl apply -f video-proxy/`创建用于反代ffmpeg的nginx服务
+12. 使用`cd /root/k8s-prometheus-onos/k8s-application/video && kubectl apply -f video-streaming/`创建ffmpeg视频流服务
 
 TIPS: 运行`cd k8s-ansible-no-sona && ansible-playbook inventory/default/reset-site.yml`命令可以重置集群，再使用`cd k8s-ansible-no-sona && ansible-playbook inventory/default/sitewithoutsona.yml`重新部署。
-
+## python adapter部署
+在windows server上运行infinity-adapter文件夹中的infinity-adapter.py
+运行方式见其文件夹下README.md
 ## 前端部署
 前端部署在windows server的80端口，同时需要将集群中的grafana服务(3000)、prometheus服务(9090)、8009，mininet的onos服务(8181)映射至windows server上。端口映射可使用virtual box自带的NAT端口映射功能。
 ### 运行前端应用(开发环境)
