@@ -26,13 +26,13 @@
             <el-row :gutter="10">
               <el-col :span="10">
                 <el-input
-                  v-model="form.ipSrc"
+                  v-model="form.traffic.srcIP"
                   placeholder="源IP地址"
                 ></el-input>
               </el-col>
               <el-col :span="10">
                 <el-input
-                  v-model="form.ipDst"
+                  v-model="form.traffic.dstIP"
                   placeholder="目的IP地址"
                 ></el-input>
               </el-col>
@@ -43,13 +43,13 @@
             <el-row :gutter="10">
               <el-col :span="10">
                 <el-input
-                  v-model="form.portSrc"
+                  v-model.number="form.traffic.srcPort"
                   placeholder="源端口号"
                 ></el-input>
               </el-col>
               <el-col :span="10">
                 <el-input
-                  v-model="form.portDst"
+                  v-model.number="form.traffic.dstPort"
                   placeholder="目的端口号"
                 ></el-input>
               </el-col>
@@ -57,7 +57,7 @@
           </el-form-item>
 
           <el-form-item label="流量类型" prop="type">
-            <el-select v-model="form.type" placeholder="请选择">
+            <el-select v-model="form.traffic.type" placeholder="请选择">
               <el-option
                 v-for="node in trafficType"
                 :key="node.name"
@@ -69,7 +69,7 @@
           </el-form-item>
 
           <el-form-item label="虚拟网络选择" prop="vnetId">
-            <el-select v-model="form.vnetId" placeholder="请选择">
+            <el-select v-model="form.vnetId" placeholder="请选择" :disabled="isFromVnetPage">
               <el-option
                 v-for="node in vnetArray"
                 :key="node.vnetId"
@@ -92,20 +92,21 @@
 </template>
 
 <script>
-import { getVirtualNetworks } from "../../../api";
+import { getVirtualNetworks, registerService } from "../../../api";
 import bus from "../../common/bus";
 export default {
   data() {
     return {
       form: {
-        serviceName: "",
-        vnetName: "",
+        serviceName: "视频流服务",
         vnetId: "",
-        ipSrc: "",
-        ipDst: "",
-        type: "",
-        portSrc: "",
-        portDst: "",
+        traffic: {
+          srcIP: "10.0.0.1",
+          dstIP: "10.0.0.2",
+          type: "udp",
+          srcPort: "5001",
+          dstPort: "12345",
+        },
       },
       vnetArray: [],
       trafficType: [
@@ -116,10 +117,20 @@ export default {
           name: "udp",
         },
       ],
+      isFromVnetPage: false
     };
   },
   created() {
-    this.loadVnetSelector();
+    if(this.$route.query.vnetId != null){
+      this.isFromVnetPage = true;
+      this.vnetArray.push({
+        vnetName: this.$route.query.vnetName,
+        vnetId: this.$route.query.vnetId
+      })
+      this.form.vnetId = this.$route.query.vnetId;
+    }else{
+      this.loadVnetSelector();
+    }   
   },
   methods: {
     async loadVnetSelector() {
@@ -131,9 +142,25 @@ export default {
         });
       });
     },
-    submit() {},
+    submit() {
+      registerService(this.form).then((res) => {
+        if(res.data.statusCode === 1){
+          // 注册成功
+          alert("注册成功！");
+          this.cancel();
+        }else{
+          alert("注册失败");
+
+        }
+        console.log(res);
+      });
+    },
     cancel() {
-      bus.$emit("close_current_tags", "/serviceList");
+      if(this.isFromVnetPage){
+        bus.$emit("close_current_tags", "/virtualNetworkList");
+      }else{
+        bus.$emit("close_current_tags", "/serviceList");
+      }
     },
     reset() {
       this.$refs.formRef.resetFields();

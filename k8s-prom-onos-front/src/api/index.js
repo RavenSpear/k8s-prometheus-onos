@@ -135,6 +135,23 @@ export const addVirtualNetwork = formData => {
     })
 }
 
+export const registerService = formData => {
+    return request({
+        url: '/vnetTraffic',
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        data: formData
+    });
+}
+
+export const getAllServices = () => {
+    return request({
+        url: '/vnetTraffic',
+        method: 'get'
+    });
+}
+
+
 export const getVirtualNetworkTopo = query => {
     return request({
         url: '/vnets/topology/' + query.id,

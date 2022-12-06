@@ -11,6 +11,7 @@ import VirtualNetworkRequest from '../components/page/Network/VirtualNetworkRequ
 import VirtualNetworkRequestCreate from '../components/page/Network/VirtualNetworkRequestCreate.vue'
 import ServiceList from '../components/page/Network/ServiceList.vue'
 import ServiceRegister from '../components/page/Network/ServiceRegister.vue'
+import SwitchDetail from '../components/page/Network/SwitchDetail.vue'
 
 import ResourceDashboard from '../components/page/Resource/ResourceDashboard.vue'
 import ResourceList from '../components/page/Resource/ResourceList.vue'
@@ -126,6 +127,11 @@ const routes = [
         path: "/serviceRegister",
         component: ServiceRegister,
         meta: { title: '虚拟网络服务注册' }
+      },
+      {
+        path:"switchDetail",
+        component: SwitchDetail,
+        meta: { title: '交换机详情' }
       }
     ]
   }

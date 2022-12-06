@@ -57,7 +57,7 @@
             <el-button
               type="text"
               icon="el-icon-plus"
-              @click="registerTraffic(scope.row)"
+              @click="registerService(scope.row)"
             >
               服务注册
             </el-button>
@@ -103,7 +103,14 @@ export default {
       });
     },
     registerService(row) {
-      console.log(row);
+      let param = {
+        vnetId: row.vnetId,
+        vnetName: row.vnetName
+      }
+      this.$router.push({
+        path: "/serviceRegister",
+        query: param,
+      });
     },
     formatDate(timestamp) {
       var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
