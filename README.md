@@ -162,8 +162,9 @@ TIPS: 下列命令以root身份运行，且仅在master主机上运行。配置�
 8. 使用`nohup kubectl proxy --address='0.0.0.0' --accept-hosts='^*$' --port=8009 2>&1 &`暴露8009端口
 9. 使用`cd /root/k8s-prometheus-onos/IoT/edgex-nginx-deployment && kubectl apply -f setup/`创建IOT命名空间
 10. 使用`cd /root/k8s-prometheus-onos/IoT/edgex-nginx-deployment && kubectl apply -f ./`创建用于反代edgex API的nginx服务
-11. 使用`cd /root/k8s-prometheus-onos/k8s-application/video && kubectl apply -f video-proxy/`创建用于反代ffmpeg的nginx服务
-12. 使用`cd /root/k8s-prometheus-onos/k8s-application/video && kubectl apply -f video-streaming/`创建ffmpeg视频流服务
+11. 使用`kubectl taint node {node-name} node-role.kubernetes.io/master:NoSchedule-`去除master污点
+12. 使用`cd /root/k8s-prometheus-onos/k8s-application/video && kubectl apply -f video-proxy/`创建用于反代ffmpeg的nginx服务
+13. 使用`cd /root/k8s-prometheus-onos/k8s-application/video && kubectl apply -f video-streaming/`创建ffmpeg视频流服务
 
 TIPS: 运行`cd k8s-ansible-no-sona && ansible-playbook inventory/default/reset-site.yml`命令可以重置集群，再使用`cd k8s-ansible-no-sona && ansible-playbook inventory/default/sitewithoutsona.yml`重新部署。
 ## python adapter部署

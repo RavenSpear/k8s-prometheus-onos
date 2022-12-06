@@ -40,7 +40,7 @@ data:
 
         server {
             listen 80;      # HTTP IPv4
-            listen [::]:80; # HTTP IPv6
+            # listen [::]:80; # HTTP IPv6
 
             location / {
                 types {
