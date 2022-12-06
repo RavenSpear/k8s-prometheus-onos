@@ -52,45 +52,109 @@
         ></el-table-column>
         <el-table-column
           align="center"
-          prop="vnetId"
-          label="所属虚拟网络ID"
+          prop="vnetName"
+          label="所属虚拟网络"
         ></el-table-column>
+
+        <el-table-column
+          align="center"
+          prop="traffic"
+          label="服务内容"
+        ></el-table-column>
+
         <el-table-column align="center" prop="status" label="当前状态">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.status === 0" type="info">运行</el-tag>
+            <el-tag v-if="scope.row.status === 1" type="success">运行</el-tag>
             <el-tag v-else type="danger">停止</el-tag>
           </template>
         </el-table-column>
-        <el-table-column
-          align="center"
-          prop="createTime"
-          label="操作"
-        ></el-table-column>
+        <el-table-column align="center" prop="createTime" label="操作">
+          <template slot-scope="scope">
+            <el-button
+              v-if="scope.row.status === 0"
+              type="text info"
+              icon="el-icon-open"
+              @click="start(scope.row)"
+              >运行</el-button
+            >
+            <el-button
+              v-else
+              type="text"
+              icon="el-icon-turn-off"
+              @click="stop(scope.row)"
+              >停止</el-button
+            >
+            <el-button
+              type="text"
+              icon="el-icon-setting"
+              @click="start(scope.row)"
+              >切换</el-button
+            >
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
 </template>
 
 <script>
+import { getAllServices } from "../../../api";
 export default {
   data() {
     return {
       query: {
-        status: '',
+        status: "",
         serviceName: "",
       },
-      tableData:[]
+      tableData: [],
     };
   },
+  created() {
+    this.loadTableData();
+  },
   methods: {
+    async loadTableData() {
+      var vnetTraffics = await (await getAllServices()).data.vnetTraffics;
+      vnetTraffics.forEach((item) => {
+        this.tableData.push({
+          serviceName: item.serviceName,
+          vnetName: item.vnetName,
+          vnetId: item.vnetId,
+          status: item.status,
+          traffic: this.formatTraffic(item.traffic),
+        });
+      });
+    },
     registerService() {
       this.$router.push({
         path: "/serviceRegister",
       });
     },
-    handleSearch(){
-
-    }
+    handleSearch() {},
+    formatTraffic(traffic) {
+      return (
+        "( " +
+        traffic.srcIP +
+        ", " +
+        traffic.dstIP +
+        ", " +
+        traffic.type +
+        ", " +
+        traffic.srcPort +
+        ", " +
+        traffic.dstPort +
+        " )"
+      );
+    },
+    start(row) {
+      console.log(row);
+    },
+    stop(row) {
+      console.log(row);
+    },
+    change(row) {
+      console.log(row);
+    },
   },
 };
 </script>
