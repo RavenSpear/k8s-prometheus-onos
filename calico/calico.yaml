@@ -3835,6 +3835,8 @@ spec:
               name: kubernetes-services-endpoint
               optional: true
           env:
+            - name: IP_AUTODETECTION_METHOD
+              value: "interface=eth1"
             # Use Kubernetes API as the backing datastore.
             - name: DATASTORE_TYPE
               value: "kubernetes"
