@@ -1,0 +1,746 @@
+apiVersion: v1
+data:
+  switch-detail.json: |-
+    {
+      "__inputs": [
+        {
+          "name": "DS_INFINITY",
+          "label": "Infinity",
+          "description": "",
+          "type": "datasource",
+          "pluginId": "yesoreyeram-infinity-datasource",
+          "pluginName": "Infinity"
+        }
+      ],
+      "__elements": [],
+      "__requires": [
+        {
+          "type": "panel",
+          "id": "bargauge",
+          "name": "Bar gauge",
+          "version": ""
+        },
+        {
+          "type": "panel",
+          "id": "gauge",
+          "name": "Gauge",
+          "version": ""
+        },
+        {
+          "type": "grafana",
+          "id": "grafana",
+          "name": "Grafana",
+          "version": "8.5.5"
+        },
+        {
+          "type": "panel",
+          "id": "stat",
+          "name": "Stat",
+          "version": ""
+        },
+        {
+          "type": "panel",
+          "id": "table",
+          "name": "Table",
+          "version": ""
+        },
+        {
+          "type": "panel",
+          "id": "timeseries",
+          "name": "Time series",
+          "version": ""
+        },
+        {
+          "type": "datasource",
+          "id": "yesoreyeram-infinity-datasource",
+          "name": "Infinity",
+          "version": "1.2.0"
+        }
+      ],
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": {
+              "type": "grafana",
+              "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "target": {
+              "limit": 100,
+              "matchAny": false,
+              "tags": [],
+              "type": "dashboard"
+            },
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": null,
+      "iteration": 1671450552670,
+      "links": [],
+      "liveNow": false,
+      "panels": [
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 4,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "/^result$/",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "table",
+              "global_query_id": "",
+              "parser": "uql",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "uql": "parse-json\r\n  project \"id\"\r\n",
+              "url": "http://223.3.94.112:8181/onos/v1/devices/${deviceId}",
+              "url_options": {
+                "data": "",
+                "headers": [
+                  {
+                    "key": "Authorization",
+                    "value": "Basic b25vczpyb2Nrcw=="
+                  }
+                ],
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "交换机名称",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 4,
+            "x": 4,
+            "y": 0
+          },
+          "id": 4,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "/^result$/",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "table",
+              "global_query_id": "",
+              "parser": "uql",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "uql": "parse-json\r\n  project \"statistics\"\r\n  mv-expand \"port\"=\"ports\"\r\n  project \"port\"\r\n  count\r\n",
+              "url": "http://223.3.94.112:8181/onos/v1/statistics/delta/ports/${deviceId}",
+              "url_options": {
+                "data": "",
+                "headers": [
+                  {
+                    "key": "Authorization",
+                    "value": "Basic b25vczpyb2Nrcw=="
+                  }
+                ],
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "活跃的端口数",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "mappings": [],
+              "thresholds": {
+                "mode": "percentage",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 70
+                  },
+                  {
+                    "color": "red",
+                    "value": 85
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 4,
+            "x": 8,
+            "y": 0
+          },
+          "id": 7,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "table",
+              "global_query_id": "",
+              "parser": "uql",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "uql": "parse-json\r\n  project \"flows\"\r\n  count\r\n\r\n",
+              "url": "http://223.3.94.112:8181/onos/v1/flows/${deviceId}",
+              "url_options": {
+                "data": "",
+                "headers": [
+                  {
+                    "key": "Authorization",
+                    "value": "Basic b25vczpyb2Nrcw=="
+                  }
+                ],
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "安装的流表项条数",
+          "type": "gauge"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "center",
+                "displayMode": "auto",
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 0
+          },
+          "id": 6,
+          "options": {
+            "footer": {
+              "enablePagination": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "table",
+              "global_query_id": "",
+              "parser": "uql",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "uql": "parse-json\r\n  scope \"statistics\"\r\n  mv-expand \"_port\"=\"ports\"\r\n  project \"_port\"\r\n",
+              "url": "http://223.3.94.112:8181/onos/v1/statistics/delta/ports/${deviceId}",
+              "url_options": {
+                "data": "",
+                "headers": [
+                  {
+                    "key": "Authorization",
+                    "value": "Basic b25vczpyb2Nrcw=="
+                  }
+                ],
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "端口数据统计表",
+          "transformations": [
+            {
+              "id": "extractFields",
+              "options": {
+                "format": "kvp",
+                "replace": true,
+                "source": "_port"
+              }
+            },
+            {
+              "id": "filterFieldsByName",
+              "options": {
+                "include": {
+                  "names": [
+                    "bytesReceived",
+                    "port",
+                    "bytesSent"
+                  ]
+                }
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {},
+                "indexByName": {},
+                "renameByName": {
+                  "bytesReceived": "",
+                  "port": "端口号"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "field": "端口号"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {},
+                "indexByName": {
+                  "bytesReceived": 1,
+                  "端口号": 0
+                },
+                "renameByName": {
+                  "bytesReceived": "接收的字节数（Bytes）",
+                  "bytesSent": "发送的字节数（Bytes）"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "continuous-GrYlRd"
+              },
+              "mappings": [],
+              "max": 1000,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "locale"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "id": 11,
+          "options": {
+            "displayMode": "lcd",
+            "minVizHeight": 10,
+            "minVizWidth": 0,
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "table",
+              "global_query_id": "",
+              "parser": "uql",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "uql": "parse-json\r\n  project \"queueOccucy\"",
+              "url": "http://223.3.94.112:8181/onos/nvh/statistic/queueOccupy/${deviceId}",
+              "url_options": {
+                "data": "",
+                "headers": [
+                  {
+                    "key": "Authorization",
+                    "value": "Basic b25vczpyb2Nrcw=="
+                  }
+                ],
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "交换机队列拥塞度（队列中堆积的数据报文数）",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "smooth",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "max": 10000,
+              "min": 5000,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "locale"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "id": 12,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "timeseries",
+              "global_query_id": "",
+              "hide": false,
+              "parser": "uql",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "uql": "parse-json\r\n  project \"data\"\r\n  project \"timestamp\"=unixtime_milliseconds_todatetime(\"timestamp\"),\"处理时间\"=\"hopLatency\"",
+              "url": "http://223.3.94.112:8181/onos/nvh/statistic/measurement/${deviceId}",
+              "url_options": {
+                "data": "",
+                "headers": [
+                  {
+                    "key": "Authorization",
+                    "value": "Basic b25vczpyb2Nrcw=="
+                  }
+                ],
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "数据报文处理时间（微秒）",
+          "transformations": [],
+          "type": "timeseries"
+        }
+      ],
+      "refresh": "5s",
+      "schemaVersion": 36,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "current": {},
+            "datasource": {
+              "type": "yesoreyeram-infinity-datasource",
+              "uid": "Infinity"
+            },
+            "definition": "Infinity- (infinity) json",
+            "hide": 0,
+            "includeAll": false,
+            "multi": false,
+            "name": "deviceId",
+            "options": [],
+            "query": {
+              "infinityQuery": {
+                "columns": [
+                  {
+                    "selector": "",
+                    "text": "",
+                    "type": "string"
+                  }
+                ],
+                "filters": [],
+                "format": "table",
+                "parser": "uql",
+                "refId": "variable",
+                "root_selector": "",
+                "source": "url",
+                "type": "json",
+                "uql": "parse-json\r\n  scope \"devices\"\r\n  project \"id\"",
+                "url": "http://223.3.94.112:8181/onos/v1/devices",
+                "url_options": {
+                  "data": "",
+                  "headers": [
+                    {
+                      "key": "Authorization",
+                      "value": "Basic b25vczpyb2Nrcw=="
+                    }
+                  ],
+                  "method": "GET"
+                }
+              },
+              "query": "",
+              "queryType": "infinity"
+            },
+            "refresh": 1,
+            "regex": "",
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-5m",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "",
+      "title": "交换机详情页",
+      "uid": "8Eea7KKVz",
+      "version": 5,
+      "weekStart": ""
+    }
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: grafana
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 8.5.5
+  name: grafana-dashboard-switch-detail
+  namespace: monitoring

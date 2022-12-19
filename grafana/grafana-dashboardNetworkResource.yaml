@@ -1,0 +1,450 @@
+apiVersion: v1
+data:
+  network-resource.json: |-
+    {
+      "__inputs": [
+        {
+          "name": "DS_INFINITY",
+          "label": "Infinity",
+          "description": "",
+          "type": "datasource",
+          "pluginId": "yesoreyeram-infinity-datasource",
+          "pluginName": "Infinity"
+        }
+      ],
+      "__elements": [],
+      "__requires": [
+        {
+          "type": "panel",
+          "id": "bargauge",
+          "name": "Bar gauge",
+          "version": ""
+        },
+        {
+          "type": "panel",
+          "id": "gauge",
+          "name": "Gauge",
+          "version": ""
+        },
+        {
+          "type": "grafana",
+          "id": "grafana",
+          "name": "Grafana",
+          "version": "8.5.5"
+        },
+        {
+          "type": "panel",
+          "id": "stat",
+          "name": "Stat",
+          "version": ""
+        },
+        {
+          "type": "datasource",
+          "id": "yesoreyeram-infinity-datasource",
+          "name": "Infinity",
+          "version": "1.2.0"
+        }
+      ],
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": {
+              "type": "grafana",
+              "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "target": {
+              "limit": 100,
+              "matchAny": false,
+              "tags": [],
+              "type": "dashboard"
+            },
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "liveNow": false,
+      "panels": [
+        {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 15,
+          "panels": [],
+          "title": "虚拟控制资源总览",
+          "type": "row"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 1
+          },
+          "id": 2,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "table",
+              "global_query_id": "",
+              "groq": "*",
+              "parser": "uql",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "uql": "parse-json\r\n  project \"vnrCount\"",
+              "url": "http://223.3.94.112:8181/onos/nvh/statistic/acceptRate",
+              "url_options": {
+                "data": "",
+                "headers": [
+                  {
+                    "key": "Authorization",
+                    "value": "Basic b25vczpyb2Nrcw=="
+                  }
+                ],
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "虚拟网络请求总数",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 1
+          },
+          "id": 3,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "table",
+              "global_query_id": "",
+              "groq": "*",
+              "parser": "uql",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "uql": "parse-json\r\n  project \"vnetCount\"",
+              "url": "http://223.3.94.112:8181/onos/nvh/statistic/acceptRate",
+              "url_options": {
+                "data": "",
+                "headers": [
+                  {
+                    "key": "Authorization",
+                    "value": "Basic b25vczpyb2Nrcw=="
+                  }
+                ],
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "成功嵌入的虚拟网络总数",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "mappings": [],
+              "max": 100,
+              "min": 0,
+              "thresholds": {
+                "mode": "percentage",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 70
+                  },
+                  {
+                    "color": "red",
+                    "value": 85
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 1
+          },
+          "id": 8,
+          "options": {
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "/^result$/",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "table",
+              "global_query_id": "",
+              "groq": "*",
+              "parser": "uql",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "uql": "parse-json\r\n  project \"acceptRate\"=percentage(\"vnetCount\",1)",
+              "url": "http://223.3.94.112:8181/onos/nvh/statistic/acceptRate",
+              "url_options": {
+                "data": "",
+                "headers": [
+                  {
+                    "key": "Authorization",
+                    "value": "Basic b25vczpyb2Nrcw=="
+                  }
+                ],
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "虚拟网络接受率",
+          "type": "gauge"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "continuous-GrYlRd"
+              },
+              "mappings": [],
+              "max": 100,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 8
+          },
+          "id": 5,
+          "options": {
+            "displayMode": "lcd",
+            "minVizHeight": 20,
+            "minVizWidth": 0,
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "/.*/",
+              "values": false
+            },
+            "showUnfilled": true
+          },
+          "pluginVersion": "8.5.5",
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "table",
+              "global_query_id": "",
+              "parser": "uql",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "json",
+              "uql": "parse-json\r\n  project \"percent\"=percentage(\"allocatedBandwidth\",\"sumBandwidth\")",
+              "url": "http://223.3.94.112:8181/onos/nvh/statistic/bandwidthUtilization",
+              "url_options": {
+                "data": "",
+                "headers": [
+                  {
+                    "key": "Authorization",
+                    "value": "Basic b25vczpyb2Nrcw=="
+                  }
+                ],
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "网络带宽资源分配情况",
+          "transformations": [],
+          "type": "bargauge"
+        }
+      ],
+      "refresh": "5s",
+      "schemaVersion": 36,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-5m",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "",
+      "title": "传输资源虚拟化控制首页",
+      "uid": "DSz0UFKVk",
+      "version": 20,
+      "weekStart": ""
+    }
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: grafana
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 8.5.5
+  name: grafana-dashboard-network-resource
+  namespace: monitoring
