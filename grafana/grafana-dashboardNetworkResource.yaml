@@ -318,7 +318,7 @@ data:
               "root_selector": "",
               "source": "url",
               "type": "json",
-              "uql": "parse-json\r\n  project \"acceptRate\"=percentage(\"vnetCount\",1)",
+              "uql": "parse-json\r\n  project \"acceptRate\"=percentage(\"vnetCount\",\"vnrCount\")",
               "url": "http://223.3.94.112:8181/onos/nvh/statistic/acceptRate",
               "url_options": {
                 "data": "",
