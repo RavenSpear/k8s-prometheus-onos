@@ -41,7 +41,7 @@
           label="请求编号"
           align="center"
         ></el-table-column>
-        <el-table-column prop="status" label="状态" align="center">
+        <el-table-column prop="status" label="运行状态" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.status === 1" type="success">运行中</el-tag>
             <el-tag v-else type="danger">停止</el-tag>

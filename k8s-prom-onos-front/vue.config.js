@@ -4,46 +4,46 @@ module.exports = {
         //host:"127.0.0.1",
         //port:"8080",
         proxy: {
-            "/vnetTraffic": {
-                target: "http://127.0.0.1:8181/onos/nvh",
-                changeOrigin :true,
-            },
-            "/pnet": {
-                target: "http://127.0.0.1:8181/onos/nvh",
-                changeOrigin: true,
-            },
-            "/vnr": {
-                target: "http://127.0.0.1:8181/onos/nvh",
-                changeOrigin: true,
-            },
-            '/vnet': {
-                target: 'http://127.0.0.1:8181/onos/nvh',
-                changeOrigin: true
-            },
-            'statistic':{
-                target: 'http://127.0.0.1:8181/onos/nvh',
-                changeOrigin: true
-            },
             // "/vnetTraffic": {
-            //     target: "http://223.3.94.112:8181/onos/nvh",
+            //     target: "http://127.0.0.1:8181/onos/nvh",
             //     changeOrigin :true,
             // },
             // "/pnet": {
-            //     target: "http://223.3.94.112:8181/onos/nvh",
+            //     target: "http://127.0.0.1:8181/onos/nvh",
             //     changeOrigin: true,
             // },
             // "/vnr": {
-            //     target: "http://223.3.94.112:8181/onos/nvh",
+            //     target: "http://127.0.0.1:8181/onos/nvh",
             //     changeOrigin: true,
             // },
             // '/vnet': {
-            //     target: 'http://223.3.94.112:8181/onos/nvh',
+            //     target: 'http://127.0.0.1:8181/onos/nvh',
             //     changeOrigin: true
             // },
             // 'statistic':{
-            //     target: 'http://223.3.94.112:8181/onos/nvh',
+            //     target: 'http://127.0.0.1:8181/onos/nvh',
             //     changeOrigin: true
             // },
+            "/vnetTraffic": {
+                target: "http://223.3.94.112:8181/onos/nvh",
+                changeOrigin :true,
+            },
+            "/pnet": {
+                target: "http://223.3.94.112:8181/onos/nvh",
+                changeOrigin: true,
+            },
+            "/vnr": {
+                target: "http://223.3.94.112:8181/onos/nvh",
+                changeOrigin: true,
+            },
+            '/vnet': {
+                target: 'http://223.3.94.112:8181/onos/nvh',
+                changeOrigin: true
+            },
+            'statistic':{
+                target: 'http://223.3.94.112:8181/onos/nvh',
+                changeOrigin: true
+            },
 
             /* Apis for k8s api/v1 */
             '/terminal': {
