@@ -16,7 +16,7 @@
                 <el-table-column prop="memReq" label="内存需求（限制/请求）" align="center"></el-table-column>
                 <el-table-column prop="diskReq" label="磁盘需求（限制/请求）" align="center"></el-table-column>
                 <el-table-column prop="bandReq" label="带宽限制（上行/下行）" align="center"></el-table-column>
-                <el-table-column prop="ratio" label="边云负载比" align="center"></el-table-column>
+                <el-table-column prop="ratio" label="云边负载比" align="center"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" icon="el-icon-ali-eye iconfont" @click="detail(scope.row)">查看
