@@ -41,6 +41,12 @@
           label="请求编号"
           align="center"
         ></el-table-column>
+        <el-table-column prop="status" label="状态" align="center">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.status === 1" type="success">运行中</el-tag>
+            <el-tag v-else type="danger">停止</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="createTime"
           label="嵌入时间"
@@ -55,12 +61,27 @@
               >详情</el-button
             >
             <el-button
+              v-if="scope.row.status === 0"
+              type="text info"
+              icon="el-icon-open"
+              @click="start(scope.row)"
+              >运行</el-button
+            >
+            <el-button
+              v-else
+              type="text"
+              icon="el-icon-turn-off"
+              @click="stop(scope.row)"
+              >停止</el-button
+            >
+
+            <!-- <el-button
               type="text"
               icon="el-icon-plus"
               @click="registerService(scope.row)"
             >
               服务注册
-            </el-button>
+            </el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -69,7 +90,11 @@
 </template>
 
 <script>
-import { getVirtualNetworks } from "../../../api";
+import {
+  getVirtualNetworks,
+  startVirtualNetworkById,
+  stopVirtualNetworkById,
+} from "../../../api";
 export default {
   data() {
     return {
@@ -89,6 +114,7 @@ export default {
             vnrId: item.vnrId,
             vnetName: item.vnetName,
             createTime: this.formatDate(item.createTime),
+            status: item.status,
           });
         });
       });
@@ -105,8 +131,8 @@ export default {
     registerService(row) {
       let param = {
         vnetId: row.vnetId,
-        vnetName: row.vnetName
-      }
+        vnetName: row.vnetName,
+      };
       this.$router.push({
         path: "/serviceRegister",
         query: param,
@@ -129,6 +155,17 @@ export default {
       var s =
         date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
       return Y + M + D + h + m + s;
+    },
+    handleSearch() {
+     
+    },
+    start(row) {
+      startVirtualNetworkById(row.vnetId);
+      row.status = 1;
+    },
+    stop(row) {
+      stopVirtualNetworkById(row.vnetId);
+      row.status = 0;
     },
   },
 };

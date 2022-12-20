@@ -135,6 +135,21 @@ export const addVirtualNetwork = formData => {
     })
 }
 
+export const startVirtualNetworkById = vnetId => {
+    return request({
+        url: '/vnet/start/' + vnetId,
+        method: 'get'
+    });
+}
+
+export const stopVirtualNetworkById = vnetId => {
+    return request({
+        url: '/vnet/stop/' + vnetId,
+        method: 'get'
+    });
+}
+
+
 export const registerService = formData => {
     return request({
         url: '/vnetTraffic',

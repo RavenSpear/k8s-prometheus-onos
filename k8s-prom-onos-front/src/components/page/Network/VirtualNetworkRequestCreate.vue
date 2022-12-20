@@ -124,7 +124,7 @@ export default {
     };
     return {
       form: {
-        vnetName: "",
+        vnetName: "虚拟网络",
         bandwidth: "",
         latency: "",
         cluster1IP: "",
