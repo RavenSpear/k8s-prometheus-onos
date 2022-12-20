@@ -22,6 +22,10 @@
             </el-col>
           </el-form-item>
 
+          <el-form-item label="手动配置">
+            <el-switch v-model="form.isManual"></el-switch>
+          </el-form-item>
+
           <el-form-item label="IP地址" prop="ip">
             <el-row :gutter="10">
               <el-col :span="10">
@@ -69,7 +73,11 @@
           </el-form-item>
 
           <el-form-item label="虚拟网络选择" prop="vnetId">
-            <el-select v-model="form.vnetId" placeholder="请选择" :disabled="isFromVnetPage">
+            <el-select
+              v-model="form.vnetId"
+              placeholder="请选择"
+              :disabled="isFromVnetPage"
+            >
               <el-option
                 v-for="node in vnetArray"
                 :key="node.vnetId"
@@ -107,7 +115,9 @@ export default {
           srcPort: "5001",
           dstPort: "12345",
         },
+        isManual: true
       },
+      
       vnetArray: [],
       trafficType: [
         {
@@ -117,20 +127,20 @@ export default {
           name: "udp",
         },
       ],
-      isFromVnetPage: false
+      isFromVnetPage: false,
     };
   },
   created() {
-    if(this.$route.query.vnetId != null){
+    if (this.$route.query.vnetId != null) {
       this.isFromVnetPage = true;
       this.vnetArray.push({
         vnetName: this.$route.query.vnetName,
-        vnetId: this.$route.query.vnetId
-      })
+        vnetId: this.$route.query.vnetId,
+      });
       this.form.vnetId = this.$route.query.vnetId;
-    }else{
+    } else {
       this.loadVnetSelector();
-    }   
+    }
   },
   methods: {
     async loadVnetSelector() {
@@ -144,21 +154,20 @@ export default {
     },
     submit() {
       registerService(this.form).then((res) => {
-        if(res.data.statusCode === 1){
+        if (res.data.statusCode === 1) {
           // 注册成功
           alert("注册成功！");
           this.cancel();
-        }else{
+        } else {
           alert("注册失败");
-
         }
         console.log(res);
       });
     },
     cancel() {
-      if(this.isFromVnetPage){
+      if (this.isFromVnetPage) {
         bus.$emit("close_current_tags", "/virtualNetworkList");
-      }else{
+      } else {
         bus.$emit("close_current_tags", "/serviceList");
       }
     },
