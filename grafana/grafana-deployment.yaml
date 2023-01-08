@@ -84,6 +84,10 @@ spec:
           readOnly: false
         - mountPath: /grafana-dashboard-definitions/0/pressure-sensor
           name: grafana-dashboard-pressure-sensor
+        - mountPath: /grafana-dashboard-definitions/0/network-resource
+          name: grafana-dashboard-network-resource
+        - mountPath: /grafana-dashboard-definitions/0/switch-detail
+          name: grafana-dashboard-switch-detail
           readOnly: false
         - mountPath: /etc/grafana
           name: grafana-config
@@ -128,6 +132,12 @@ spec:
       - configMap:
           name: grafana-dashboard-temperature-sensor
         name: grafana-dashboard-temperature-sensor
+      - configMap:
+          name: grafana-dashboard-switch-detail
+        name: grafana-dashboard-switch-detail
+      - configMap:
+          name: grafana-dashboard-network-resource
+        name: grafana-dashboard-network-resource
       - name: grafana-config
         secret:
           secretName: grafana-config
