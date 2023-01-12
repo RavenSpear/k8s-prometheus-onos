@@ -68,27 +68,8 @@ export default {
         },
         {
           icon: "el-icon-ali-Topology iconfont",
-          index: "task",
-          title: "边云协同任务调度",
-          subs: [
-            {
-              index: "taskDashboard",
-              title: "任务首页",
-            },
-            {
-              index: "taskList",
-              title: "任务列表",
-            },
-            {
-              index: "taskCreate",
-              title: "任务部署",
-            }
-          ],
-        },
-        {
-          icon: "el-icon-ali-Topology iconfont",
           index: "virtualNetwork",
-          title: "传输资源虚拟化控制",
+          title: "网络资源虚拟化控制",
           subs: [
             {
               index: "virtualNetworkDashboard",
@@ -106,6 +87,25 @@ export default {
             //   index: "serviceList",
             //   title: "网络服务列表"
             // }
+          ],
+        },
+        {
+          icon: "el-icon-ali-Topology iconfont",
+          index: "task",
+          title: "边云协同任务调度",
+          subs: [
+            {
+              index: "taskDashboard",
+              title: "任务首页",
+            },
+            {
+              index: "taskList",
+              title: "任务列表",
+            },
+            {
+              index: "taskCreate",
+              title: "任务部署",
+            }
           ],
         }
       ],

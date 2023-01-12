@@ -115,7 +115,7 @@ export default {
         let ipAddress = host.ipAddresses[0];
         let node = {
           id: nodeIndex,
-          label: "集群" + clusterIndex++,
+          label: "节点" + clusterIndex++,
           shape: "image",
           image: require("../../../assets/img/host.png"),
           title: "ip: " + ipAddress,

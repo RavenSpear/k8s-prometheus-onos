@@ -12,9 +12,9 @@
                 <el-table-column prop="name" label="任务名" align="center"></el-table-column>
                 <el-table-column prop="version" label="版本" align="center"></el-table-column>
                 <el-table-column prop="taskNum" label="副本数" align="center"></el-table-column>
-                <el-table-column prop="CPUReq" label="CPU需求（限制/请求）" align="center"></el-table-column>
-                <el-table-column prop="memReq" label="内存需求（限制/请求）" align="center"></el-table-column>
-                <el-table-column prop="diskReq" label="磁盘需求（限制/请求）" align="center"></el-table-column>
+                <el-table-column prop="CPUReq" label="CPU需求（请求/限制）" align="center"></el-table-column>
+                <el-table-column prop="memReq" label="内存需求（请求/限制）" align="center"></el-table-column>
+                <el-table-column prop="diskReq" label="磁盘需求（请求/限制）" align="center"></el-table-column>
                 <el-table-column prop="bandReq" label="带宽限制（上行/下行）" align="center"></el-table-column>
                 <el-table-column prop="ratio" label="云边负载比" align="center"></el-table-column>
                 <el-table-column label="操作" align="center">
@@ -85,15 +85,16 @@ export default {
                 task.taskNum = tasks[i].spec.replicas;
                 //console.log(tasks[i]);
                 var resources = tasks[i].spec.template.spec.containers[0].resources;
-                if ("limits" in resources) {
-                    if ("cpu" in resources.limits) task.CPUReq = resources.limits.cpu;
-                    if ("memory" in resources.limits) task.memReq = resources.limits.memory;
-                    if ("ephemeral-storage" in resources.limits) task.diskReq = resources.limits['ephemeral-storage'];
-                }
+
                 if ("requests" in resources) {
-                    if ("cpu" in resources.requests) task.CPUReq += "/" + resources.requests.cpu;
-                    if ("memory" in resources.requests) task.memReq += "/" + resources.requests.memory;
-                    if ("ephemeral-storage" in resources.requests) task.diskReq += "/" + resources.requests['ephemeral-storage'];
+                    if ("cpu" in resources.requests) task.CPUReq = resources.requests.cpu;
+                    if ("memory" in resources.requests) task.memReq = resources.requests.memory;
+                    if ("ephemeral-storage" in resources.requests) task.diskReq = resources.requests['ephemeral-storage'];
+                }
+                if ("limits" in resources) {
+                    if ("cpu" in resources.limits) task.CPUReq  += "/" + resources.limits.cpu;
+                    if ("memory" in resources.limits) task.memReq  += "/" + resources.limits.memory;
+                    if ("ephemeral-storage" in resources.limits) task.diskReq  += "/" + resources.limits['ephemeral-storage'];
                 }
                 if ("annotations" in tasks[i].spec.template.metadata) {
                     var annotations = tasks[i].spec.template.metadata.annotations;

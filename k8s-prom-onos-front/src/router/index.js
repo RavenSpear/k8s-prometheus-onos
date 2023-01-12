@@ -92,11 +92,11 @@ const routes = [
         meta: { title: '任务资源详情' }
       },
 
-      //传输资源虚拟化控制资源
+      //网络资源虚拟化控制资源
       {
         path: "/virtualNetworkDashboard",
         component: VirtualNetworkDashboard,
-        meta: { title: '传输资源控制首页' }
+        meta: { title: '网络资源控制首页' }
       },
       {
         path: '/createVirtualNetworkRequest',
