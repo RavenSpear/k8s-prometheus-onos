@@ -273,13 +273,41 @@ export default {
                                         title: swlist[i],
                                         label: "Sw-" + i,
                                         shape: "circle",
-                                        physics: false
+                                        physics: false,
+                                        fixed: true
+                                }
+                                if(i==4){
+                                        sw.x = 2400;
+                                        sw.y = 500;
+                                }
+                                if(i==0){
+                                        sw.x = 2800;
+                                        sw.y = 1000;
+                                }
+                                if(i==7){
+                                        sw.x = 2000;
+                                        sw.y = 1000;
+                                }
+                                if(i==2){
+                                        sw.x = 2700;
+                                        sw.y = 700;
+                                }
+                                if(i==6){
+                                        sw.x = 2150;
+                                        sw.y = 400;
+                                }
+                                if(i==3){
+                                        sw.x = 2650;
+                                        sw.y = 400;
+                                }
+                                if(i==2){
+                                        sw.x = 2800;
+                                        sw.y = 650;
                                 }
                                 this.devicehashs[sw.title] = i;
                                 //console.log(this.devicehashs)
                                 this.nodes.push(sw);
                         }
-
                         //j for else
                         for (var j = 0; j < linklist.length; j++) {
                                 let link = {
@@ -331,7 +359,12 @@ export default {
                                         margin: 40,
                                         mass: 10
                                 }
-                                if (distribute == "cloud") node['isCloud'] = true;
+                                if (distribute == "cloud"){
+                                        node['isCloud'] = true;
+                                        node.label = "云" + node.label;
+                                }else{
+                                        node.label = "边" + node.label;
+                                }
                                 let loc = {
                                         from: i,
                                         to: this.devicehashs[hostlist[i - nodeslength].locations[0].elementId]

@@ -61,7 +61,7 @@
                 </el-collapse-item>
                 <el-collapse-item name="3">
                     <template slot="title">
-                        <p class="title">传输资源列表</p>
+                        <p class="title">网络资源列表</p>
                     </template>
                     <template>
                         <el-table :data="switchData" style="width: 100%">
