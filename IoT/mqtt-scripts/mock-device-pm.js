@@ -1,15 +1,16 @@
-function getRandomFloat(min, max) {
-    return Math.random() * (max - min) + min;
+var count = 0
+function dataLoop(){
+    let data = [26,24,27,29,31,33,34,33,31,30,30,29];
+    return data[count++ % 12];
 }
-
 const deviceName = "pm-sensor";
 
-// DataSender sends async value to MQTT broker every 15 seconds
-schedule('*/15 * * * * *', ()=>{
+// DataSender sends async value to MQTT broker every 15 min
+schedule('* */15 * * * *', ()=>{
     let body = {
         "name": deviceName,
         "cmd": "pmvalue",
-        "pmvalue": getRandomFloat(100,120).toFixed(1)
+        "pmvalue": dataLoop()
     };
     publish( 'DataTopic', JSON.stringify(body));
 });
