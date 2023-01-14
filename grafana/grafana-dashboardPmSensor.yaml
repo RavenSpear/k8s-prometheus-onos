@@ -172,7 +172,7 @@ data:
                   "tooltip": false,
                   "viz": false
                 },
-                "lineInterpolation": "linear",
+                "lineInterpolation": "smooth",
                 "lineWidth": 2,
                 "pointSize": 5,
                 "scaleDistribution": {
@@ -316,7 +316,7 @@ data:
         ]
       },
       "time": {
-        "from": "now-15m",
+        "from": "now-3h",
         "to": "now"
       },
       "timepicker": {},
