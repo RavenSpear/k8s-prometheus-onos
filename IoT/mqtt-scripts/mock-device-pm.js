@@ -6,7 +6,7 @@ function dataLoop(){
 const deviceName = "pm-sensor";
 
 // DataSender sends async value to MQTT broker every 15 min
-schedule('* */15 * * * *', ()=>{
+schedule('*/15 * * * *', ()=>{
     let body = {
         "name": deviceName,
         "cmd": "pmvalue",

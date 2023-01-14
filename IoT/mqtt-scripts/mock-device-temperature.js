@@ -8,7 +8,7 @@ const deviceName = "temperature-sensor";
 // 23:00	02:00	05:00	08:00	11:00	14:00	17:00	20:00
 // 14.8	    12.3    13.6	11.7	8.6	    6.8	    3.1	    2
 // DataSender sends async value to MQTT broker every 15 min
-schedule('* */15 * * * *', ()=>{
+schedule('*/15 * * * *', ()=>{
     let body = {
         "name": deviceName,
         "cmd": "temperaturevalue",
