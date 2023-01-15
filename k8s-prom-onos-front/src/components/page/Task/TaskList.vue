@@ -11,11 +11,12 @@
             <el-table :data="tableData">
                 <el-table-column prop="name" label="任务名" align="center"></el-table-column>
                 <el-table-column prop="version" label="版本" align="center"></el-table-column>
-                <el-table-column prop="taskNum" label="副本数" align="center"></el-table-column>
+                <el-table-column prop="taskNum" label="子任务数" align="center"></el-table-column>
                 <el-table-column prop="CPUReq" label="CPU需求（请求/限制）" align="center"></el-table-column>
                 <el-table-column prop="memReq" label="内存需求（请求/限制）" align="center"></el-table-column>
                 <el-table-column prop="diskReq" label="磁盘需求（请求/限制）" align="center"></el-table-column>
                 <el-table-column prop="bandReq" label="带宽限制（上行/下行）" align="center"></el-table-column>
+                <el-table-column prop="virtualNetwork" label="绑定虚拟网络" align="center"></el-table-column>
                 <el-table-column prop="ratio" label="云边负载比" align="center"></el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
@@ -78,7 +79,7 @@ export default {
             let podlist = await (await getClusterPods()).data.items;
             //console.log(podlist)
             for (var i = 0; i < tasks.length; i++) {
-                var task = { name: "-", version: "-", creationTimestamp: "-", taskNum: "-", CPUReq: "-", memReq: "-", diskReq: "-", bandReq: "-", ratio: "-", pods:[] };
+                var task = { name: "-", version: "-", creationTimestamp: "-", taskNum: "-", CPUReq: "-", memReq: "-", diskReq: "-", bandReq: "-", virtualNetwork: "-", ratio: "-", pods:[] };
                 task.name = tasks[i].metadata.name;
                 task.version = tasks[i].spec.template.spec.containers[0].image;
                 task.creationTimestamp = tasks[i].metadata.creationTimestamp;
@@ -86,13 +87,20 @@ export default {
                 //console.log(tasks[i]);
                 var resources = tasks[i].spec.template.spec.containers[0].resources;
 
+                var regnum = /^[0-9]+$/;
                 if ("requests" in resources) {
-                    if ("cpu" in resources.requests) task.CPUReq = resources.requests.cpu;
+                    if ("cpu" in resources.requests){ 
+                        if(regnum.test(resources.requests.cpu)) task.CPUReq = resources.requests.cpu + "000m";
+                        else task.CPUReq = resources.requests.cpu;
+                    }
                     if ("memory" in resources.requests) task.memReq = resources.requests.memory;
                     if ("ephemeral-storage" in resources.requests) task.diskReq = resources.requests['ephemeral-storage'];
                 }
                 if ("limits" in resources) {
-                    if ("cpu" in resources.limits) task.CPUReq  += "/" + resources.limits.cpu;
+                    if ("cpu" in resources.limits){
+                        if(regnum.test(resources.limits.cpu)) task.CPUReq += "/" + resources.limits.cpu + "000m";
+                        else task.CPUReq  += "/" + resources.limits.cpu;
+                    }
                     if ("memory" in resources.limits) task.memReq  += "/" + resources.limits.memory;
                     if ("ephemeral-storage" in resources.limits) task.diskReq  += "/" + resources.limits['ephemeral-storage'];
                 }
@@ -104,6 +112,7 @@ export default {
 
                 }
 
+                
 
                 // var labelSelectorobj = tasks[i].spec.selector.matchLabels;
                 // var labelSelector = Object.keys(labelSelectorobj)[0] + "=" + Object.values(labelSelectorobj)[0];
