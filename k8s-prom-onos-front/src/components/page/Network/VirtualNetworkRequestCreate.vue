@@ -161,18 +161,18 @@ export default {
           name: "云端节点",
           ip: "172.1.113.58",
         },
-        {
-          name: "本机测试节点1",
-          ip: "10.0.0.1",
-        },
-        {
-          name: "本机测试节点2",
-          ip: "10.0.0.2",
-        },
-        {
-          name: "本机测试节点3",
-          ip: "10.0.0.3",
-        },
+        // {
+        //   name: "本机测试节点1",
+        //   ip: "10.0.0.1",
+        // },
+        // {
+        //   name: "本机测试节点2",
+        //   ip: "10.0.0.2",
+        // },
+        // {
+        //   name: "本机测试节点3",
+        //   ip: "10.0.0.3",
+        // },
       ],
     };
   },
@@ -185,6 +185,7 @@ export default {
       // 先校验表单提交的数据是否符合规范
       this.$refs.vnrFormRef.validate((valid) => {
         if (valid) {
+          this.form.bandwidth = this.form.bandwidth/100;
           submitVNR(this.form).then((res) => {
             if (res.data.status == "success") {
               alert("虚拟网络请求提交成功！");

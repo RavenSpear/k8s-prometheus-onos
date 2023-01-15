@@ -66,12 +66,13 @@
             <div slot="header" class="clearfix">
               <span>虚拟网络拓扑</span>
             </div>
-            <network
+            <div id="vNetwork" class="network"></div>
+            <!-- <network
               class="network"
               ref="virtualNetwork"
               :nodes="nodes"
               :edges="edges"
-            ></network>
+            ></network> -->
           </el-card>
         </el-col>
         <el-col :span="1">
@@ -82,12 +83,13 @@
             <div slot="header" class="clearfix">
               <span>物理网络拓扑</span>
             </div>
-            <network
+            <div id="pNetwork" class="network"></div>
+            <!-- <network
               class="network"
               ref="physicalNetwork"
               :nodes="xnodes"
               :edges="xedges"
-            ></network>
+            ></network> -->
           </el-card>
         </el-col>
       </el-row>
@@ -97,6 +99,8 @@
 
 <script>
 import { getVirtualNetworkById } from "../../../api";
+require("vis-network/dist/dist/vis-network.min.css");
+const vis = require("vis-network/dist/vis-network.min");
 export default {
   data() {
     return {
@@ -105,10 +109,7 @@ export default {
       linkMappingTable: [],
       isVisible: true,
       a: [],
-      nodes: [],
-      edges: [],
-      xnodes: [],
-      xedges: [],
+      multiple: 100
     };
   },
   created() {
@@ -117,10 +118,10 @@ export default {
   methods: {
     getData() {
       let vnetId = this.$route.query.vnetId;
+
       getVirtualNetworkById(vnetId).then((res) => {
         let details = res.data;
-        console.log(details);
-        // 更新虚拟设备表
+        // 更新虚拟设备映射表
         details.virtualDevices.forEach((item) => {
           this.nodeMappingTable.push({
             vDeviceId: item.deviceId,
@@ -128,13 +129,13 @@ export default {
           });
         });
 
-        //更新虚拟链路表;
+        //更新虚拟链路映射表;
         details.virtualLinks.forEach((item) => {
           item.pathList.forEach((item2) => {
             this.linkMappingTable.push({
               vlink: item.src.device + " => " + item.dst.device,
-              vlinkBandwidthProperty: item.bandwidth + " M",
-              allocatedBandwidth: item2.allocatedBandwidth + " M",
+              vlinkBandwidthProperty: item.bandwidth*this.multiple + " M",
+              allocatedBandwidth: item2.allocatedBandwidth*this.multiple + " M",
               path: item2.path.join(" => "),
             });
           });
@@ -144,7 +145,7 @@ export default {
         this.mergeTableCell(this.linkMappingTable);
 
         // 显示映射拓扑图
-        this.load_topo(details);
+        this.load_Topo(details);
       });
     },
     changeStatus() {
@@ -191,49 +192,101 @@ export default {
         };
       }
     },
-    load_topo(data) {
+    // 加载虚拟网络
+    load_Topo(data) {
+
+      // 网络属性配置
+      var options = {
+        groups: {
+          default:{
+            color: {
+              background: "grey",
+            },
+          },
+          group0: {
+            color: {
+              background: "yellow",
+            },
+          },
+          group1: {
+            color: {
+              background: "green",
+            },
+          },
+        },
+      };
+
+      // 节点groupMap映射
+      let groupIdMap = {};
+      let groupIndex = 0;
+
+
       // 加载虚拟网络
       let map = {};
       let node_number = 0;
+      let nodes = [];
+      let edges = [];
+
       data.virtualDevices.forEach((item) => {
         map[item.deviceId] = node_number;
-        this.nodes.push({
+        groupIdMap[item.deviceId] = groupIndex;
+        groupIdMap[item.physicalDeviceId] = groupIndex;
+    
+        nodes.push({
           id: node_number,
           label: item.deviceId,
           shape: "circle",
-          widthConstraint: 60
+          widthConstraint: 60,
+          group: "group"+groupIndex,
         });
         node_number++;
+        groupIndex++;
       });
+      console.log(groupIdMap);
 
       data.virtualLinks.forEach((item) => {
         let a = map[item.src.device];
         let b = map[item.dst.device];
         if (a < b) {
           // 去重
-          this.edges.push({ from: a, to: b, label: item.bandwidth + "M" });
+          edges.push({ from: a, to: b, label: item.bandwidth*this.multiple + "M" });
         }
       });
 
-      // 加载物理网络
+      var vdata = {
+        nodes: nodes,
+        edges: edges,
+      };
+      var container = document.getElementById("vNetwork");
+      this.vNetwork = new vis.Network(container, vdata, options);
+
+
+      // 加载物理映射网络
       let xnodeMap = {};
-      
       let xnode_number = 0;
-
+      let xnodes = [];
+      let xedges = [];
       let xlinkMap = {};
-      data.virtualLinks.forEach((item) => {
 
+      data.virtualLinks.forEach((item) => {
         item.pathList.forEach((item2) => {
           let path = item2.path;
           // 添加节点
           for (var i = 0; i < path.length; i++) {
             if (!(path[i] in xnodeMap)) {
-                xnodeMap[path[i]] = xnode_number;
-              this.xnodes.push({
+              xnodeMap[path[i]] = xnode_number;
+              let groupId;
+              if(groupIdMap[path[i]] != undefined){
+                groupId = "group"+groupIdMap[path[i]];
+              }else{
+                groupId = "default";
+              }
+              xnodes.push({
                 id: xnode_number,
                 label: path[i],
                 shape: "circle",
-                widthConstraint: 60
+                widthConstraint: 60,
+                group: groupId
               });
               xnode_number++;
             }
@@ -248,7 +301,7 @@ export default {
               let key = a + "," + b;
               if (key in xlinkMap) {
                 xlinkMap[key] += item2.allocatedBandwidth;
-              }else{
+              } else {
                 xlinkMap[key] = item2.allocatedBandwidth;
               }
             }
@@ -256,13 +309,19 @@ export default {
         });
       });
 
-
-      for(var v in xlinkMap){
+      for (var v in xlinkMap) {
         let arr = v.split(",");
         let a = arr[0];
         let b = arr[1];
-        this.xedges.push({ from: a, to: b, label: xlinkMap[v] + "M" });
+        xedges.push({ from: a, to: b, label: xlinkMap[v]*this.multiple + "M" });
       }
+      var xdata = {
+        nodes: xnodes,
+        edges: xedges,
+      };
+      var xcontainer = document.getElementById("pNetwork");
+      this.pNetwork = new vis.Network(xcontainer, xdata, options);
+
 
     },
   },

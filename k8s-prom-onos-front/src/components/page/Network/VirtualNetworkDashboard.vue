@@ -2,31 +2,30 @@
   <div>
     <el-row :gutter="20" class="mgb20">
       <el-col :span="12">
-          <el-card>
-            <div slot="header" class="clearfix">
-              <span class="title">物理网络拓扑</span>
-            </div>
-            <div id="pNetwork" class="topo"></div>
-          </el-card>
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span class="title">物理网络拓扑</span>
+          </div>
+          <div id="pNetwork" class="topo"></div>
+        </el-card>
       </el-col>
 
       <el-col :span="12">
-        
-          <el-card>
-            <div slot="header" class="clearfix">
-              <span class="title">网络资源消耗情况</span>
-            </div>
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span class="title">网络资源消耗情况</span>
+          </div>
 
-            <div id="pStatistic">
-              <iframe
-                v-if="load"
-                v-bind:src="url"
-                frameborder="0"
-                width="100%"
-                height="700px"
-              ></iframe>
-            </div>
-          </el-card>
+          <div id="pStatistic">
+            <iframe
+              v-if="load"
+              v-bind:src="url"
+              frameborder="0"
+              width="100%"
+              height="700px"
+            ></iframe>
+          </div>
+        </el-card>
       </el-col>
     </el-row>
   </div>
@@ -60,7 +59,7 @@ export default {
   created() {
     this.loadPhysicalNetwork();
     this.loadVirtualNetwork();
-    this.loadResourceInfo();
+    // this.loadResourceInfo();
     this.makeURL();
   },
   methods: {
@@ -74,6 +73,11 @@ export default {
       var linksData = await (await getNetworkTopoLinks()).data.links;
       var hostsData = await (await getHosts()).data.hosts;
 
+      var linkResources = await (
+        await getAllLinkResources()
+      ).data.linkResources;
+      console.log(linkResources);
+
       this.devicesNum = devicesData.length;
       this.linksNum = linksData.length / 2;
       this.hostsNum = hostsData.length;
@@ -84,7 +88,7 @@ export default {
       let devicesIdMap = {}; // deviceId与其node id的map
       // let linksMap = {}; // link与其ID的map
       //let clusterIdMap = {};
-      let clusterIndex = 1;
+      //let clusterIndex = 1;
 
       let nodeIndex = 1;
       devicesData.forEach((device) => {
@@ -99,11 +103,31 @@ export default {
         };
         nodes.push(node);
       });
+      console.log(nodeIndex);
+      var maxBwMatrix = new Array();
+      for (var i = 0; i < nodeIndex - 1; i++) {
+        maxBwMatrix[i] = new Array();
+        for (var j = 0; j < nodeIndex - 1; j++) {
+          maxBwMatrix[i][j] = 0;
+        }
+      }
+
+      linkResources.forEach((linkResource) => {
+        var a = devicesIdMap[linkResource.src];
+        var b = devicesIdMap[linkResource.dst];
+        maxBwMatrix[a - 1][b - 1] = linkResource.sumBandwidth * 100;
+        console.log(a + "->" + b + ":" + maxBwMatrix[a - 1][b - 1]);
+      });
+
+      // 构建二维数组，记录每个链路的
 
       linksData.forEach((link) => {
+        var srcIndex = devicesIdMap[link.src.device];
+        var dstIndex = devicesIdMap[link.dst.device];
         let edge = {
-          from: devicesIdMap[link.src.device],
-          to: devicesIdMap[link.dst.device],
+          from: srcIndex,
+          to: dstIndex,
+          label: maxBwMatrix[srcIndex - 1][dstIndex - 1] + "M",
         };
         if (edge.from < edge.to) {
           edges.push(edge);
@@ -113,9 +137,18 @@ export default {
       hostsData.forEach((host) => {
         let deviceAttached = host.locations[0].elementId;
         let ipAddress = host.ipAddresses[0];
+        let label = "节点";
+        if (ipAddress == "172.1.113.58") {
+          label = "云节点";
+        } else if (ipAddress == "223.26.35.1") {
+          label = "边缘节点2";
+        } else {
+          label = "边缘节点1";
+        }
         let node = {
           id: nodeIndex,
-          label: "节点" + clusterIndex++,
+          // label: "节点" + clusterIndex++,
+          label: label,
           shape: "image",
           image: require("../../../assets/img/host.png"),
           title: "ip: " + ipAddress,
@@ -125,6 +158,7 @@ export default {
           to: nodeIndex,
           dashes: true,
         };
+
         nodes.push(node);
         edges.push(edge);
 
@@ -147,6 +181,16 @@ export default {
           length: 250,
           hoverWidth: 4,
           color: "orange",
+          font: {
+            size: 25,
+            bold: {
+              color: "#343434",
+              size: 30,
+              face: "arial",
+              vadjust: 0,
+              mod: "bold",
+            },
+          },
         },
       };
       var data = {
@@ -163,21 +207,21 @@ export default {
       this.requestNum = vnrs.length;
       this.vnetNum = vnets.length;
     },
-    async loadResourceInfo() {
-      var linkResources = await (
-        await getAllLinkResources()
-      ).data.linkResources;
-      let sum = 0;
-      let allocated = 0;
-      linkResources.forEach((linkResource) => {
-        sum += linkResource.sumBandwidth;
-        allocated += linkResource.allocatedBandwidth;
-      });
-      // this.options1.datasets.data.push(allocated);
-      // this.options1.datasets.data.push(sum-allocated);
-      console.log(sum);
-      console.log(allocated);
-    },
+    // async loadResourceInfo() {
+    //   var linkResources = await (
+    //     await getAllLinkResources()
+    //   ).data.linkResources;
+    //   let sum = 0;
+    //   let allocated = 0;
+    //   linkResources.forEach((linkResource) => {
+    //     sum += linkResource.sumBandwidth;
+    //     allocated += linkResource.allocatedBandwidth;
+    //   });
+    //   // this.options1.datasets.data.push(allocated);
+    //   // this.options1.datasets.data.push(sum-allocated);
+    //   // console.log(sum);
+    //   // console.log(allocated);
+    // },
 
     toVNRPage() {
       this.$router.push({

@@ -99,6 +99,7 @@ import { getAllVNRs } from "../../../api";
 export default {
   data() {
     return {
+      multiple: 100,
       query: {
         seqNo: "",
         status: "",
@@ -116,7 +117,7 @@ export default {
           this.tableData.push({
             id: item.vnrId,
             end2end: item.cluster1IP + " <=> " + item.cluster2IP,
-            bandwidth: item.bandwidth + " Mbps",
+            bandwidth: item.bandwidth*this.multiple + " Mbps",
             latency: item.latency + " ms",
             status: item.status,
             createTime: this.formatDate(item.createTime),
