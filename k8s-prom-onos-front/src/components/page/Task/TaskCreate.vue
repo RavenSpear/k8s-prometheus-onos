@@ -19,7 +19,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="9">
-                            <el-form-item label="任务副本数" label-width="200px">
+                            <el-form-item label="子任务数" label-width="200px">
 
                                 <el-input v-model.number="task.spec.replicas" placeholder="1" type="number"></el-input>
 
