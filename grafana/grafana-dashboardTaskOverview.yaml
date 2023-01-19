@@ -102,10 +102,6 @@ data:
                   {
                     "color": "#ffffff",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -165,14 +161,6 @@ data:
                   {
                     "color": "#ffffff",
                     "value": null
-                  },
-                  {
-                    "color": "orange",
-                    "value": 70
-                  },
-                  {
-                    "color": "red",
-                    "value": 85
                   }
                 ]
               }
@@ -211,7 +199,7 @@ data:
               "refId": "A"
             }
           ],
-          "title": "任务副本数",
+          "title": "子任务数",
           "type": "stat"
         },
         {
@@ -231,10 +219,6 @@ data:
                   {
                     "color": "#ffffff",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               }
@@ -332,10 +316,6 @@ data:
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -455,10 +435,6 @@ data:
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -551,10 +527,6 @@ data:
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
@@ -672,10 +644,6 @@ data:
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
                   }
                 ]
               },
