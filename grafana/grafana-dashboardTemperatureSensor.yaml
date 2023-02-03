@@ -140,7 +140,7 @@ data:
               "source": "url",
               "type": "uql",
               "uql": "parse-json\n| project \"readings\"\n| project \"value\"",
-              "url": "http://223.3.94.112:30080/${nodeName}/data/api/v2/reading/device/name/temperature-sensor?limit=1",
+              "url": "http://nginx-service.iot.svc:8888/${nodeName}/data/api/v2/reading/device/name/temperature-sensor?limit=1",
               "url_options": {
                 "data": "",
                 "method": "GET"
@@ -251,7 +251,7 @@ data:
               "source": "url",
               "type": "uql",
               "uql": "parse-json\n| project \"readings\"\n| project \"timestamp\"=unixtime_nanoseconds_todatetime(\"origin\"),\"温度\"=\"value\"",
-              "url": "http://223.3.94.112:30080/${nodeName}/data/api/v2/reading/device/name/temperature-sensor?limit=100",
+              "url": "http://nginx-service.iot.svc:8888/${nodeName}/data/api/v2/reading/device/name/temperature-sensor?limit=100",
               "url_options": {
                 "data": "",
                 "method": "GET"

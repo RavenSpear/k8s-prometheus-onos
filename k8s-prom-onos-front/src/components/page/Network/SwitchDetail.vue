@@ -23,7 +23,7 @@ export default {
   methods: {
     makeURL() {
         let query = this.$route.query;
-        this.url = "http://223.3.94.112:3000/d/8Eea7KKVz/jiao-huan-ji-xiang-qing-ye?orgId=1&theme=light&kiosk&var-deviceId="+query.switchName;
+        this.url = "http://1.117.170.89:3000/d/8Eea7KKVz/jiao-huan-ji-xiang-qing-ye?orgId=1&theme=light&kiosk&var-deviceId="+query.switchName;
     },
   },
 };
