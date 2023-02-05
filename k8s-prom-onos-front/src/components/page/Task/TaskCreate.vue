@@ -86,6 +86,14 @@
                         </el-col>
                     </el-form-item>
 
+                    <el-form-item label="绑定虚拟网络" label-width="200px">
+                        <el-col :span="9">
+                            <el-select v-model="task.spec.template.metadata.annotations.vnrid" placeholder="请选择虚拟网络" clearable>
+                                <el-option v-for="VNR in VNRs" :label="VNR.vnetName" :value="VNR.vnrId" :key="VNR.vnrId"></el-option>
+                            </el-select>
+                        </el-col>
+                    </el-form-item>
+
                     <el-form-item label-width="150px">
                         <el-button type="primary" @click="submit">创建</el-button>
                         <el-button @click="cancel">取消</el-button>
@@ -97,24 +105,36 @@
 </template>
 
 <script>
-import { createTask } from "../../../api";
+import { createTask,getVirtualNetworks } from "../../../api";
 export default {
     data() {
         return {
-            task: {}
+            task: {},
+            VNRs:[]
         };
     },
     created() {
         this.task = this.readFile()
+        this.getVNR()
+        
+        //console.log(this.VNRs)
     },
 
     methods: {
+        async getVNR(){
+            let res = await (await getVirtualNetworks()).data.VNets
+            this.VNRs = res
+            for(var i = 0; i < this.VNRs.length; i++) {
+                this.VNRs[i].vnrId = this.VNRs[i].vnrId + "";
+            }
+        },
         readFile() {
             var task = require('./task.json');
             //console.log(task);
             return task;
         },
         submit() {
+            console.log(this.VNRs)
             if (this.task.metadata.name == ""||this.task.metadata.name == null) {
                 this.$message({
                     showClose: true,
@@ -128,6 +148,11 @@ export default {
                     message: "请指定镜像及版本",
                 });
             } else {
+                for(var i = 0; i < this.VNRs.length; i++) {
+                    if(this.task.spec.template.metadata.annotations['vnrid'] == this.VNRs[i].vnrId)
+                    this.task.spec.template.metadata.annotations['vnrname'] = this.VNRs[i].vnetName
+                }
+                //this.task.spec.template.metadata.annotations['vnrname'] = null;
                 createTask(this.task).then((res) => {
                     if (res.status==201) {
                         alert("任务创建成功");
@@ -150,6 +175,8 @@ export default {
             this.task.spec.template.spec.containers[0].resources.limits['ephemeral-storage'] = null;
             this.task.spec.template.metadata.annotations['kubernetes.io/egress-bandwidth'] = null;
             this.task.spec.template.metadata.annotations['kubernetes.io/ingress-bandwidth'] = null;
+            this.task.spec.template.metadata.annotations['vnrid'] = null;
+            this.task.spec.template.metadata.annotations['vnrname'] = null;
         }
     },
 };

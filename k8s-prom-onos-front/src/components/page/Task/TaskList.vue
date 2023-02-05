@@ -109,7 +109,7 @@ export default {
                     //console.log(annotations)
                     if ("kubernetes.io/egress-bandwidth" in annotations) task.bandReq = annotations['kubernetes.io/egress-bandwidth'];
                     if ("kubernetes.io/ingress-bandwidth" in annotations) task.bandReq += "/" + annotations['kubernetes.io/ingress-bandwidth'];
-
+                    if ("vnrid" in annotations) task.virtualNetwork = annotations['vnrname'];
                 }
 
                 
