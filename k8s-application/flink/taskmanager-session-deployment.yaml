@@ -27,6 +27,15 @@ spec:
       containers:
       - name: taskmanager
         image: apache/flink:latest
+        resources:
+          requests:
+            memory: 50Mi
+            cpu: 200m
+            ephemeral-storage: 50Mi
+          limits:
+            memory: 500Mi
+            cpu: 1000m
+            ephemeral-storage: 1Gi
         args: ["taskmanager"]
         ports:
         - containerPort: 6122
