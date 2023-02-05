@@ -44,7 +44,7 @@
         <el-table-column prop="status" label="运行状态" align="center">
           <template slot-scope="scope">
             <el-tag v-if="scope.row.status === 1" type="success">运行中</el-tag>
-            <el-tag v-else type="danger">停止</el-tag>
+            <el-tag v-else type="danger">未运行</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -75,6 +75,10 @@
               >停止</el-button
             >
 
+            <el-button type="text" icon="el-icon-delete" @click="del(scope.row)"
+              >删除</el-button
+            >
+
             <!-- <el-button
               type="text"
               icon="el-icon-plus"
@@ -94,6 +98,7 @@ import {
   getVirtualNetworks,
   startVirtualNetworkById,
   stopVirtualNetworkById,
+  deleteVirtualNetwork,
 } from "../../../api";
 export default {
   data() {
@@ -108,8 +113,10 @@ export default {
   methods: {
     getData() {
       getVirtualNetworks().then((res) => {
+        let index = 0;
         res.data.VNets.forEach((item) => {
           this.tableData.push({
+            index: index++,
             vnetId: item.vnetId,
             vnrId: item.vnrId,
             vnetName: item.vnetName,
@@ -156,9 +163,7 @@ export default {
         date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
       return Y + M + D + h + m + s;
     },
-    handleSearch() {
-     
-    },
+    handleSearch() {},
     start(row) {
       startVirtualNetworkById(row.vnetId);
       row.status = 1;
@@ -166,6 +171,13 @@ export default {
     stop(row) {
       stopVirtualNetworkById(row.vnetId);
       row.status = 0;
+    },
+    del(row) {
+      let res = confirm("确认删除？");
+      if (res == true) {
+        this.tableData.splice(row.index, 1);
+        deleteVirtualNetwork(row.vnetId);
+      }
     },
   },
 };

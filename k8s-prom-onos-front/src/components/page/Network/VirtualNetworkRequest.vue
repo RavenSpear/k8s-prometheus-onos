@@ -81,7 +81,8 @@
             <el-tag v-else-if="scope.row.status === 1" type="success"
               >已嵌入</el-tag
             >
-            <el-tag v-else type="danger">拒绝</el-tag>
+            <el-tag v-else-if="scope.row.status === 2" type="danger">拒绝</el-tag>
+            <el-tag v-else type="warning">已失效</el-tag>
           </template>
         </el-table-column>
         <el-table-column
