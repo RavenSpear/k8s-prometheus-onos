@@ -19,7 +19,9 @@
                 },
                 "annotations": {
                     "kubernetes.io/ingress-bandwidth": "1M",
-                    "kubernetes.io/egress-bandwidth": "1M"
+                    "kubernetes.io/egress-bandwidth": "1M",
+                    "vnrid": "",
+                    "vnrname": ""
                 }
             },
             "spec": {

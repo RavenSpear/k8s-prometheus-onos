@@ -647,7 +647,7 @@ data:
                 "uid": "prometheus"
               },
               "editorMode": "code",
-              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", pod=~\"$pod\", namespace=\"default\"}[1m])) by (pod) / on() group_left() sum(rate(node_cpu_seconds_total[1m]))",
+              "expr": "sum(rate(container_cpu_usage_seconds_total{container!=\"POD\", pod=~\"$pod\", namespace=\"default\"}[1m])) by (pod) / on() group_left() sum(rate(node_cpu_seconds_total[1m]))*100",
               "range": true,
               "refId": "A"
             }

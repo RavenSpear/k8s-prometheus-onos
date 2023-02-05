@@ -1,15 +1,18 @@
-function getRandomFloat(min, max) {
-    return Math.random() * (max - min) + min;
+var count = 0
+function dataLoop(){
+    let data = [14.8,12.3,13.6,11.7,12.8,12.0,13.6,14.7,12.3,13.6,11.7,13.2];
+    return data[count++ % 12];
 }
 
 const deviceName = "temperature-sensor";
-
-// DataSender sends async value to MQTT broker every 15 seconds
-schedule('*/15 * * * * *', ()=>{
+// 23:00	02:00	05:00	08:00	11:00	14:00	17:00	20:00
+// 14.8	    12.3    13.6	11.7	8.6	    6.8	    3.1	    2
+// DataSender sends async value to MQTT broker every 15 min
+schedule('*/15 * * * *', ()=>{
     let body = {
         "name": deviceName,
         "cmd": "temperaturevalue",
-        "temperaturevalue": getRandomFloat(25,29).toFixed(1)
+        "temperaturevalue": dataLoop()
     };
     publish( 'DataTopic', JSON.stringify(body));
 });
