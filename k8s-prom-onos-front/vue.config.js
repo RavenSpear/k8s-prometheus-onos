@@ -20,7 +20,7 @@ module.exports = {
             //     target: 'http://127.0.0.1:8181/onos/nvh',
             //     changeOrigin: true
             // },
-            // 'statistic':{
+            // '/statistic':{
             //     target: 'http://127.0.0.1:8181/onos/nvh',
             //     changeOrigin: true
             // },

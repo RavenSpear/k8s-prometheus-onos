@@ -95,11 +95,17 @@ export const getAllLinkResources = () => {
 //================ Virtual Network Request API =================
 
 export const submitVNR = formData => {
+    let copy_formData = {};
+    copy_formData.bandwidth = formData.bandwidth / 100;
+    copy_formData.vnetName = formData.vnetName;
+    copy_formData.latency = formData.latency;
+    copy_formData.cluster1IP = formData.cluster1IP;
+    copy_formData.cluster2IP = formData.cluster2IP;
     return request({
         url: "/vnr",
         method: "post",
         headers: { 'Content-Type': 'application/json' },
-        data: formData
+        data: copy_formData
     })
 }
 
@@ -150,11 +156,18 @@ export const stopVirtualNetworkById = vnetId => {
 }
 
 
+export const deleteVirtualNetwork = vnetId => {
+    return request({
+        url: '/vnet/' + vnetId,
+        method: 'delete'
+    });
+}
+
 export const registerService = formData => {
     return request({
         url: '/vnetTraffic',
         method: 'post',
-        headers: {'Content-Type':'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         data: formData
     });
 }

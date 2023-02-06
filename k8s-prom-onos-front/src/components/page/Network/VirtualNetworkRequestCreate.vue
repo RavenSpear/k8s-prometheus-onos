@@ -185,7 +185,6 @@ export default {
       // 先校验表单提交的数据是否符合规范
       this.$refs.vnrFormRef.validate((valid) => {
         if (valid) {
-          this.form.bandwidth = this.form.bandwidth/100;
           submitVNR(this.form).then((res) => {
             if (res.data.status == "success") {
               alert("虚拟网络请求提交成功！");
