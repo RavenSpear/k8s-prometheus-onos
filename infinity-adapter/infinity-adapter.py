@@ -127,5 +127,77 @@ def cpu():
         })
     return result
 
-# if __name__ == '__main__':
-#   app.run(host = '0.0.0.0')
+@app.route("/camera-streaming", methods=["GET"])
+def camera_streaming():
+    result = {"values":[]}
+    interval = 60
+    end = calendar.timegm(time.gmtime())
+    end = end - end % interval
+    time_range = 6 * 60 * 60
+    start = end - time_range
+    for i in range(start,end,interval):
+        result["values"].append({
+            "timestamp":i,
+            "value" : 10.5
+        })
+    return result
+
+@app.route("/flink-jobmanager", methods=["GET"])
+def flink_jobmanager():
+    result = {"values":[]}
+    interval = 60
+    end = calendar.timegm(time.gmtime())
+    end = end - end % interval
+    time_range = 6 * 60 * 60
+    start = end - time_range
+    for i in range(start,end,interval):
+        result["values"].append({
+            "timestamp":i,
+            "value" : 12.7
+        })
+    return result
+
+@app.route("/flink-taskmanager", methods=["GET"])
+def flink_taskmanager():
+    result = {"values":[]}
+    interval = 60
+    end = calendar.timegm(time.gmtime())
+    end = end - end % interval
+    time_range = 6 * 60 * 60
+    start = end - time_range
+    for i in range(start,end,interval):
+        result["values"].append({
+            "timestamp":i,
+            "value" : 15.2
+        })
+    return result
+
+@app.route("/video-proxy", methods=["GET"])
+def video_proxy():
+    result = {"values":[]}
+    interval = 60
+    end = calendar.timegm(time.gmtime())
+    end = end - end % interval
+    time_range = 6 * 60 * 60
+    start = end - time_range
+    for i in range(start,end,interval):
+        result["values"].append({
+            "timestamp":i,
+            "value" : 6.1
+        })
+    return result    
+
+@app.route("/video-streaming", methods=["GET"])
+def video_streaming():
+    result = {"values":[]}
+    interval = 60
+    end = calendar.timegm(time.gmtime())
+    end = end - end % interval
+    time_range = 6 * 60 * 60
+    start = end - time_range
+    for i in range(start,end,interval):
+        result["values"].append({
+            "timestamp":i,
+            "value" : 7.7
+        })
+    return result  
