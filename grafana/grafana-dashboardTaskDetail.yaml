@@ -327,7 +327,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", pod=~\"$pod\",namespace=\"default\"})/2 by (pod)",
+              "expr": "(sum(container_memory_working_set_bytes{container!=\"POD\", pod=~\"$pod\",namespace=\"default\"}) by (pod))/2",
               "refId": "A"
             }
           ],
