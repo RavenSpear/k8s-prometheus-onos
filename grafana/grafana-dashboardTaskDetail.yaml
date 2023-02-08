@@ -769,7 +769,7 @@ data:
               "root_selector": "",
               "source": "url",
               "type": "uql",
-              "uql": "parse-json\r\n| project \"values\"\r\n| project \"timestamp\"=unixtime_seconds_todatetime(\"timestamp\"),\"预测\"=\"value\"",
+              "uql": "parse-json\r\n| project \"values\"\r\n| project \"timestamp\"=unixtime_seconds_todatetime(\"timestamp\"),\"$deployment\"=\"value\"",
               "url": "http://223.3.94.112:5000/$deployment",
               "url_options": {
                 "data": "",
@@ -777,7 +777,7 @@ data:
               }
             }
           ],
-          "title": "管理进程内存用量",
+          "title": "微容器内存用量",
           "transformations": [
             {
               "id": "renameByRegex",
