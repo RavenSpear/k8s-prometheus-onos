@@ -4,7 +4,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/virtualNetworkDashboard' }"
-          >网络资源虚拟化控制</el-breadcrumb-item
+          >感知数据传输优化</el-breadcrumb-item
         >
         <el-breadcrumb-item>虚拟网络请求</el-breadcrumb-item>
       </el-breadcrumb>

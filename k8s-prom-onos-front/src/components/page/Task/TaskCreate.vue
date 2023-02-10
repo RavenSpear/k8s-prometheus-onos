@@ -2,8 +2,8 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>边云协同任务调度</el-breadcrumb-item>
-                <el-breadcrumb-item>任务部署</el-breadcrumb-item>
+                <el-breadcrumb-item>边云智能协同计算</el-breadcrumb-item>
+                <el-breadcrumb-item>任务协同部署</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
 
