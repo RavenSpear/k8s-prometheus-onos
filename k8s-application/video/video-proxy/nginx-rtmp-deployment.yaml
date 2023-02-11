@@ -13,8 +13,6 @@ spec:
       labels:
         app: nginx-rtmp
       annotations:
-        # kubernetes.io/ingress-bandwidth: 600M
-        # kubernetes.io/egress-bandwidth: 600M
         vnrid: 6
         vnrname: 视频流网络切片1
     spec:
