@@ -13,8 +13,10 @@ spec:
       labels:
         app: ffmpeg
       annotations:
-        kubernetes.io/ingress-bandwidth: 3M
-        kubernetes.io/egress-bandwidth: 3M
+        kubernetes.io/ingress-bandwidth: 600M
+        kubernetes.io/egress-bandwidth: 600M
+        vnrid: 1
+        vnrname: 视频流网络切片2
     spec:
       affinity:
         podAntiAffinity:
