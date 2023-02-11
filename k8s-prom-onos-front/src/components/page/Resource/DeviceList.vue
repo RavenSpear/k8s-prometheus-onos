@@ -2,7 +2,7 @@
     <div>
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item>传存算资源监视器</el-breadcrumb-item>
+                <el-breadcrumb-item>存传算资源感知复用</el-breadcrumb-item>
                 <el-breadcrumb-item>设备感知列表</el-breadcrumb-item>
             </el-breadcrumb>
         </div>

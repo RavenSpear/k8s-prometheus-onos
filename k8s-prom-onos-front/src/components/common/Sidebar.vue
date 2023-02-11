@@ -50,11 +50,11 @@ export default {
         {
           icon: "el-icon-ali-Topology iconfont",
           index: "resource",
-          title: "传存算资源监视器",
+          title: "存传算资源感知复用",
           subs: [
             {
               index: "resourceDashboard",
-              title: "资源感知首页",
+              title: "资源感知概览",
             },
             {
               index: "resourceList",
@@ -69,11 +69,11 @@ export default {
         {
           icon: "el-icon-ali-Topology iconfont",
           index: "virtualNetwork",
-          title: "网络资源虚拟化控制",
+          title: "感知数据传输优化",
           subs: [
             {
               index: "virtualNetworkDashboard",
-              title: "虚拟网络首页",
+              title: "虚拟网络概览",
             },
             {
               index: "virtualNetworkRequest",
@@ -92,19 +92,19 @@ export default {
         {
           icon: "el-icon-ali-Topology iconfont",
           index: "task",
-          title: "边云协同任务调度",
+          title: "边云智能协同计算",
           subs: [
             {
               index: "taskDashboard",
-              title: "任务首页",
+              title: "边云任务概览",
             },
             {
               index: "taskList",
-              title: "任务列表",
+              title: "边云任务列表",
             },
             {
               index: "taskCreate",
-              title: "任务部署",
+              title: "任务协同部署",
             }
           ],
         }

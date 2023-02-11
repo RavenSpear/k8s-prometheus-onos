@@ -4,7 +4,7 @@
       <i v-if="!collapse" class="el-icon-s-fold"></i>
       <i v-else class="el-icon-s-unfold"></i>
     </div>
-    <div class="logo">物联网资源虚拟化控制复用系统</div>
+    <div class="logo">应用适配的异质物联网资源虚拟化控制复用系统</div>
     <div class="header-right">
       <!-- 暂时先不写用户登录的按钮 -->
     </div>
@@ -54,7 +54,7 @@ export default {
 
 .header .logo {
   float: left;
-  width: 600px;
+  width: 700px;
   line-height: 100px;
 }
 

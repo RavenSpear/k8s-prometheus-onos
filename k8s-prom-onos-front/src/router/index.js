@@ -43,11 +43,11 @@ const routes = [
         meta: { title: '系统首页' }
       },
 
-      //传存算资源监视器资源
+      //存传算资源感知复用
       {
         path: "/resourceDashboard",
         component: ResourceDashboard,
-        meta: { title: '资源感知首页' }
+        meta: { title: '资源感知概览' }
       },
       {
         path: "/deviceList",
@@ -70,21 +70,21 @@ const routes = [
         meta: { title: '节点详情' }
       },
 
-      //边云协同任务调度资源
+      //边云智能协同计算资源
       {
         path: "/taskDashboard",
         component: TaskDashboard,
-        meta: { title: '任务首页' }
+        meta: { title: '边云任务概览' }
       },
       {
         path: "/taskList",
         component: TaskList,
-        meta: { title: '任务列表' }
+        meta: { title: '边云任务列表' }
       },
       {
         path: "/taskCreate",
         component: TaskCreate,
-        meta: { title: '任务部署' }
+        meta: { title: '任务协同部署' }
       },
       {
         path: "/taskDetail",
@@ -92,11 +92,11 @@ const routes = [
         meta: { title: '任务资源详情' }
       },
 
-      //网络资源虚拟化控制资源
+      //感知数据传输优化资源
       {
         path: "/virtualNetworkDashboard",
         component: VirtualNetworkDashboard,
-        meta: { title: '网络资源控制首页' }
+        meta: { title: '网络资源控制概览' }
       },
       {
         path: '/createVirtualNetworkRequest',
