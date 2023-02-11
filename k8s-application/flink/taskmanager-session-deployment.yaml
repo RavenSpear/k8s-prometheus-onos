@@ -16,7 +16,7 @@ spec:
       annotations:
         kubernetes.io/ingress-bandwidth: 200M
         kubernetes.io/egress-bandwidth: 200M
-        vnrid: 5
+        vnrid: "5"
         vnrname: 流处理网络切片1
     spec:
       affinity:
