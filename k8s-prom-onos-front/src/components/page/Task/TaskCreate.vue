@@ -46,7 +46,7 @@
                         </el-col>
                     </el-form-item>
 
-                    <el-form-item label="内存需求（Mi）" label-width="200px">
+                    <el-form-item label="内存需求（MB）" label-width="200px">
                         <el-col :span="9">
                             <el-input v-model="task.spec.template.spec.containers[0].resources.requests.memory"
                                 placeholder="内存请求"></el-input>
@@ -58,7 +58,7 @@
                         </el-col>
                     </el-form-item>
 
-                    <el-form-item label="磁盘需求（Gi）" label-width="200px">
+                    <el-form-item label="磁盘需求（GB）" label-width="200px">
                         <el-col :span="9">
                             <el-input
                                 v-model="task.spec.template.spec.containers[0].resources.requests['ephemeral-storage']"
@@ -72,7 +72,7 @@
                         </el-col>
                     </el-form-item>
 
-                    <el-form-item label="带宽限制（M）" label-width="200px">
+                    <el-form-item label="带宽限制（Mbps）" label-width="200px">
                         <el-col :span="9">
                             <el-input
                                 v-model="task.spec.template.metadata.annotations['kubernetes.io/egress-bandwidth']"
@@ -152,8 +152,17 @@ export default {
                     if(this.task.spec.template.metadata.annotations['vnrid'] == this.VNRs[i].vnrId)
                     this.task.spec.template.metadata.annotations['vnrname'] = this.VNRs[i].vnetName
                 }
+                var newtask =JSON.parse(JSON.stringify(this.task))
+                newtask.spec.template.metadata.annotations["kubernetes.io/ingress-bandwidth"]+="M"
+                newtask.spec.template.metadata.annotations["kubernetes.io/egress-bandwidth"]+="M"
+                newtask.spec.template.spec.containers[0].resources.requests.memory += "Mi"
+                newtask.spec.template.spec.containers[0].resources.limits.memory += "Mi"
+                newtask.spec.template.spec.containers[0].resources.requests.cpu += "m"
+                newtask.spec.template.spec.containers[0].resources.limits.cpu += "m"
+                newtask.spec.template.spec.containers[0].resources.requests["ephemeral-storage"] += "Gi"
+                newtask.spec.template.spec.containers[0].resources.limits["ephemeral-storage"] += "Gi"
                 //this.task.spec.template.metadata.annotations['vnrname'] = null;
-                createTask(this.task).then((res) => {
+                createTask(newtask).then((res) => {
                     if (res.status==201) {
                         alert("任务创建成功");
                         this.$router.push("/TaskList");

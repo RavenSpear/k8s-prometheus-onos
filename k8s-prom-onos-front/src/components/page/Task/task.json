@@ -18,8 +18,8 @@
                     "app": "nginx"
                 },
                 "annotations": {
-                    "kubernetes.io/ingress-bandwidth": "1M",
-                    "kubernetes.io/egress-bandwidth": "1M",
+                    "kubernetes.io/ingress-bandwidth": "1",
+                    "kubernetes.io/egress-bandwidth": "1",
                     "vnrid": "",
                     "vnrname": ""
                 }
@@ -31,14 +31,14 @@
                         "image": "nginx:1.14",
                         "resources": {
                             "requests": {
-                                "memory": "64Mi",
-                                "cpu": "250m",
-                                "ephemeral-storage": "2Gi"
+                                "memory": "64",
+                                "cpu": "250",
+                                "ephemeral-storage": "2"
                             },
                             "limits": {
-                                "memory": "128Mi",
-                                "cpu": "500m",
-                                "ephemeral-storage": "4Gi"
+                                "memory": "128",
+                                "cpu": "500",
+                                "ephemeral-storage": "4"
                             }
                         },
                         "ports": [

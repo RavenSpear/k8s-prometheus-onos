@@ -150,6 +150,13 @@ export default {
                                                 );
                                                 break;
                                         case 1:
+                                                param['switchName'] = cnode.title;
+                                                this.$router.push(
+                                                        {
+                                                                path: '/switchDetail',
+                                                                query: param
+                                                        }
+                                                );
                                                 break;
                                         case 2:
                                                 param['deployment'] = cnode.taskName;

@@ -35,12 +35,12 @@ const routes = [
   {
     path: '/',
     component: Home,
-    meta: { title: '系统首页' },
+    meta: { title: '系统总览' },
     children: [
       {
         path: "/dashboard",
         component: Dashboard,
-        meta: { title: '系统首页' }
+        meta: { title: '系统总览' }
       },
 
       //存传算资源感知复用
