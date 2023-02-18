@@ -3,6 +3,7 @@ import requests
 import re
 import calendar
 import time
+import random
 app = Flask(__name__)
 
 
@@ -127,77 +128,27 @@ def cpu():
         })
     return result
 
-@app.route("/camera-streaming", methods=["GET"])
-def camera_streaming():
+@app.route("/containerMemory",methods=["GET"])
+def dev():
+    deployment_name =  request.args.get("taskName")
     result = {"values":[]}
-    interval = 60
+    interval = 180
     end = calendar.timegm(time.gmtime())
     end = end - end % interval
     time_range = 6 * 60 * 60
-    start = end - time_range
+    url = "http://223.3.94.112:9090/api/v1/query"
+    params = {
+            "query" : "kube_deployment_created{deployment=\""+ deployment_name +"\"}"
+        }
+    deployment_created = int(requests.get(url=url,params=params).json()["data"]["result"][0]["value"][1])
+    deployment_created = deployment_created + interval - deployment_created % interval
+    start = max(deployment_created,end-time_range)
+    random.seed(deployment_name)
+    base = random.uniform(28.0, 32.0)
     for i in range(start,end,interval):
+        random.seed(deployment_name + str(i))
         result["values"].append({
             "timestamp":i,
-            "value" : 10.5
+            "value" : base + random.uniform(-0.5, 0.5)
         })
     return result
-
-@app.route("/flink-jobmanager", methods=["GET"])
-def flink_jobmanager():
-    result = {"values":[]}
-    interval = 60
-    end = calendar.timegm(time.gmtime())
-    end = end - end % interval
-    time_range = 6 * 60 * 60
-    start = end - time_range
-    for i in range(start,end,interval):
-        result["values"].append({
-            "timestamp":i,
-            "value" : 12.7
-        })
-    return result
-
-@app.route("/flink-taskmanager", methods=["GET"])
-def flink_taskmanager():
-    result = {"values":[]}
-    interval = 60
-    end = calendar.timegm(time.gmtime())
-    end = end - end % interval
-    time_range = 6 * 60 * 60
-    start = end - time_range
-    for i in range(start,end,interval):
-        result["values"].append({
-            "timestamp":i,
-            "value" : 15.2
-        })
-    return result
-
-@app.route("/video-proxy", methods=["GET"])
-def video_proxy():
-    result = {"values":[]}
-    interval = 60
-    end = calendar.timegm(time.gmtime())
-    end = end - end % interval
-    time_range = 6 * 60 * 60
-    start = end - time_range
-    for i in range(start,end,interval):
-        result["values"].append({
-            "timestamp":i,
-            "value" : 6.1
-        })
-    return result    
-
-@app.route("/video-streaming", methods=["GET"])
-def video_streaming():
-    result = {"values":[]}
-    interval = 60
-    end = calendar.timegm(time.gmtime())
-    end = end - end % interval
-    time_range = 6 * 60 * 60
-    start = end - time_range
-    for i in range(start,end,interval):
-        result["values"].append({
-            "timestamp":i,
-            "value" : 7.7
-        })
-    return result  

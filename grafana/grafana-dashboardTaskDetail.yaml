@@ -703,6 +703,8 @@ data:
                 }
               },
               "mappings": [],
+              "max": 40,
+              "min": 20,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -770,7 +772,7 @@ data:
               "source": "url",
               "type": "uql",
               "uql": "parse-json\r\n| project \"values\"\r\n| project \"timestamp\"=unixtime_seconds_todatetime(\"timestamp\"),\"$deployment\"=\"value\"",
-              "url": "http://223.3.94.112:5000/$deployment",
+              "url": "http://223.3.94.112:5000/containerMemory?taskName=$deployment",
               "url_options": {
                 "data": "",
                 "method": "GET"
