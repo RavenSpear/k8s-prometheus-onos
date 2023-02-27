@@ -55,7 +55,7 @@ $ docker-compose up -d
 
 
 ```
-$ docker run -d --restart=always --name=mqtt-scripts --net={edgex-network} -v {absolute path to ./mqtt-scripts}:/scripts dersimn/mqtt-scripts --url mqtt://{docker ip of container:edgex-mqtt-broker} --dir /scripts
+$ docker run -d --restart=always --name=mqtt-scripts --net=edgex_edgex-network -v /root/k8s-prometheus-onos/IoT/mqtt-scripts:/scripts dersimn/mqtt-scripts --url mqtt://{docker ip of container:edgex-mqtt-broker} --dir /scripts
 ```
 
 ### 建立edgex-nginx反向代理
@@ -159,8 +159,7 @@ $ curl http://127.0.0.1:30080/{node-name}/command/api/v2/device/all
 ### 关闭虚拟设备
 
 ```
-$ docker stop mqtt-scripts
-$ docker rm mqtt-scripts
+docker stop mqtt-scripts && docker rm mqtt-scripts
 ```
 
 ### 关闭device-mqtt服务
@@ -185,5 +184,10 @@ docker-compose stop device-mqtt
 docker rm edgex-device-mqtt
 ```
 
-
+## 重启
+```
+docker stop mqtt-scripts && docker rm mqtt-scripts
+docker run -d --restart=always --name=mqtt-scripts --net=edgex_edgex-network -v /root/k8s-prometheus-onos/IoT/mqtt-scripts:/scripts dersimn/mqtt-scripts --url mqtt://172.18.0.14 --dir /scripts
+curl http://localhost:59882/api/v2/device/name/pm-sensor/ping
+```
 
