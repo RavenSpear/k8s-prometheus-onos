@@ -45,7 +45,7 @@ export default {
         {
           icon: "el-icon-s-home",
           index: "dashboard",
-          title: "系统首页",
+          title: "系统总览",
         },
         {
           icon: "el-icon-ali-Topology iconfont",
