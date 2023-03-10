@@ -3,6 +3,7 @@ module.exports = {
     devServer: {
         //host:"127.0.0.1",
         //port:"8080",
+        disableHostCheck: true,
         proxy: {
             // "/vnetTraffic": {
             //     target: "http://127.0.0.1:8181/onos/nvh",
