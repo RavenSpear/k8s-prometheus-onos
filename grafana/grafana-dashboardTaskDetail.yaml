@@ -56,7 +56,7 @@ data:
           "type": "datasource",
           "id": "yesoreyeram-infinity-datasource",
           "name": "Infinity",
-          "version": "1.1.0"
+          "version": "1.3.0"
         }
       ],
       "annotations": {
@@ -85,7 +85,7 @@ data:
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
       "id": null,
-      "iteration": 1669689759469,
+      "iteration": 1675775015573,
       "links": [],
       "liveNow": false,
       "panels": [
@@ -304,7 +304,7 @@ data:
             ]
           },
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
             "y": 0
@@ -327,7 +327,7 @@ data:
                 "type": "prometheus",
                 "uid": "prometheus"
               },
-              "expr": "sum(container_memory_working_set_bytes{container!=\"POD\", pod=~\"$pod\",namespace=\"default\"}) by (pod)",
+              "expr": "(sum(container_memory_working_set_bytes{container!=\"POD\", pod=~\"$pod\",namespace=\"default\"}) by (pod))/2",
               "refId": "A"
             }
           ],
@@ -417,10 +417,10 @@ data:
             ]
           },
           "gridPos": {
-            "h": 9,
+            "h": 7,
             "w": 12,
             "x": 12,
-            "y": 8
+            "y": 7
           },
           "id": 2,
           "options": {
@@ -488,7 +488,7 @@ data:
             "overrides": []
           },
           "gridPos": {
-            "h": 13,
+            "h": 16,
             "w": 12,
             "x": 0,
             "y": 12
@@ -623,10 +623,10 @@ data:
             ]
           },
           "gridPos": {
-            "h": 8,
+            "h": 7,
             "w": 12,
             "x": 12,
-            "y": 17
+            "y": 14
           },
           "id": 4,
           "options": {
@@ -653,6 +653,133 @@ data:
             }
           ],
           "title": "当前任务CPU用量",
+          "transformations": [
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": ".*pod=\"([^\"]*)\".*",
+                "renamePattern": "$1"
+              }
+            }
+          ],
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "yesoreyeram-infinity-datasource",
+            "uid": "Infinity"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "max": 40,
+              "min": 20,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "mbytes"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Value"
+                },
+                "properties": [
+                  {
+                    "id": "custom.hideFrom",
+                    "value": {
+                      "legend": false,
+                      "tooltip": false,
+                      "viz": false
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 12,
+            "x": 12,
+            "y": 21
+          },
+          "id": 13,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "targets": [
+            {
+              "columns": [],
+              "datasource": {
+                "type": "yesoreyeram-infinity-datasource",
+                "uid": "Infinity"
+              },
+              "filters": [],
+              "format": "timeseries",
+              "global_query_id": "",
+              "refId": "A",
+              "root_selector": "",
+              "source": "url",
+              "type": "uql",
+              "uql": "parse-json\r\n| project \"values\"\r\n| project \"timestamp\"=unixtime_seconds_todatetime(\"timestamp\"),\"$deployment\"=\"value\"",
+              "url": "http://223.3.94.112:5000/containerMemory?taskName=$deployment",
+              "url_options": {
+                "data": "",
+                "method": "GET"
+              }
+            }
+          ],
+          "title": "微容器内存用量",
           "transformations": [
             {
               "id": "renameByRegex",

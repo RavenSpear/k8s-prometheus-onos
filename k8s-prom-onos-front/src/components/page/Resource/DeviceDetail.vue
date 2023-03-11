@@ -19,11 +19,11 @@ export default {
         makeURL() {
             let containers = this.$route.query;
             if(containers["deviceName"] == "pressure-sensor"){
-                this.url = `http://223.3.94.112:3000/d/95UYiuD4k/qi-ya-chuan-gan-qi?orgId=1&var-nodeName=${containers['nodeName']}&refresh=30s&theme=light&kiosk`
+                this.url = `http://1.117.170.89:3000/d/95UYiuD4k/qi-ya-chuan-gan-qi?orgId=1&var-nodeName=${containers['nodeName']}&refresh=30s&theme=light&kiosk`
             }else if(containers["deviceName"] == "pm-sensor"){
-                this.url = `http://223.3.94.112:3000/d/y744ZuD4k/kong-qi-zhi-liang-chuan-gan-qi?orgId=1&var-nodeName=${containers['nodeName']}&refresh=30s&theme=light&kiosk`
+                this.url = `http://1.117.170.89:3000/d/y744ZuD4k/kong-qi-zhi-liang-chuan-gan-qi?orgId=1&var-nodeName=${containers['nodeName']}&refresh=30s&theme=light&kiosk`
             }else{
-                this.url = `http://223.3.94.112:3000/d/lNgro_vVk/wen-du-chuan-gan-qi?orgId=1&var-nodeName=${containers['nodeName']}&refresh=30s&theme=light&kiosk`
+                this.url = `http://1.117.170.89:3000/d/lNgro_vVk/wen-du-chuan-gan-qi?orgId=1&var-nodeName=${containers['nodeName']}&refresh=30s&theme=light&kiosk`
             }
             console.log(this.url);
         }

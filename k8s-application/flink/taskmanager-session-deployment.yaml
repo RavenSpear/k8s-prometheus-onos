@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: flink-taskmanager
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: flink
@@ -13,20 +13,34 @@ spec:
       labels:
         app: flink
         component: taskmanager
+      annotations:
+        kubernetes.io/ingress-bandwidth: 200M
+        kubernetes.io/egress-bandwidth: 200M
+        vnrid: "5"
+        vnrname: 流处理网络切片1
     spec:
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchExpressions:
-                  - key: app
+                  - key: component
                     operator: In
                     values:
-                      - flink
+                      - taskmanager
               topologyKey: kubernetes.io/hostname
       containers:
       - name: taskmanager
         image: apache/flink:latest
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 100m
+            ephemeral-storage: 100Mi
+          limits:
+            memory: 500Mi
+            cpu: 1000m
+            ephemeral-storage: 1Gi
         args: ["taskmanager"]
         ports:
         - containerPort: 6122

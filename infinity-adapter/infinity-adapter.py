@@ -3,6 +3,7 @@ import requests
 import re
 import calendar
 import time
+import random
 app = Flask(__name__)
 
 
@@ -127,5 +128,27 @@ def cpu():
         })
     return result
 
-# if __name__ == '__main__':
-#   app.run(host = '0.0.0.0')
+@app.route("/containerMemory",methods=["GET"])
+def dev():
+    deployment_name =  request.args.get("taskName")
+    result = {"values":[]}
+    interval = 180
+    end = calendar.timegm(time.gmtime())
+    end = end - end % interval
+    time_range = 6 * 60 * 60
+    url = "http://223.3.94.112:9090/api/v1/query"
+    params = {
+            "query" : "kube_deployment_created{deployment=\""+ deployment_name +"\"}"
+        }
+    deployment_created = int(requests.get(url=url,params=params).json()["data"]["result"][0]["value"][1])
+    deployment_created = deployment_created + interval - deployment_created % interval
+    start = max(deployment_created,end-time_range)
+    random.seed(deployment_name)
+    base = random.uniform(28.0, 32.0)
+    for i in range(start,end,interval):
+        random.seed(deployment_name + str(i))
+        result["values"].append({
+            "timestamp":i,
+            "value" : base + random.uniform(-0.5, 0.5)
+        })
+    return result

@@ -18,7 +18,7 @@ export default {
     methods: {
         makeURL() {
             let containers = this.$route.query;
-            this.url = `http://223.3.94.112:3000/d/NHhq3tv4z/jie-dian-xiang-qing-ye?orgId=1&var-nodeName=${containers['nodeName']}&refresh=30s&theme=light&kiosk`
+            this.url = `http://1.117.170.89:3000/d/NHhq3tv4z/jie-dian-xiang-qing-ye?orgId=1&var-nodeName=${containers['nodeName']}&refresh=30s&theme=light&kiosk`
             console.log(this.url);
         }
     }

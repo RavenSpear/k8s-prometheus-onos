@@ -26,29 +26,29 @@ module.exports = {
             //     changeOrigin: true
             // },
             "/vnetTraffic": {
-                target: "http://223.3.94.112:8181/onos/nvh",
+                target: "http://1.117.170.89:8181/onos/nvh",
                 changeOrigin :true,
             },
             "/pnet": {
-                target: "http://223.3.94.112:8181/onos/nvh",
+                target: "http://1.117.170.89:8181/onos/nvh",
                 changeOrigin: true,
             },
             "/vnr": {
-                target: "http://223.3.94.112:8181/onos/nvh",
+                target: "http://1.117.170.89:8181/onos/nvh",
                 changeOrigin: true,
             },
             '/vnet': {
-                target: 'http://223.3.94.112:8181/onos/nvh',
+                target: 'http://1.117.170.89:8181/onos/nvh',
                 changeOrigin: true
             },
             'statistic':{
-                target: 'http://223.3.94.112:8181/onos/nvh',
+                target: 'http://1.117.170.89:8181/onos/nvh',
                 changeOrigin: true
             },
 
             /* Apis for k8s api/v1 */
             '/terminal': {
-                target: 'http://223.3.94.112:8009/api/v1',
+                target: 'http://1.117.170.89:8009/api/v1',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/terminal': '',
@@ -56,7 +56,7 @@ module.exports = {
             },
 
             '/task': {
-                target: 'http://223.3.94.112:8009/apis/apps/v1',
+                target: 'http://1.117.170.89:8009/apis/apps/v1',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/task': '',
@@ -83,7 +83,7 @@ module.exports = {
 
             /* Apis for onos api/v1 */
             '/network': {
-                target: 'http://223.3.94.112:8181/onos/v1',
+                target: 'http://1.117.170.89:8181/onos/v1',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/network': '',
@@ -92,7 +92,7 @@ module.exports = {
 
             /* Apis for edgex foundry */
             '/IoT': {
-                target: 'http://223.3.94.112:30080',
+                target: 'http://1.117.170.89:30080',
                 changeOrigin: true,
                 pathRewrite: {
                     '^/IoT': '',

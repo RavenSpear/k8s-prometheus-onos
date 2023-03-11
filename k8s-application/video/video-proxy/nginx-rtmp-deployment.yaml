@@ -12,6 +12,9 @@ spec:
     metadata:
       labels:
         app: nginx-rtmp
+      annotations:
+        vnrid: "6"
+        vnrname: 视频流网络切片1
     spec:
       nodeSelector:
         cluster: cloud

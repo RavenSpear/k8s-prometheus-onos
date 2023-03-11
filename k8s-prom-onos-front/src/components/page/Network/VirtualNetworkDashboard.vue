@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     makeURL() {
-      this.url = `http://223.3.94.112:3000/d/DSz0UFKVk/chuan-shu-zi-yuan-xu-ni-hua-kong-zhi-shou-ye?orgId=1&theme=light&kiosk`;
+      this.url = `http://1.117.170.89:3000/d/DSz0UFKVk/chuan-shu-zi-yuan-xu-ni-hua-kong-zhi-shou-ye?orgId=1&theme=light&kiosk`;
       this.load = true;
     },
     async loadPhysicalNetwork() {

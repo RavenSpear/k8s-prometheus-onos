@@ -13,12 +13,26 @@ spec:
       labels:
         app: flink
         component: jobmanager
+      annotations:
+        # kubernetes.io/ingress-bandwidth: 200M
+        # kubernetes.io/egress-bandwidth: 200M
+        vnrid: "2"
+        vnrname: 流处理网络切片2
     spec:
       nodeSelector:
         cluster: cloud
       containers:
       - name: jobmanager
         image: apache/flink:latest
+        resources:
+          requests:
+            memory: 50Mi
+            cpu: 200m
+            ephemeral-storage: 50Mi
+          limits:
+            memory: 500Mi
+            cpu: 1000m
+            ephemeral-storage: 1Gi
         args: ["jobmanager"]
         ports:
         - containerPort: 6123

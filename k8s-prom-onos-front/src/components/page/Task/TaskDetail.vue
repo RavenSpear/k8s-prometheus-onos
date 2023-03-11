@@ -6,7 +6,7 @@
 export default {
     data() {
         return {
-            url: "http://223.3.94.112:3000/d/h2UbV_D4z/ren-wu-zi-yuan-xiang-qing-ye?orgId=1&refresh=5s&theme=light&kiosk",
+            url: "http://1.117.170.89:3000/d/h2UbV_D4z/ren-wu-zi-yuan-xiang-qing-ye?orgId=1&refresh=5s&theme=light&kiosk",
             load: false
         };
     },
