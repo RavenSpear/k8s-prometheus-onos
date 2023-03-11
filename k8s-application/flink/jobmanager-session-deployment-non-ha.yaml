@@ -6,12 +6,12 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flink-job
+      app: flink
       component: jobmanager
   template:
     metadata:
       labels:
-        app: flink-job
+        app: flink
         component: jobmanager
       annotations:
         # kubernetes.io/ingress-bandwidth: 200M
