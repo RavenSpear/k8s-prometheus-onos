@@ -9,22 +9,45 @@
         "revisionHistoryLimit": 10,
         "selector": {
             "matchLabels": {
-                "app": "nginx"
+                "app": "nginx-dp"
             }
         },
         "template": {
             "metadata": {
                 "labels": {
-                    "app": "nginx"
+                    "app": "nginx-dp"
                 },
                 "annotations": {
-                    "kubernetes.io/ingress-bandwidth": "1",
-                    "kubernetes.io/egress-bandwidth": "1",
+                    "kubernetes.io/ingress-bandwidth": "10",
+                    "kubernetes.io/egress-bandwidth": "10",
                     "vnrid": "",
                     "vnrname": ""
                 }
             },
             "spec": {
+                "affinity": {
+                    "podAntiAffinity": {
+                        "preferredDuringSchedulingIgnoredDuringExecution": [
+                            {
+                                "weight": 10,
+                                "podAffinityTerm": {
+                                    "labelSelector": {
+                                        "matchExpressions": [
+                                            {
+                                                "key": "app",
+                                                "operator": "In",
+                                                "values": [
+                                                    "nginx-dp"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "topologyKey": "kubernetes.io/hostname"
+                                }
+                            }
+                        ]
+                    }
+                },
                 "containers": [
                     {
                         "name": "nginx",
